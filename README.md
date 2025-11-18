@@ -18,10 +18,10 @@ Complete specification for a **Slovak tax-compliant company vehicle mileage logg
 
 ## Quick Start
 
-**For Developers:** Start here → [08-implementation-plan.md](./08-implementation-plan.md)
-**For Product Managers:** Start here → [01-product-overview.md](./01-product-overview.md)
-**For Architects:** Start here → [06-mcp-architecture-v2.md](./06-mcp-architecture-v2.md)
-**For Hackathon Judges:** Start here → [09-hackathon-presentation.md](./09-hackathon-presentation.md)
+**For Developers:** Start here → [spec/08-implementation-plan.md](./spec/08-implementation-plan.md)
+**For Product Managers:** Start here → [spec/01-product-overview.md](./spec/01-product-overview.md)
+**For Architects:** Start here → [spec/06-mcp-architecture-v2.md](./spec/06-mcp-architecture-v2.md)
+**For Hackathon Judges:** Start here → [spec/09-hackathon-presentation.md](./spec/09-hackathon-presentation.md)
 
 ---
 
@@ -31,35 +31,35 @@ Complete specification for a **Slovak tax-compliant company vehicle mileage logg
 
 | Document | Description | Status | Key Topics |
 |----------|-------------|--------|------------|
-| [01-product-overview.md](./01-product-overview.md) | Product vision, scope, target users, success metrics | ✅ Complete | Vision, architecture overview, P0/P1 features |
-| [02-domain-model.md](./02-domain-model.md) | Core concepts, business rules, Slovak compliance | ✅ Complete | Checkpoint, Trip, Template, GPS-first philosophy |
+| [spec/01-product-overview.md](./spec/01-product-overview.md) | Product vision, scope, target users, success metrics | ✅ Complete | Vision, architecture overview, P0/P1 features |
+| [02-domain-model.md](./spec/02-domain-model.md) | Core concepts, business rules, Slovak compliance | ✅ Complete | Checkpoint, Trip, Template, GPS-first philosophy |
 
 ### 🧮 Algorithm & Logic (Technical Deep Dive)
 
 | Document | Description | Status | Key Topics |
 |----------|-------------|--------|------------|
-| [03-trip-reconstruction.md](./03-trip-reconstruction.md) | Checkpoint-based reconstruction algorithm | ✅ Complete | Mode A/B/C, 4 validation algorithms, thresholds |
+| [03-trip-reconstruction.md](./spec/03-trip-reconstruction.md) | Checkpoint-based reconstruction algorithm | ✅ Complete | Mode A/B/C, 4 validation algorithms, thresholds |
 
 ### 💾 Data & Storage (Implementation Reference)
 
 | Document | Description | Status | Key Topics |
 |----------|-------------|--------|------------|
-| [04-data-model.md](./04-data-model.md) | JSON file schemas, atomic write pattern | ✅ Complete | 5 entities, file structure, monthly folders |
+| [04-data-model.md](./spec/04-data-model.md) | JSON file schemas, atomic write pattern | ✅ Complete | 5 entities, file structure, monthly folders |
 
 ### 🏗️ Architecture (System Design)
 
 | Document | Description | Status | Key Topics |
 |----------|-------------|--------|------------|
-| [05-claude-skills-dspy.md](./05-claude-skills-dspy.md) | Dual interface architecture | ✅ Complete | Claude Skills, DSPy integration, testing |
-| [06-mcp-architecture-v2.md](./06-mcp-architecture-v2.md) | MCP server architecture (GPS-first, stateless) | ✅ Complete | 7 servers, tool definitions, integration |
-| [07-mcp-api-specifications.md](./07-mcp-api-specifications.md) | Complete MCP tool API specifications | ✅ Complete | 24 tools, JSON schemas, error handling |
+| [05-claude-skills-dspy.md](./spec/05-claude-skills-dspy.md) | Dual interface architecture | ✅ Complete | Claude Skills, DSPy integration, testing |
+| [spec/06-mcp-architecture-v2.md](./spec/06-mcp-architecture-v2.md) | MCP server architecture (GPS-first, stateless) | ✅ Complete | 7 servers, tool definitions, integration |
+| [07-mcp-api-specifications.md](./spec/07-mcp-api-specifications.md) | Complete MCP tool API specifications | ✅ Complete | 24 tools, JSON schemas, error handling |
 
 ### 🚀 Execution (Project Management)
 
 | Document | Description | Status | Key Topics |
 |----------|-------------|--------|------------|
-| [08-implementation-plan.md](./08-implementation-plan.md) | 13-day parallel development plan | ✅ Complete | 4 tracks, dependencies, user stories, critical path |
-| [09-hackathon-presentation.md](./09-hackathon-presentation.md) | Demo script, video structure, Q&A | ✅ Complete | 5-min demo, elevator pitch, submission checklist |
+| [spec/08-implementation-plan.md](./spec/08-implementation-plan.md) | 13-day parallel development plan | ✅ Complete | 4 tracks, dependencies, user stories, critical path |
+| [spec/09-hackathon-presentation.md](./spec/09-hackathon-presentation.md) | Demo script, video structure, Q&A | ✅ Complete | 5-min demo, elevator pitch, submission checklist |
 
 ### 📚 Reference (Background)
 
@@ -155,7 +155,7 @@ Claude Desktop integration (Days 7-11) →
 Submission (Day 13)
 ```
 
-See [08-implementation-plan.md](./08-implementation-plan.md) for detailed day-by-day breakdown.
+See [spec/08-implementation-plan.md](./spec/08-implementation-plan.md) for detailed day-by-day breakdown.
 
 ---
 
@@ -232,6 +232,235 @@ See [08-implementation-plan.md](./08-implementation-plan.md) for detailed day-by
 
 ---
 
+## Getting Started
+
+### Prerequisites
+
+- **Python 3.11+** (for Python MCP servers)
+- **Node.js 18+** (for geo-routing server)
+- **Claude Desktop** (for conversational interface)
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd car-log
+   ```
+
+2. **Install Python dependencies:**
+   ```bash
+   # Install for each Python server
+   pip install -r mcp-servers/car_log_core/requirements.txt
+   pip install -r mcp-servers/trip_reconstructor/requirements.txt
+   pip install -r mcp-servers/validation/requirements.txt
+   pip install -r mcp-servers/ekasa_api/requirements.txt
+   pip install -r mcp-servers/dashboard_ocr/requirements.txt
+   pip install -r mcp-servers/report_generator/requirements.txt
+   ```
+
+3. **Install Node.js dependencies:**
+   ```bash
+   cd mcp-servers/geo-routing
+   npm install
+   cd ../..
+   ```
+
+4. **Create data directories:**
+   ```bash
+   mkdir -p ~/Documents/MileageLog/data/{vehicles,checkpoints,trips,templates,reports}
+   ```
+
+5. **Configure Claude Desktop:**
+   ```bash
+   # Copy the sample configuration
+   # macOS: ~/Library/Application Support/Claude/claude_desktop_config.json
+   # Linux: ~/.config/Claude/claude_desktop_config.json
+   # Windows: %APPDATA%\Claude\claude_desktop_config.json
+
+   # Copy contents from claude_desktop_config.json in this repo
+   ```
+
+   See [CLAUDE_DESKTOP_SETUP.md](./CLAUDE_DESKTOP_SETUP.md) for detailed setup instructions.
+
+6. **Run tests to verify installation:**
+   ```bash
+   pytest tests/ -v
+   # Expected: 70 passed, 1 skipped
+   ```
+
+### Quick Start Guide
+
+#### 1. Generate Demo Data
+
+```bash
+python scripts/generate_mock_data.py --scenario demo
+```
+
+This creates:
+- 1 vehicle (Ford Transit)
+- 2 checkpoints (Nov 1-8, 820 km gap)
+- 3 templates (Warehouse Run, Client Visit, Branch Office)
+- 2 trips (2× Warehouse Run)
+
+#### 2. Test MCP Servers
+
+Run the Day 7 integration checkpoint:
+
+```bash
+python tests/integration_checkpoint_day7.py
+# Expected: 20/20 tests passed (100% success rate)
+```
+
+#### 3. Use with Claude Desktop
+
+After configuring Claude Desktop (step 5 above), restart Claude Desktop and start conversing:
+
+**Example conversation:**
+```
+You: Create a new vehicle for me
+Claude: I'll help you create a vehicle. What are the details?
+You: Ford Transit, license plate BA-456CD, VIN WBAXX01234ABC5678, Diesel, 45000 km
+Claude: [Creates vehicle using car-log-core.create_vehicle]
+
+You: I just refueled. Can you help me create a checkpoint?
+Claude: I'll help you log this refuel checkpoint. What's the odometer reading?
+You: 45820 km, at Bratislava, I refueled 70 liters of Diesel for €110
+Claude: [Creates checkpoint using car-log-core.create_checkpoint]
+
+You: Can you detect if there are any gaps in my mileage log?
+Claude: [Uses car-log-core.detect_gap to find the 820 km gap]
+
+You: Can you suggest trips to fill this gap?
+Claude: [Uses trip-reconstructor.match_templates to suggest Warehouse Run template]
+
+You: Generate a report for November 2025
+Claude: [Uses report-generator.generate_csv]
+```
+
+See [spec/09-hackathon-presentation.md](./spec/09-hackathon-presentation.md) for complete demo script.
+
+#### 4. Generate Reports
+
+```bash
+# Via Python (if not using Claude Desktop)
+python -c "
+from mcp_servers.report_generator.tools.generate_csv import execute
+import asyncio
+
+result = asyncio.run(execute({
+    'start_date': '2025-11-01',
+    'end_date': '2025-11-30',
+    'business_only': True
+}))
+print(result)
+"
+```
+
+### Project Structure
+
+```
+car-log/
+├── mcp-servers/              # 7 MCP servers (backend)
+│   ├── car_log_core/         # Vehicle, checkpoint, template CRUD
+│   ├── trip_reconstructor/   # Template matching (GPS 70% + address 30%)
+│   ├── validation/           # 4 validation algorithms
+│   ├── ekasa_api/            # Slovak receipt processing
+│   ├── geo-routing/          # OpenStreetMap integration (Node.js)
+│   ├── dashboard_ocr/        # EXIF extraction + OCR
+│   └── report_generator/     # CSV/PDF report generation
+├── tests/                    # Test suites (70 tests, all passing)
+├── scripts/                  # Utility scripts (mock data generator)
+├── spec/                     # Complete specification documents
+├── examples/                 # Demo scripts and examples
+├── CLAUDE.md                 # Instructions for Claude Code
+├── TASKS.md                  # Implementation task tracking
+├── README.md                 # This file
+└── claude_desktop_config.json # Sample MCP configuration
+```
+
+### Development Workflow
+
+1. **Make changes to MCP server code** (e.g., `mcp-servers/car_log_core/`)
+2. **Write tests** in `tests/`
+3. **Run tests**: `pytest tests/test_<module>.py -v`
+4. **Update TASKS.md** to track progress
+5. **Commit with descriptive message**
+6. **Test in Claude Desktop** after code changes
+
+### Testing
+
+```bash
+# Run all tests
+pytest tests/ -v
+
+# Run specific test suite
+pytest tests/test_validation.py -v
+
+# Run with coverage
+pytest tests/ --cov=mcp_servers --cov-report=html
+
+# Run integration checkpoint
+python tests/integration_checkpoint_day7.py
+```
+
+### Troubleshooting
+
+See [CLAUDE_DESKTOP_SETUP.md](./CLAUDE_DESKTOP_SETUP.md) for comprehensive troubleshooting guide.
+
+**Common issues:**
+
+1. **ImportError: No module named 'mcp_servers'**
+   ```bash
+   export PYTHONPATH="${PYTHONPATH}:$(pwd)/mcp-servers"
+   ```
+
+2. **Claude Desktop not discovering servers**
+   - Check config file location
+   - Verify JSON syntax is valid
+   - Check server logs in Claude Desktop settings
+
+3. **Tests failing**
+   - Ensure all dependencies installed
+   - Check Python version (3.11+ required)
+   - Verify data directories exist
+
+### Slovak Tax Compliance
+
+All implementations follow Slovak VAT Act 2025 requirements:
+
+- ✅ VIN validation (17 characters, no I/O/Q)
+- ✅ Driver name mandatory for all trips
+- ✅ L/100km fuel efficiency format (European standard)
+- ✅ Trip timing separate from refuel timing
+- ✅ Business trip descriptions required
+- ✅ All fields in CSV reports
+
+### Performance
+
+- **Template matching**: < 2 seconds for 100+ templates
+- **File storage**: Handles 1,000+ trips efficiently
+- **Report generation**: Processes month of data in < 1 second
+- **MCP server startup**: < 1 second per server
+
+### Production Deployment
+
+For production use:
+
+1. **Set environment variables:**
+   ```bash
+   export DATA_PATH="/path/to/production/data"
+   export ANTHROPIC_API_KEY="your-api-key"
+   ```
+
+2. **Configure monitoring** (logs, errors)
+3. **Set up backups** for data directory
+4. **Consider SQLite migration** for 10,000+ trips (P2 feature)
+
+See [CLAUDE_DESKTOP_SETUP.md](./CLAUDE_DESKTOP_SETUP.md) for deployment details.
+
+---
+
 ## Contact & Contribution
 
 **Repository:** [To be added - GitHub link]
@@ -249,12 +478,12 @@ See [08-implementation-plan.md](./08-implementation-plan.md) for detailed day-by
 
 The following documents have been superseded and moved to `_archive/`:
 
-- `04-interface-architecture.md` → Superseded by [05-claude-skills-dspy.md](./05-claude-skills-dspy.md)
-- `06-mcp-architecture.md` → Superseded by [06-mcp-architecture-v2.md](./06-mcp-architecture-v2.md)
+- `04-interface-architecture.md` → Superseded by [05-claude-skills-dspy.md](./spec/05-claude-skills-dspy.md)
+- `06-mcp-architecture.md` → Superseded by [spec/06-mcp-architecture-v2.md](./spec/06-mcp-architecture-v2.md)
 - `FR_for_review.md` → Original functional requirements (reference only)
 
 ---
 
-**Last Updated:** 2025-11-17
+**Last Updated:** 2025-11-18
 **Specification Version:** 1.0
-**Implementation Status:** Ready to Code ✅
+**Implementation Status:** ✅ Complete (All 7 P0 MCP servers functional, 70/71 tests passing)

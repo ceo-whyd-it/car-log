@@ -1,0 +1,31 @@
+# Car Log - Slovak Tax-Compliant Mileage Logger
+# Python dependencies for all MCP servers
+
+# Core MCP Framework
+mcp>=1.2.0
+
+# HTTP Client (ekasa-api)
+requests>=2.31.0
+
+# Image Processing (dashboard-ocr, ekasa-api QR scanning)
+Pillow>=10.0.0
+
+# QR Code Scanning (ekasa-api) - OPTIONAL
+# These dependencies are optional for QR code scanning from images/PDFs
+# If not installed, users can manually enter receipt IDs
+# Install with: pip install pyzbar pdf2image
+# Note: pyzbar also requires system library zbar
+#   - Ubuntu/Debian: sudo apt-get install libzbar0
+#   - macOS: brew install zbar
+#   - Windows: Download from http://zbar.sourceforge.net/
+pyzbar>=0.1.9
+pdf2image>=1.16.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+
+# Development Tools (optional)
+# black>=23.0.0  # Code formatting
+# mypy>=1.5.0    # Type checking
+# ruff>=0.1.0    # Fast linter

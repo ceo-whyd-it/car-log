@@ -504,12 +504,15 @@ def test_slovak_compliance() -> TestResult:
     issues = []
 
     # Search for VIN validation in vehicle creation
+    vin_pattern_found = False
     for py_file in car_log_core.rglob("*.py"):
         content = py_file.read_text()
-        if "vin" in content.lower():
-            if "[A-HJ-NPR-Z0-9]{17}" not in content and "17" not in content:
-                issues.append("VIN validation pattern may be missing")
+        if "[A-HJ-NPR-Z0-9]{17}" in content:
+            vin_pattern_found = True
             break
+
+    if not vin_pattern_found:
+        issues.append("VIN validation pattern may be missing")
 
     # Check for L/100km format
     validation_server = Path("mcp-servers/validation")

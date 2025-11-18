@@ -284,7 +284,7 @@ The implementation plan uses 4 parallel tracks:
 - **Authentication:** None required (public endpoint)
 - **Response Time:** 5-30 seconds typically
 - **Timeout:** 60 seconds (MCP server configuration)
-- **See:** EKASA_IMPLEMENTATION_GUIDE.md for complete details
+- **See:** spec/EKASA_IMPLEMENTATION_GUIDE.md for complete details
 
 ### OpenStreetMap (OSRM + Nominatim)
 - **OSRM:** Route calculation (https://router.project-osrm.org)
@@ -301,7 +301,7 @@ The implementation plan uses 4 parallel tracks:
 
 ## e-Kasa API Implementation Pattern
 
-**Complete reference:** See EKASA_IMPLEMENTATION_GUIDE.md
+**Complete reference:** See spec/EKASA_IMPLEMENTATION_GUIDE.md
 
 ### Endpoint Details
 - **URL:** `https://ekasa.financnasprava.sk/mdu/api/v1/opd/receipt/{receipt_id}`
@@ -661,14 +661,14 @@ const template = {
 
 ## Documentation References
 
-- **01-product-overview.md**: Product vision, scope, success metrics
-- **02-domain-model.md**: Core concepts (Checkpoint, Trip, Template)
-- **03-trip-reconstruction.md**: Algorithm details, scoring thresholds
-- **04-data-model.md**: JSON schemas, file structure
-- **06-mcp-architecture-v2.md**: Server architecture, tool definitions
-- **07-mcp-api-specifications.md**: Complete API tool specs (24 tools, queue removed)
-- **08-implementation-plan.md**: 13-day parallel development plan
-- **09-hackathon-presentation.md**: Demo script, video structure
+- **spec/01-product-overview.md**: Product vision, scope, success metrics
+- **spec/02-domain-model.md**: Core concepts (Checkpoint, Trip, Template)
+- **spec/03-trip-reconstruction.md**: Algorithm details, scoring thresholds
+- **spec/04-data-model.md**: JSON schemas, file structure
+- **spec/06-mcp-architecture-v2.md**: Server architecture, tool definitions
+- **spec/07-mcp-api-specifications.md**: Complete API tool specs (24 tools, queue removed)
+- **spec/08-implementation-plan.md**: 13-day parallel development plan
+- **spec/09-hackathon-presentation.md**: Demo script, video structure
 
 ## Important Notes
 
@@ -696,10 +696,10 @@ const template = {
 
 ## Getting Started
 
-1. **Read specifications first**: Start with README.md → 01-product-overview.md
-2. **Understand MCP architecture**: Read 06-mcp-architecture-v2.md
-3. **Review API contracts**: Study 07-mcp-api-specifications.md
-4. **Check implementation plan**: Follow 08-implementation-plan.md tracks
+1. **Read specifications first**: Start with README.md → spec/01-product-overview.md
+2. **Understand MCP architecture**: Read spec/06-mcp-architecture-v2.md
+3. **Review API contracts**: Study spec/07-mcp-api-specifications.md
+4. **Check implementation plan**: Follow spec/08-implementation-plan.md tracks
 5. **Start with car-log-core**: It blocks trip-reconstructor and validation
 
 ## Environment Setup
