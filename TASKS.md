@@ -56,16 +56,17 @@ Day 13:   Hackathon submission
 ### A1: car-log-core - Project Setup (2 hours)
 
 **Can run in parallel:** ✅ All Track B tasks
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 1
+**Actual Time:** 30 minutes
 
 **Tasks:**
-- [ ] Create `mcp-servers/car_log_core/` directory structure
-- [ ] Create `__init__.py` and `__main__.py` (MCP server entry point)
-- [ ] Create `storage.py` with atomic write pattern (CRITICAL)
-- [ ] Create `tools/` directory for 8 tool implementations
-- [ ] Set up `requirements.txt` (mcp, uuid, datetime, pathlib)
-- [ ] Create data directories: `data/vehicles/`, `data/checkpoints/`, `data/trips/`, `data/templates/`
+- [x] Create `mcp-servers/car_log_core/` directory structure
+- [x] Create `__init__.py` and `__main__.py` (MCP server entry point)
+- [x] Create `storage.py` with atomic write pattern (CRITICAL)
+- [x] Create `tools/` directory for 8 tool implementations
+- [x] Set up `requirements.txt` (mcp, uuid, datetime, pathlib)
+- [x] Create data directories: `data/vehicles/`, `data/checkpoints/`, `data/trips/`, `data/templates/`
 
 **Deliverable:** Project skeleton with atomic write function tested
 
@@ -80,20 +81,21 @@ pytest tests/test_atomic_write.py
 ### A2: car-log-core - Vehicle CRUD (4 hours)
 
 **Can run in parallel:** ✅ All Track B tasks
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 1
 **Depends on:** A1
+**Actual Time:** 1 hour
 
 **Tasks:**
-- [ ] Implement `tools/create_vehicle.py`
-  - [ ] VIN validation: `^[A-HJ-NPR-Z0-9]{17}$` (no I, O, Q)
-  - [ ] License plate validation: `^[A-Z]{2}-[0-9]{3}[A-Z]{2}$`
-  - [ ] Atomic write to `data/vehicles/{vehicle_id}.json`
-- [ ] Implement `tools/get_vehicle.py`
-- [ ] Implement `tools/list_vehicles.py`
-- [ ] Implement `tools/update_vehicle.py`
-- [ ] Write unit tests for all 4 tools
-- [ ] Test VIN validation edge cases (I, O, Q characters should fail)
+- [x] Implement `tools/create_vehicle.py`
+  - [x] VIN validation: `^[A-HJ-NPR-Z0-9]{17}$` (no I, O, Q)
+  - [x] License plate validation: `^[A-Z]{2}-[0-9]{3}[A-Z]{2}$`
+  - [x] Atomic write to `data/vehicles/{vehicle_id}.json`
+- [x] Implement `tools/get_vehicle.py`
+- [x] Implement `tools/list_vehicles.py`
+- [x] Implement `tools/update_vehicle.py`
+- [x] Write unit tests for all 4 tools
+- [x] Test VIN validation edge cases (I, O, Q characters should fail)
 
 **Deliverable:** Vehicle CRUD functional with Slovak compliance
 
@@ -112,24 +114,25 @@ pytest tests/test_vehicle_crud.py
 ### A3: car-log-core - Checkpoint CRUD (4 hours)
 
 **Can run in parallel:** ✅ All Track B tasks
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 1
 **Depends on:** A2
+**Actual Time:** 1.5 hours
 
 **Tasks:**
-- [ ] Implement `tools/create_checkpoint.py`
-  - [ ] GPS coordinates mandatory if provided
-  - [ ] Address is optional label
-  - [ ] Receipt data embedded (fuel quantity, price, VAT)
-  - [ ] Monthly folder structure: `data/checkpoints/2025-11/`
-  - [ ] Atomic write
-- [ ] Implement `tools/get_checkpoint.py`
-- [ ] Implement `tools/list_checkpoints.py`
-  - [ ] Filter by vehicle_id
-  - [ ] Filter by date range
-  - [ ] Sort by datetime descending
-- [ ] Write unit tests
-- [ ] Test with real Slovak GPS coordinates (Bratislava: 48.1486, 17.1077)
+- [x] Implement `tools/create_checkpoint.py`
+  - [x] GPS coordinates mandatory if provided
+  - [x] Address is optional label
+  - [x] Receipt data embedded (fuel quantity, price, VAT)
+  - [x] Monthly folder structure: `data/checkpoints/2025-11/`
+  - [x] Atomic write
+- [x] Implement `tools/get_checkpoint.py`
+- [x] Implement `tools/list_checkpoints.py`
+  - [x] Filter by vehicle_id
+  - [x] Filter by date range
+  - [x] Sort by datetime descending
+- [x] Write unit tests
+- [x] Test with real Slovak GPS coordinates (Bratislava: 48.1486, 17.1077)
 
 **Deliverable:** Checkpoint CRUD functional
 
@@ -149,18 +152,19 @@ python scripts/generate_mock_data.py --scenario demo
 ### A4: car-log-core - Gap Detection (2 hours)
 
 **Can run in parallel:** ✅ B1-B6, A5
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 2
 **Depends on:** A3
+**Actual Time:** 45 minutes
 
 **Tasks:**
-- [ ] Implement `tools/detect_gap.py`
-  - [ ] Calculate odometer delta between checkpoints
-  - [ ] Calculate time gap (days, hours)
-  - [ ] Return structured gap data for trip-reconstructor
-  - [ ] Flag if GPS available on both checkpoints
-- [ ] Write unit tests
-- [ ] Test with demo scenario (820 km gap, 7 days)
+- [x] Implement `tools/detect_gap.py`
+  - [x] Calculate odometer delta between checkpoints
+  - [x] Calculate time gap (days, hours)
+  - [x] Return structured gap data for trip-reconstructor
+  - [x] Flag if GPS available on both checkpoints
+- [x] Write unit tests
+- [x] Test with demo scenario (820 km gap, 7 days)
 
 **Deliverable:** Gap detection working
 
@@ -177,23 +181,24 @@ pytest tests/test_gap_detection.py
 ### A5: car-log-core - Template CRUD (4 hours)
 
 **Can run in parallel:** ✅ All Track B tasks, A4
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 2
 **Depends on:** A3
+**Actual Time:** 1 hour
 
 **Tasks:**
-- [ ] Implement `tools/create_template.py`
-  - [ ] GPS coordinates MANDATORY (from_coords, to_coords)
-  - [ ] Addresses OPTIONAL (from_address, to_address)
-  - [ ] Distance, typical_days, purpose all optional
-  - [ ] Calculate completeness percentage
-  - [ ] Atomic write to `data/templates/{template_id}.json`
-- [ ] Implement `tools/get_template.py`
-- [ ] Implement `tools/list_templates.py`
-  - [ ] Filter by vehicle_id (optional)
-  - [ ] Sort by usage_count or last_used_at
-- [ ] Implement `tools/update_template.py`
-- [ ] Write unit tests
+- [x] Implement `tools/create_template.py`
+  - [x] GPS coordinates MANDATORY (from_coords, to_coords)
+  - [x] Addresses OPTIONAL (from_address, to_address)
+  - [x] Distance, typical_days, purpose all optional
+  - [x] Calculate completeness percentage
+  - [x] Atomic write to `data/templates/{template_id}.json`
+- [x] Implement `tools/get_template.py`
+- [x] Implement `tools/list_templates.py`
+  - [x] Filter by vehicle_id (optional)
+  - [x] Sort by usage_count or last_used_at
+- [x] Implement `tools/update_template.py`
+- [x] Write unit tests
 
 **Deliverable:** Template CRUD functional
 
@@ -219,16 +224,17 @@ python scripts/generate_mock_data.py --scenario demo
 ### B1: ekasa-api - Project Setup (2 hours)
 
 **Can run in parallel:** ✅ ALL tasks in Tracks A, B
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 3
+**Actual Time:** 30 minutes
 
 **Tasks:**
-- [ ] Create `mcp-servers/ekasa_api/` directory structure
-- [ ] Set up MCP server skeleton (`__main__.py`)
-- [ ] Configure MCP timeout: 60 seconds (e-Kasa API can take 5-30s)
-- [ ] Install dependencies: `pyzbar` (QR scanning), `requests`, `Pillow`, `pdf2image` (for PDF support)
-- [ ] Note: e-Kasa API endpoint is public, no API key required
-- [ ] Test with actual endpoint: Financial Administration e-Kasa API
+- [x] Create `mcp-servers/ekasa_api/` directory structure
+- [x] Set up MCP server skeleton (`__main__.py`)
+- [x] Configure MCP timeout: 60 seconds (e-Kasa API can take 5-30s)
+- [x] Install dependencies: `pyzbar` (QR scanning), `requests`, `Pillow`, `pdf2image` (for PDF support)
+- [x] Note: e-Kasa API endpoint is public, no API key required
+- [x] Test with actual endpoint: Financial Administration e-Kasa API
 
 **Deliverable:** ekasa-api skeleton ready
 
@@ -242,21 +248,22 @@ python -m mcp_servers.ekasa_api --version
 ### B2: ekasa-api - QR Code Scanning (2 hours)
 
 **Can run in parallel:** ✅ ALL tasks in Tracks A, B
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 3
 **Depends on:** B1
+**Actual Time:** 1 hour
 
 **Tasks:**
-- [ ] Implement `tools/scan_qr_code.py`
-  - [ ] Use `pyzbar` to decode QR from image (PNG, JPG)
-  - [ ] Implement PDF QR scanning with multi-scale detection (1x, 2x, 3x zoom)
-  - [ ] Use `pdf2image` to render PDF pages at different scales
-  - [ ] Try detection at each scale, stop on first success
-  - [ ] Extract receipt ID from QR data
-  - [ ] Return receipt_id, detection_scale, format (image/pdf), confidence
-- [ ] Write unit tests with sample receipt QR images
-- [ ] Test with real Slovak e-Kasa receipt (if available)
-- [ ] Test PDF multi-scale detection with low-resolution QR codes
+- [x] Implement `tools/scan_qr_code.py`
+  - [x] Use `pyzbar` to decode QR from image (PNG, JPG)
+  - [x] Implement PDF QR scanning with multi-scale detection (1x, 2x, 3x zoom)
+  - [x] Use `pdf2image` to render PDF pages at different scales
+  - [x] Try detection at each scale, stop on first success
+  - [x] Extract receipt ID from QR data
+  - [x] Return receipt_id, detection_scale, format (image/pdf), confidence
+- [x] Write unit tests with sample receipt QR images
+- [x] Test with real Slovak e-Kasa receipt (if available)
+- [x] Test PDF multi-scale detection with low-resolution QR codes
 
 **Deliverable:** QR scanning functional
 
@@ -272,23 +279,24 @@ pytest tests/test_qr_scanning.py
 ### B3: ekasa-api - Receipt Fetching (4 hours)
 
 **Can run in parallel:** ✅ ALL tasks in Tracks A, B
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 3
 **Depends on:** B2
+**Actual Time:** 2 hours
 
 **Tasks:**
-- [ ] Implement `tools/fetch_receipt_data.py`
-  - [ ] Call Slovak e-Kasa API with receipt_id
-  - [ ] Endpoint: `https://ekasa.financnasprava.sk/mdu/api/v1/opd/receipt/{receipt_id}`
-  - [ ] Timeout: 60 seconds (API typically responds in 5-30s)
-  - [ ] No authentication required (public endpoint)
-  - [ ] Parse response (vendor, items, prices, VAT)
-  - [ ] Detect fuel items using Slovak name patterns (Diesel, Nafta, Natural 95, etc.)
-  - [ ] Extract fuel quantity, price per liter, total cost, VAT
-  - [ ] Handle API errors (timeout after 60s, invalid ID, 404 not found, 500 server error)
-  - [ ] Implement single retry for transient failures (optional)
-- [ ] Write unit tests with actual API responses (cache for offline testing)
-- [ ] Test timeout handling (mock slow API)
+- [x] Implement `tools/fetch_receipt_data.py`
+  - [x] Call Slovak e-Kasa API with receipt_id
+  - [x] Endpoint: `https://ekasa.financnasprava.sk/mdu/api/v1/opd/receipt/{receipt_id}`
+  - [x] Timeout: 60 seconds (API typically responds in 5-30s)
+  - [x] No authentication required (public endpoint)
+  - [x] Parse response (vendor, items, prices, VAT)
+  - [x] Detect fuel items using Slovak name patterns (Diesel, Nafta, Natural 95, etc.)
+  - [x] Extract fuel quantity, price per liter, total cost, VAT
+  - [x] Handle API errors (timeout after 60s, invalid ID, 404 not found, 500 server error)
+  - [x] Implement single retry for transient failures (optional)
+- [x] Write unit tests with actual API responses (cache for offline testing)
+- [x] Test timeout handling (mock slow API)
 
 **Deliverable:** Receipt fetching functional
 
@@ -337,19 +345,20 @@ pytest tests/test_receipt_fetching.py
 ### B5: geo-routing - Project Setup (Node.js) (3 hours)
 
 **Can run in parallel:** ✅ ALL tasks in Tracks A, B
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 4
+**Actual Time:** 30 minutes
 
 **Tasks:**
-- [ ] Create `mcp-servers/geo-routing/` directory
-- [ ] Initialize Node.js project: `npm init`
-- [ ] Install dependencies: `@modelcontextprotocol/sdk`, `axios`, `node-cache`
-- [ ] Create `index.js` MCP server entry point
-- [ ] Configure environment variables:
+- [x] Create `mcp-servers/geo-routing/` directory
+- [x] Initialize Node.js project: `npm init`
+- [x] Install dependencies: `@modelcontextprotocol/sdk`, `axios`, `node-cache`
+- [x] Create `index.js` MCP server entry point
+- [x] Configure environment variables:
   - `OSRM_BASE_URL=https://router.project-osrm.org`
   - `NOMINATIM_BASE_URL=https://nominatim.openstreetmap.org`
   - `CACHE_TTL_HOURS=24`
-- [ ] Set up 24-hour cache for geocoding results
+- [x] Set up 24-hour cache for geocoding results
 
 **Deliverable:** geo-routing skeleton ready
 
@@ -363,22 +372,23 @@ node mcp-servers/geo-routing/index.js --version
 ### B6: geo-routing - Geocoding (3 hours)
 
 **Can run in parallel:** ✅ ALL tasks in Tracks A, B
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 4
 **Depends on:** B5
+**Actual Time:** 1.5 hours
 
 **Tasks:**
-- [ ] Implement `geocode_address` tool
-  - [ ] Call Nominatim API
-  - [ ] Normalize address (lowercase, remove accents)
-  - [ ] Calculate confidence score
-  - [ ] Return alternatives if confidence < 0.7
-  - [ ] Cache results (24-hour TTL)
-- [ ] Implement `reverse_geocode` tool
-  - [ ] Call Nominatim reverse API
-  - [ ] Return formatted address
-- [ ] Write unit tests with Slovak addresses
-- [ ] Test ambiguity handling: "Košice" should return multiple matches
+- [x] Implement `geocode_address` tool
+  - [x] Call Nominatim API
+  - [x] Normalize address (lowercase, remove accents)
+  - [x] Calculate confidence score
+  - [x] Return alternatives if confidence < 0.7
+  - [x] Cache results (24-hour TTL)
+- [x] Implement `reverse_geocode` tool
+  - [x] Call Nominatim reverse API
+  - [x] Return formatted address
+- [x] Write unit tests with Slovak addresses
+- [x] Test ambiguity handling: "Košice" should return multiple matches
 
 **Deliverable:** Geocoding functional with ambiguity handling
 
@@ -396,19 +406,20 @@ npm test
 ### B7: geo-routing - Route Calculation (3 hours)
 
 **Can run in parallel:** ✅ All Track A, B4
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 4
 **Depends on:** B6
+**Actual Time:** 1 hour
 
 **Tasks:**
-- [ ] Implement `calculate_route` tool
-  - [ ] Call OSRM API with GPS coordinates
-  - [ ] Parse distance (km) and duration (hours)
-  - [ ] Extract route summary (via highway names)
-  - [ ] Return alternatives if requested
-  - [ ] Cache results (24-hour TTL)
-- [ ] Write unit tests
-- [ ] Test: Bratislava → Košice should return ~410 km via D1 highway
+- [x] Implement `calculate_route` tool
+  - [x] Call OSRM API with GPS coordinates
+  - [x] Parse distance (km) and duration (hours)
+  - [x] Extract route summary (via highway names)
+  - [x] Return alternatives if requested
+  - [x] Cache results (24-hour TTL)
+- [x] Write unit tests
+- [x] Test: Bratislava → Košice should return ~410 km via D1 highway
 
 **Deliverable:** Route calculation functional
 
@@ -428,17 +439,18 @@ npm test
 ### B8: dashboard-ocr - EXIF Extraction (P0) (2 hours)
 
 **Can run in parallel:** ✅ ALL tasks in Tracks A, B
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 3 or 4 (after ekasa-api or geo-routing)
+**Actual Time:** 2 hours
 
 **Tasks:**
-- [ ] Create `mcp-servers/dashboard_ocr/` directory
-- [ ] Implement `tools/extract_metadata.py`
-  - [ ] Use `Pillow` to read EXIF data
-  - [ ] Extract GPS coordinates (latitude, longitude)
-  - [ ] Extract timestamp
-  - [ ] Handle missing EXIF gracefully (return null)
-- [ ] Write unit tests with sample photos (with/without EXIF)
+- [x] Create `mcp-servers/dashboard_ocr/` directory
+- [x] Implement `tools/extract_metadata.py`
+  - [x] Use `Pillow` to read EXIF data
+  - [x] Extract GPS coordinates (latitude, longitude)
+  - [x] Extract timestamp
+  - [x] Handle missing EXIF gracefully (return null)
+- [x] Write unit tests with sample photos (with/without EXIF)
 
 **Deliverable:** EXIF extraction functional (P0 requirement)
 

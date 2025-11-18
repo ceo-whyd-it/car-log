@@ -1,0 +1,19 @@
+{
+  "name": "geo-routing",
+  "version": "1.0.0",
+  "description": "MCP server for geocoding and route calculation via OpenStreetMap",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js"
+  },
+  "keywords": ["mcp", "geocoding", "routing", "openstreetmap"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.22.0",
+    "axios": "^1.13.2",
+    "node-cache": "^5.1.2"
+  }
+}
