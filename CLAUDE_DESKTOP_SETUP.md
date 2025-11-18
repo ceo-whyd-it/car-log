@@ -230,7 +230,7 @@ Detect gaps between my checkpoints and suggest templates to fill them.
 
 Once all servers are loaded successfully:
 
-1. Test the complete workflow (see `09-hackathon-presentation.md`)
+1. Test the complete workflow (see `spec/09-hackathon-presentation.md`)
 2. Create your first vehicle and checkpoints
 3. Set up templates for your common routes
 4. Start logging trips!

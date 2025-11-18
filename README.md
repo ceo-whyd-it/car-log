@@ -18,10 +18,10 @@ Complete specification for a **Slovak tax-compliant company vehicle mileage logg
 
 ## Quick Start
 
-**For Developers:** Start here → [08-implementation-plan.md](./08-implementation-plan.md)
-**For Product Managers:** Start here → [01-product-overview.md](./01-product-overview.md)
-**For Architects:** Start here → [06-mcp-architecture-v2.md](./06-mcp-architecture-v2.md)
-**For Hackathon Judges:** Start here → [09-hackathon-presentation.md](./09-hackathon-presentation.md)
+**For Developers:** Start here → [spec/08-implementation-plan.md](./spec/08-implementation-plan.md)
+**For Product Managers:** Start here → [spec/01-product-overview.md](./spec/01-product-overview.md)
+**For Architects:** Start here → [spec/06-mcp-architecture-v2.md](./spec/06-mcp-architecture-v2.md)
+**For Hackathon Judges:** Start here → [spec/09-hackathon-presentation.md](./spec/09-hackathon-presentation.md)
 
 ---
 
@@ -31,35 +31,35 @@ Complete specification for a **Slovak tax-compliant company vehicle mileage logg
 
 | Document | Description | Status | Key Topics |
 |----------|-------------|--------|------------|
-| [01-product-overview.md](./01-product-overview.md) | Product vision, scope, target users, success metrics | ✅ Complete | Vision, architecture overview, P0/P1 features |
-| [02-domain-model.md](./02-domain-model.md) | Core concepts, business rules, Slovak compliance | ✅ Complete | Checkpoint, Trip, Template, GPS-first philosophy |
+| [spec/01-product-overview.md](./spec/01-product-overview.md) | Product vision, scope, target users, success metrics | ✅ Complete | Vision, architecture overview, P0/P1 features |
+| [02-domain-model.md](./spec/02-domain-model.md) | Core concepts, business rules, Slovak compliance | ✅ Complete | Checkpoint, Trip, Template, GPS-first philosophy |
 
 ### 🧮 Algorithm & Logic (Technical Deep Dive)
 
 | Document | Description | Status | Key Topics |
 |----------|-------------|--------|------------|
-| [03-trip-reconstruction.md](./03-trip-reconstruction.md) | Checkpoint-based reconstruction algorithm | ✅ Complete | Mode A/B/C, 4 validation algorithms, thresholds |
+| [03-trip-reconstruction.md](./spec/03-trip-reconstruction.md) | Checkpoint-based reconstruction algorithm | ✅ Complete | Mode A/B/C, 4 validation algorithms, thresholds |
 
 ### 💾 Data & Storage (Implementation Reference)
 
 | Document | Description | Status | Key Topics |
 |----------|-------------|--------|------------|
-| [04-data-model.md](./04-data-model.md) | JSON file schemas, atomic write pattern | ✅ Complete | 5 entities, file structure, monthly folders |
+| [04-data-model.md](./spec/04-data-model.md) | JSON file schemas, atomic write pattern | ✅ Complete | 5 entities, file structure, monthly folders |
 
 ### 🏗️ Architecture (System Design)
 
 | Document | Description | Status | Key Topics |
 |----------|-------------|--------|------------|
-| [05-claude-skills-dspy.md](./05-claude-skills-dspy.md) | Dual interface architecture | ✅ Complete | Claude Skills, DSPy integration, testing |
-| [06-mcp-architecture-v2.md](./06-mcp-architecture-v2.md) | MCP server architecture (GPS-first, stateless) | ✅ Complete | 7 servers, tool definitions, integration |
-| [07-mcp-api-specifications.md](./07-mcp-api-specifications.md) | Complete MCP tool API specifications | ✅ Complete | 24 tools, JSON schemas, error handling |
+| [05-claude-skills-dspy.md](./spec/05-claude-skills-dspy.md) | Dual interface architecture | ✅ Complete | Claude Skills, DSPy integration, testing |
+| [spec/06-mcp-architecture-v2.md](./spec/06-mcp-architecture-v2.md) | MCP server architecture (GPS-first, stateless) | ✅ Complete | 7 servers, tool definitions, integration |
+| [07-mcp-api-specifications.md](./spec/07-mcp-api-specifications.md) | Complete MCP tool API specifications | ✅ Complete | 24 tools, JSON schemas, error handling |
 
 ### 🚀 Execution (Project Management)
 
 | Document | Description | Status | Key Topics |
 |----------|-------------|--------|------------|
-| [08-implementation-plan.md](./08-implementation-plan.md) | 13-day parallel development plan | ✅ Complete | 4 tracks, dependencies, user stories, critical path |
-| [09-hackathon-presentation.md](./09-hackathon-presentation.md) | Demo script, video structure, Q&A | ✅ Complete | 5-min demo, elevator pitch, submission checklist |
+| [spec/08-implementation-plan.md](./spec/08-implementation-plan.md) | 13-day parallel development plan | ✅ Complete | 4 tracks, dependencies, user stories, critical path |
+| [spec/09-hackathon-presentation.md](./spec/09-hackathon-presentation.md) | Demo script, video structure, Q&A | ✅ Complete | 5-min demo, elevator pitch, submission checklist |
 
 ### 📚 Reference (Background)
 
@@ -155,7 +155,7 @@ Claude Desktop integration (Days 7-11) →
 Submission (Day 13)
 ```
 
-See [08-implementation-plan.md](./08-implementation-plan.md) for detailed day-by-day breakdown.
+See [spec/08-implementation-plan.md](./spec/08-implementation-plan.md) for detailed day-by-day breakdown.
 
 ---
 
@@ -249,8 +249,8 @@ See [08-implementation-plan.md](./08-implementation-plan.md) for detailed day-by
 
 The following documents have been superseded and moved to `_archive/`:
 
-- `04-interface-architecture.md` → Superseded by [05-claude-skills-dspy.md](./05-claude-skills-dspy.md)
-- `06-mcp-architecture.md` → Superseded by [06-mcp-architecture-v2.md](./06-mcp-architecture-v2.md)
+- `04-interface-architecture.md` → Superseded by [05-claude-skills-dspy.md](./spec/05-claude-skills-dspy.md)
+- `06-mcp-architecture.md` → Superseded by [spec/06-mcp-architecture-v2.md](./spec/06-mcp-architecture-v2.md)
 - `FR_for_review.md` → Original functional requirements (reference only)
 
 ---

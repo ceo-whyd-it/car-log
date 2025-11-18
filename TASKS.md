@@ -107,7 +107,7 @@ pytest tests/test_vehicle_crud.py
 # Should fail: VIN with I, O, or Q characters
 ```
 
-**Spec Reference:** 07-mcp-api-specifications.md lines 41-199
+**Spec Reference:** spec/07-mcp-api-specifications.md lines 41-199
 
 ---
 
@@ -145,7 +145,7 @@ python scripts/generate_mock_data.py --scenario demo
 # Verify: data/checkpoints/2025-11/{uuid}.json exists
 ```
 
-**Spec Reference:** 07-mcp-api-specifications.md lines 200-353
+**Spec Reference:** spec/07-mcp-api-specifications.md lines 200-353
 
 ---
 
@@ -174,7 +174,7 @@ pytest tests/test_gap_detection.py
 # Test: cp1 (45000 km) → cp2 (45820 km) = 820 km gap
 ```
 
-**Spec Reference:** 06-mcp-architecture-v2.md lines 248-281
+**Spec Reference:** spec/06-mcp-architecture-v2.md lines 248-281
 
 ---
 
@@ -209,7 +209,7 @@ python scripts/generate_mock_data.py --scenario demo
 # Verify: 3 templates created (Warehouse, Client Visit, Branch Office)
 ```
 
-**Spec Reference:** 06-mcp-architecture-v2.md lines 285-372
+**Spec Reference:** spec/06-mcp-architecture-v2.md lines 285-372
 
 ---
 
@@ -272,7 +272,7 @@ python -m mcp_servers.ekasa_api --version
 pytest tests/test_qr_scanning.py
 ```
 
-**Spec Reference:** 07-mcp-api-specifications.md lines 980-1010
+**Spec Reference:** spec/07-mcp-api-specifications.md lines 980-1010
 
 ---
 
@@ -309,7 +309,7 @@ pytest tests/test_receipt_fetching.py
 # Test with invalid ID: Should return error
 ```
 
-**Spec Reference:** 07-mcp-api-specifications.md lines 1011-1069
+**Spec Reference:** spec/07-mcp-api-specifications.md lines 1011-1069
 
 ---
 
@@ -338,7 +338,7 @@ pytest tests/test_receipt_fetching.py
 # No validation needed
 ```
 
-**Spec Reference:** 07-mcp-api-specifications.md - Tools 4.3 & 4.4 removed
+**Spec Reference:** spec/07-mcp-api-specifications.md - Tools 4.3 & 4.4 removed
 
 ---
 
@@ -399,7 +399,7 @@ npm test
 # Test: "Košice" → confidence < 0.7, multiple alternatives
 ```
 
-**Spec Reference:** 07-mcp-api-specifications.md lines 732-970
+**Spec Reference:** spec/07-mcp-api-specifications.md lines 732-970
 
 ---
 
@@ -432,7 +432,7 @@ npm test
 # Expected: ~410 km, via "D1"
 ```
 
-**Spec Reference:** 07-mcp-api-specifications.md lines 724-970
+**Spec Reference:** spec/07-mcp-api-specifications.md lines 724-970
 
 ---
 
@@ -461,7 +461,7 @@ pytest tests/test_exif_extraction.py
 # Test with photo without EXIF: Should return null
 ```
 
-**Spec Reference:** 07-mcp-api-specifications.md lines 1140-1212
+**Spec Reference:** spec/07-mcp-api-specifications.md lines 1140-1212
 
 **Note:** OCR with Claude Vision is P1 (skip for MVP if behind schedule)
 
@@ -529,7 +529,7 @@ pytest tests/test_gps_matching.py
 # Test: 10km away → score 0
 ```
 
-**Spec Reference:** 06-mcp-architecture-v2.md lines 719-749
+**Spec Reference:** spec/06-mcp-architecture-v2.md lines 719-749
 
 ---
 
@@ -560,7 +560,7 @@ pytest tests/test_address_matching.py
 # Test: Same city, different street → medium score
 ```
 
-**Spec Reference:** 06-mcp-architecture-v2.md lines 752-801
+**Spec Reference:** spec/06-mcp-architecture-v2.md lines 752-801
 
 ---
 
@@ -589,7 +589,7 @@ pytest tests/test_hybrid_scoring.py
 # Test: GPS=100, Address=80 → Total = (100*0.7 + 80*0.3) = 94
 ```
 
-**Spec Reference:** 06-mcp-architecture-v2.md lines 653-716
+**Spec Reference:** spec/06-mcp-architecture-v2.md lines 653-716
 
 ---
 
@@ -624,7 +624,7 @@ pytest tests/test_trip_reconstruction.py
 # Confidence should be >= 85%
 ```
 
-**Spec Reference:** 06-mcp-architecture-v2.md lines 804-843
+**Spec Reference:** spec/06-mcp-architecture-v2.md lines 804-843
 
 ---
 
@@ -653,7 +653,7 @@ pytest tests/test_completeness.py
 # Test: Template with only GPS → ~30%
 ```
 
-**Spec Reference:** 06-mcp-architecture-v2.md lines 848-889
+**Spec Reference:** spec/06-mcp-architecture-v2.md lines 848-889
 
 ---
 
@@ -704,7 +704,7 @@ pytest tests/test_distance_validation.py
 # Test: Odometer delta = 820 km, trips sum = 700 km → error (14% off)
 ```
 
-**Spec Reference:** 07-mcp-api-specifications.md lines 1259-1295
+**Spec Reference:** spec/07-mcp-api-specifications.md lines 1259-1295
 
 ---
 
@@ -734,7 +734,7 @@ pytest tests/test_fuel_validation.py
 # Test: Actual refuel 50 L → error (43% off)
 ```
 
-**Spec Reference:** 07-mcp-api-specifications.md lines 1296-1329
+**Spec Reference:** spec/07-mcp-api-specifications.md lines 1296-1329
 
 ---
 
@@ -766,7 +766,7 @@ pytest tests/test_efficiency_validation.py
 # Test: Diesel 25 L/100km → error (unrealistically high)
 ```
 
-**Spec Reference:** 07-mcp-api-specifications.md lines 1330-1361
+**Spec Reference:** spec/07-mcp-api-specifications.md lines 1330-1361
 
 ---
 
@@ -797,7 +797,7 @@ pytest tests/test_deviation_validation.py
 # Test: Vehicle avg = 8.5 L/100km, trip = 12.0 L/100km → warning (41% deviation)
 ```
 
-**Spec Reference:** 07-mcp-api-specifications.md lines 1362-1390
+**Spec Reference:** spec/07-mcp-api-specifications.md lines 1362-1390
 
 ---
 
@@ -960,7 +960,7 @@ pytest tests/test_report_generation.py
 # Verify: CSV contains all trips with VIN, driver, trip timing, locations
 ```
 
-**Spec Reference:** 07-mcp-api-specifications.md lines 1401-1477
+**Spec Reference:** spec/07-mcp-api-specifications.md lines 1401-1477
 
 ---
 
@@ -1042,7 +1042,7 @@ pytest tests/test_report_generation.py
 **Priority:** P1 (POST-HACKATHON)
 **Not critical for submission**
 
-This is explicitly deprioritized per 08-implementation-plan.md lines 1014-1030.
+This is explicitly deprioritized per spec/08-implementation-plan.md lines 1014-1030.
 
 ---
 
@@ -1236,7 +1236,7 @@ graph TD
 ## Quick Start for Developers
 
 1. **Read specifications first:**
-   - README.md → CLAUDE.md → 08-implementation-plan.md
+   - README.md → CLAUDE.md → spec/08-implementation-plan.md
 
 2. **Pick your track:**
    - Track A (Days 1-3): car-log-core
