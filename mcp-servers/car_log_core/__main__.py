@@ -24,6 +24,10 @@ from .tools import (
     detect_gap,
     create_template,
     list_templates,
+    create_trip,
+    create_trips_batch,
+    list_trips,
+    get_trip,
 )
 
 # Configure logging
@@ -92,6 +96,27 @@ async def list_tools():
             "description": "List all trip templates",
             "inputSchema": list_templates.INPUT_SCHEMA,
         },
+        # Trip tools
+        {
+            "name": "create_trip",
+            "description": "Create single trip with Slovak compliance (driver_name, L/100km)",
+            "inputSchema": create_trip.INPUT_SCHEMA,
+        },
+        {
+            "name": "create_trips_batch",
+            "description": "Batch create trips from reconstruction proposals",
+            "inputSchema": create_trips_batch.INPUT_SCHEMA,
+        },
+        {
+            "name": "list_trips",
+            "description": "List trips with filters (vehicle, date range, purpose)",
+            "inputSchema": list_trips.INPUT_SCHEMA,
+        },
+        {
+            "name": "get_trip",
+            "description": "Retrieve trip by ID",
+            "inputSchema": get_trip.INPUT_SCHEMA,
+        },
     ]
 
 
@@ -119,6 +144,14 @@ async def call_tool(name: str, arguments: dict):
             return await create_template.execute(arguments)
         elif name == "list_templates":
             return await list_templates.execute(arguments)
+        elif name == "create_trip":
+            return await create_trip.execute(arguments)
+        elif name == "create_trips_batch":
+            return await create_trips_batch.execute(arguments)
+        elif name == "list_trips":
+            return await list_trips.execute(arguments)
+        elif name == "get_trip":
+            return await get_trip.execute(arguments)
         else:
             return {
                 "success": False,
