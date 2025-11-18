@@ -2,8 +2,35 @@
 
 **Project:** Slovak Tax-Compliant Mileage Logger (MCP Hackathon)
 **Deadline:** November 30, 2025 (13 days remaining)
-**Status:** Ready for Implementation
+**Status:** ⚠️ CRITICAL GAP - Trip CRUD Tools Missing
 **Last Updated:** November 18, 2025
+
+---
+
+## ⚠️ CRITICAL: MISSING IMPLEMENTATION
+
+**BLOCKING ISSUE:** Trip CRUD tools are documented in specifications but **NOT IMPLEMENTED**.
+
+**Impact:**
+- ❌ Cannot complete end-to-end workflow: Receipt → Checkpoint → Gap → Template Match → **[MISSING]** → Report
+- ❌ Template matching produces proposals but cannot save them as trips
+- ❌ Report generation works but has no trip data to report
+- ❌ Demo will fail at critical "create trip" step
+
+**Missing Tools (car-log-core):**
+- ❌ `create_trip` - Create single trip with Slovak compliance fields
+- ❌ `create_trips_batch` - Batch trip creation from reconstruction proposals
+- ❌ `list_trips` - List trips with filters (date range, vehicle, purpose)
+- ❌ `get_trip` - Retrieve trip by ID
+- ⏳ `update_trip` - Update trip details (P1 - optional)
+- ⏳ `delete_trip` - Delete trip (P1 - optional)
+
+**Specification References:**
+- `spec/06-mcp-architecture-v2.md` lines 374-473 (Tools 1.5, 1.6)
+- `spec/07-mcp-api-specifications.md` - Trip data model defined
+- `spec/04-data-model.md` - Trip schema documented
+
+**Action Required:** Implement missing trip tools (estimated 4-6 hours) before demo can be completed.
 
 ---
 
@@ -12,7 +39,7 @@
 **Total Tasks:** 98 hours of P0 work across 4 parallel tracks
 **Critical Path:** Track A → Track C → Track D (13 days)
 **Parallel Capacity:** 4 developers working simultaneously
-**Success Criteria:** All P0 servers functional + Demo working by Day 13
+**Success Criteria:** All P0 servers functional + **Trip CRUD implemented** + Demo working by Day 13
 
 ---
 
@@ -56,7 +83,7 @@ Day 13:   Hackathon submission
 ### A1: car-log-core - Project Setup (2 hours)
 
 **Can run in parallel:** ✅ All Track B tasks
-**Status:** ✅ COMPLETE
+**Status:** ⚠️ PARTIAL - Missing trip CRUD tools
 **Assignee:** Developer 1
 **Actual Time:** 30 minutes
 
@@ -64,11 +91,14 @@ Day 13:   Hackathon submission
 - [x] Create `mcp-servers/car_log_core/` directory structure
 - [x] Create `__init__.py` and `__main__.py` (MCP server entry point)
 - [x] Create `storage.py` with atomic write pattern (CRITICAL)
-- [x] Create `tools/` directory for 8 tool implementations
+- [x] Create `tools/` directory for tool implementations
 - [x] Set up `requirements.txt` (mcp, uuid, datetime, pathlib)
 - [x] Create data directories: `data/vehicles/`, `data/checkpoints/`, `data/trips/`, `data/templates/`
+- [ ] **MISSING:** Trip CRUD tools not implemented (see A6-A9 below)
 
 **Deliverable:** Project skeleton with atomic write function tested
+
+**Note:** Spec says "8 tools" but actually implemented 10 (vehicle, checkpoint, template CRUD + gap detection). Trip tools still missing.
 
 **Validation:**
 ```bash
@@ -210,6 +240,87 @@ python scripts/generate_mock_data.py --scenario demo
 ```
 
 **Spec Reference:** spec/06-mcp-architecture-v2.md lines 285-372
+
+---
+
+### A6: car-log-core - Trip CRUD (P0) ❌ NOT IMPLEMENTED
+
+**Can run in parallel:** ✅ Can be done independently
+**Status:** ❌ NOT STARTED - CRITICAL BLOCKER
+**Assignee:** NEEDS ASSIGNMENT
+**Estimated Time:** 4-6 hours
+**Blocks:** End-to-end workflow, demo, report generation
+
+**Tasks:**
+- [ ] Implement `tools/create_trip.py`
+  - [ ] Validate all Slovak compliance fields (driver_name, trip timing, locations)
+  - [ ] Separate trip timing from refuel timing
+  - [ ] Calculate fuel efficiency in L/100km (NEVER km/L)
+  - [ ] Store in monthly folder: `data/trips/2025-11/{trip_id}.json`
+  - [ ] Atomic write pattern
+  - [ ] Return complete trip object
+- [ ] Implement `tools/create_trips_batch.py`
+  - [ ] Accept array of trip data (from reconstruction proposals)
+  - [ ] Validate each trip
+  - [ ] Create all trips atomically (all or nothing)
+  - [ ] Return array of created trip IDs
+- [ ] Implement `tools/list_trips.py`
+  - [ ] Filter by vehicle_id
+  - [ ] Filter by date range (trip_start_datetime)
+  - [ ] Filter by purpose (Business/Personal)
+  - [ ] Sort by datetime descending
+  - [ ] Return trip list with summary stats
+- [ ] Implement `tools/get_trip.py`
+  - [ ] Retrieve trip by trip_id
+  - [ ] Include all Slovak compliance fields
+  - [ ] Return 404 error if not found
+- [ ] Write comprehensive unit tests
+- [ ] Test with Slovak compliance scenarios
+
+**Deliverable:** Trip CRUD functional, end-to-end workflow unblocked
+
+**CRITICAL:** This blocks:
+- Template matching → Trip creation workflow
+- Report generation (needs trip data)
+- Demo completion
+- Hackathon submission
+
+**Validation:**
+```bash
+pytest tests/test_trip_crud.py
+python scripts/generate_mock_data.py --scenario demo
+# Verify: data/trips/2025-11/{uuid}.json exists
+# Verify: Reports contain trip data
+```
+
+**Spec Reference:**
+- spec/06-mcp-architecture-v2.md lines 374-473 (Tools 1.5, 1.6)
+- spec/04-data-model.md - Trip schema
+- CLAUDE.md - Trip data model
+
+---
+
+### A7: car-log-core - Trip Update/Delete (P1) ⏳ OPTIONAL
+
+**Can run in parallel:** ✅ Can be done independently
+**Status:** ⏳ P1 - Optional for MVP
+**Assignee:** OPTIONAL
+**Estimated Time:** 2 hours
+**Priority:** LOW - Only implement if ahead of schedule
+
+**Tasks:**
+- [ ] Implement `tools/update_trip.py` (optional)
+  - [ ] Update trip fields
+  - [ ] Maintain audit trail (updated_at timestamp)
+  - [ ] Atomic write
+- [ ] Implement `tools/delete_trip.py` (optional)
+  - [ ] Soft delete (mark as deleted) or hard delete
+  - [ ] Move to archive folder if needed
+- [ ] Write unit tests
+
+**Deliverable:** Trip modification tools (P1 feature)
+
+**Scope Decision:** ⏳ Implement only if all P0 tasks complete and time permits
 
 ---
 
@@ -1236,16 +1347,153 @@ graph TD
 ## Success Metrics
 
 ### Must-Have (P0)
-- [ ] 6 MCP servers functional (24 tools, was 26 but ekasa queue removed)
-- [ ] End-to-end demo working (< 5 minutes)
-- [ ] Slovak compliance verified (VIN, driver, L/100km)
-- [ ] CSV reports generated
-- [ ] Demo video recorded (5 minutes)
+- [x] 7 MCP servers functional (6/7 complete for P0)
+- [ ] **CRITICAL:** Trip CRUD tools implemented (23 tools currently, need 27+ with trip tools)
+  - Current: 23 implemented tools
+  - Missing: 4-6 trip CRUD tools
+  - Note: Was 26 tools, ekasa queue removed (24 documented), but trip tools never implemented
+- [ ] End-to-end demo working (< 5 minutes) - **BLOCKED by missing trip tools**
+- [x] Slovak compliance verified (VIN, driver, L/100km)
+- [x] CSV reports generated (but no trip data)
+- [ ] Demo video recorded (5 minutes) - **BLOCKED by workflow gap**
 
 ### Nice-to-Have (P1)
 - [ ] Dashboard OCR with Claude Vision
 - [ ] PDF reports
 - [ ] Gradio web UI
+
+---
+
+## Track E: Docker Deployment (NEW)
+
+**Priority:** P0 (Deployment infrastructure)
+**Duration:** 2-3 hours
+**Status:** 📋 Documentation complete, implementation pending
+
+### E1: Docker Setup (2 hours)
+
+**Tasks:**
+- [ ] Build Docker images (Python + Node.js)
+- [ ] Test docker-compose.yml locally
+- [ ] Verify all 7 MCP servers start
+- [ ] Test shared volume mount (`/data`)
+- [ ] Verify environment variables
+- [ ] Test health checks
+
+**Files Created:**
+- ✅ docker/docker-compose.yml
+- ✅ docker/Dockerfile.python
+- ✅ docker/Dockerfile.nodejs
+- ✅ docker/docker-entrypoint.sh
+- ✅ docker/.env.example
+- ✅ docker/requirements.txt
+- ✅ docker/README.md
+
+**Validation:**
+```bash
+cd docker
+docker-compose up -d
+docker-compose ps  # All containers running
+docker-compose logs -f  # No errors
+```
+
+### E2: Docker Testing (1 hour)
+
+**Tasks:**
+- [ ] Test data persistence (restart containers)
+- [ ] Test with mock data
+- [ ] Verify MCP tool calls work
+- [ ] Test QR scanning (libzbar0)
+- [ ] Test PDF processing (poppler-utils)
+- [ ] Performance testing (resource usage)
+
+---
+
+## Track F: Claude Desktop Skills (NEW)
+
+**Priority:** P0 (User interface)
+**Duration:** 15-20 hours
+**Status:** 📋 Specifications complete, implementation pending
+
+### F1: Skill 1 - Vehicle Setup (2 hours)
+
+**Tasks:**
+- [ ] Implement VIN validation workflow
+- [ ] Add Slovak license plate format checking
+- [ ] Test with valid/invalid inputs
+- [ ] Error handling (duplicate plates)
+
+**Files Created:**
+- ✅ claude_skills/01-vehicle-setup.md
+
+### F2: Skill 2 - Checkpoint from Receipt (4 hours)
+
+**Tasks:**
+- [ ] Implement photo paste detection
+- [ ] QR code workflow (e-Kasa API)
+- [ ] EXIF GPS extraction workflow
+- [ ] Automatic gap detection trigger
+- [ ] Error handling (timeout, no QR, no GPS)
+
+**Files Created:**
+- ✅ claude_skills/02-checkpoint-from-receipt.md
+
+### F3: Skill 3 - Trip Reconstruction (5 hours)
+
+**Tasks:**
+- [ ] Implement orchestration pattern
+- [ ] GPS-first matching presentation
+- [ ] Confidence score display
+- [ ] Batch trip creation
+- [ ] Automatic validation integration
+
+**Files Created:**
+- ✅ claude_skills/03-trip-reconstruction.md
+
+### F4: Skill 4 - Template Creation (3 hours)
+
+**Tasks:**
+- [ ] Implement geocoding ambiguity handling
+- [ ] Route calculation alternatives
+- [ ] GPS mandatory validation
+- [ ] Day-of-week pattern collection
+
+**Files Created:**
+- ✅ claude_skills/04-template-creation.md
+
+### F5: Skill 5 - Report Generation (2 hours)
+
+**Tasks:**
+- [ ] Implement Slovak VAT compliance checklist
+- [ ] CSV/PDF format selection
+- [ ] Business trip filtering
+- [ ] Summary statistics display
+
+**Files Created:**
+- ✅ claude_skills/05-report-generation.md
+
+### F6: Skill 6 - Data Validation (2 hours)
+
+**Tasks:**
+- [ ] Implement proactive validation
+- [ ] 4 algorithm integration
+- [ ] Warning vs error distinction
+- [ ] Contextual suggestion generation
+
+**Files Created:**
+- ✅ claude_skills/06-data-validation.md
+
+### F7: Skills Integration Testing (2 hours)
+
+**Tasks:**
+- [ ] Test end-to-end workflow (all 6 skills)
+- [ ] Test skill chaining (Skill 2 → Skill 3)
+- [ ] Test error recovery
+- [ ] Performance testing
+- [ ] User experience testing
+
+**Files Created:**
+- ✅ claude_skills/README.md
 
 ---
 

@@ -10,7 +10,11 @@
 
 This document provides **complete, production-ready MCP tool definitions** with full input/output schemas, validation rules, and error responses for all 7 MCP servers.
 
-**Total Tools:** 24 tools across 7 servers (21 P0, 3 P1)
+**Total Tools:** 24 documented (23 implemented, 4-6 trip tools missing)
+
+**Implementation Status:**
+- ✅ 23 tools implemented and tested
+- ❌ 4-6 trip CRUD tools documented but NOT implemented (critical blocker)
 
 **Architecture:** Headless MCP servers that power both Claude Desktop (P0) and Gradio UI (P1)
 
@@ -18,19 +22,21 @@ This document provides **complete, production-ready MCP tool definitions** with 
 
 ## MCP Server Summary
 
-| Server | Purpose | Priority | Tools Count |
-|--------|---------|----------|-------------|
-| `car-log-core` | CRUD operations (file-based storage) | P0 | 8 |
-| `trip-reconstructor` | Stateless template matching | P0 | 2 |
-| `geo-routing` | Geocoding + routing (OpenStreetMap) | P0 | 3 |
-| `ekasa-api` | Receipt processing (e-Kasa Slovakia) | P0 | 2 |
-| `dashboard-ocr` | Photo OCR + EXIF extraction | P0 | 3 |
-| `validation` | Data validation algorithms | P0 | 4 |
-| `report-generator` | PDF/CSV generation | P1 | 2 |
+| Server | Purpose | Priority | Tools Count | Status |
+|--------|---------|----------|-------------|--------|
+| `car-log-core` | CRUD operations (file-based storage) | P0 | 10 implemented, 4-6 trip tools missing | ⚠️ PARTIAL |
+| `trip-reconstructor` | Stateless template matching | P0 | 2 | ✅ COMPLETE |
+| `geo-routing` | Geocoding + routing (OpenStreetMap) | P0 | 3 | ✅ COMPLETE |
+| `ekasa-api` | Receipt processing (e-Kasa Slovakia) | P0 | 2 | ✅ COMPLETE |
+| `dashboard-ocr` | Photo OCR + EXIF extraction | P0/P1 | 1 (P0), 2 (P1) | ✅ P0 COMPLETE |
+| `validation` | Data validation algorithms | P0 | 4 | ✅ COMPLETE |
+| `report-generator` | PDF/CSV generation | P0/P1 | 1 (P0), 1 (P1) | ✅ P0 COMPLETE |
+
+**Critical Gap:** Trip CRUD tools (create_trip, create_trips_batch, list_trips, get_trip) are documented in this specification but NOT implemented. This blocks the end-to-end workflow.
 
 ---
 
-## Server 1: car-log-core (8 tools)
+## Server 1: car-log-core (10 implemented + 4-6 missing)
 
 **Purpose:** CRUD operations for vehicles, checkpoints, trips, templates
 **Storage:** JSON file-based in `~/Documents/MileageLog/data/`

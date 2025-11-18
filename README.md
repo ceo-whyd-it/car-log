@@ -1,8 +1,41 @@
 # Car Log Specification
 
 **Version:** 1.0
-**Date:** 2025-11-17
-**Status:** Implementation-Ready ✅
+**Date:** 2025-11-18
+**Status:** ⚠️ Implementation Partially Complete - Trip CRUD Blocking
+
+---
+
+## ⚠️ Current Implementation Status
+
+**Overall Progress:** 6/7 MCP servers complete for P0 (82% implementation consistency)
+
+### What IS Implemented ✅
+- ✅ **Vehicle CRUD** - Complete with Slovak compliance (VIN validation, license plate format)
+- ✅ **Checkpoint CRUD** - Complete with GPS-first philosophy, monthly folder structure
+- ✅ **Template CRUD** - Complete with GPS mandatory, addresses optional
+- ✅ **Gap Detection** - Fully functional, returns structured gap data
+- ✅ **Trip Reconstruction** - Hybrid GPS (70%) + Address (30%) matching working
+- ✅ **Validation** - All 4 algorithms functional (distance sum, fuel, efficiency, deviation)
+- ✅ **E-Kasa API** - QR scanning + receipt fetching with 60s timeout
+- ✅ **Geo-Routing** - Geocoding with ambiguity handling, route calculation, 24h caching
+- ✅ **Dashboard OCR** - EXIF extraction (GPS, timestamp) working
+- ✅ **Report Generation** - CSV generation with Slovak compliance (P0)
+- ✅ **70+ tests passing** (98.6% success rate)
+
+### What is NOT Implemented ❌
+- ❌ **Trip CRUD Tools** (CRITICAL BLOCKER):
+  - `car-log-core.create_trip` - Cannot save individual trips
+  - `car-log-core.create_trips_batch` - Cannot save reconstruction proposals
+  - `car-log-core.list_trips` - Cannot retrieve trips for reports
+  - `car-log-core.get_trip` - Cannot fetch trip details
+- ⏳ **Dashboard OCR with Claude Vision** (P1 - optional)
+- ⏳ **PDF Reports** (P1 - optional)
+
+### Impact
+**Current:** Template matching produces proposals, but **cannot save them as trips**.
+**Blocker:** End-to-end demo cannot be completed without trip storage.
+**Action Required:** Implement trip CRUD tools (estimated 4-6 hours) - See TASKS.md section A6.
 
 ---
 
@@ -22,6 +55,51 @@ Complete specification for a **Slovak tax-compliant company vehicle mileage logg
 **For Product Managers:** Start here → [spec/01-product-overview.md](./spec/01-product-overview.md)
 **For Architects:** Start here → [spec/06-mcp-architecture-v2.md](./spec/06-mcp-architecture-v2.md)
 **For Hackathon Judges:** Start here → [spec/09-hackathon-presentation.md](./spec/09-hackathon-presentation.md)
+**🐳 For Deployment:** Docker setup → [docker/README.md](./docker/README.md)
+**🎯 For Claude Skills:** Conversational UI → [claude_skills/README.md](./claude_skills/README.md)
+
+---
+
+## 🐳 Docker Deployment (NEW)
+
+**Run all 7 MCP servers with one command:**
+
+```bash
+cd docker
+docker-compose up -d
+```
+
+**Architecture:** Hybrid setup (1 Python + 1 Node.js container) with shared data volume.
+
+**What's included:**
+- ✅ All 6 Python MCP servers (car-log-core, trip-reconstructor, validation, ekasa-api, dashboard-ocr, report-generator)
+- ✅ 1 Node.js server (geo-routing)
+- ✅ Shared `/data` volume for JSON storage
+- ✅ Environment-driven configuration
+- ✅ Health checks and restart policies
+
+**Files:** `docker/docker-compose.yml`, `Dockerfile.python`, `Dockerfile.nodejs`, `.env.example`, entrypoint script
+
+**See:** [docker/README.md](./docker/README.md) for complete setup instructions
+
+---
+
+## 🎯 Claude Desktop Skills (NEW)
+
+**6 conversational skills** that make mileage tracking 10x faster:
+
+1. **Vehicle Setup** - Slovak VIN validation (3 min → 30 sec)
+2. **Checkpoint from Receipt** - Photo paste → QR scan → EXIF → checkpoint (3 min → 30 sec)
+3. **Trip Reconstruction** - GPS-first matching with 92% confidence (15 min → 2 min)
+4. **Template Creation** - GPS-mandatory templates with route calculation (5 min → 1 min)
+5. **Report Generation** - Slovak VAT Act 2025 compliant CSV/PDF (10 min → 1 min)
+6. **Data Validation** - Proactive 4-algorithm validation (manual → automatic)
+
+**Key Innovation:** Skills orchestrate multiple MCP servers to create seamless workflows.
+
+**Files:** `claude_skills/01-vehicle-setup.md` through `06-data-validation.md` + overview README
+
+**See:** [claude_skills/README.md](./claude_skills/README.md) for complete skill documentation
 
 ---
 

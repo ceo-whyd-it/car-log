@@ -62,10 +62,13 @@
 - None (foundational layer)
 
 **Interface Contract:**
-- **8 tools:** `create_vehicle`, `get_vehicle`, `list_vehicles`, `update_vehicle`, `create_checkpoint`, `get_checkpoint`, `list_checkpoints`, `detect_gap`
+- **10 tools implemented:** `create_vehicle`, `get_vehicle`, `list_vehicles`, `update_vehicle`, `create_checkpoint`, `get_checkpoint`, `list_checkpoints`, `detect_gap`, `create_template`, `list_templates`
+- **4-6 tools MISSING:** `create_trip`, `create_trips_batch`, `list_trips`, `get_trip` ❌ NOT IMPLEMENTED
 - **Specification:** `07-mcp-api-specifications.md` lines 41-480
 - **Storage:** JSON file-based in `~/Documents/MileageLog/data/`
 - **Atomic Write Pattern:** Temp file + rename (04-data-model.md lines 829-856)
+
+**⚠️ CRITICAL GAP:** Trip CRUD tools documented but not implemented. See TASKS.md section A6 for implementation tasks.
 
 **Data Contracts:**
 - **Reads/Writes:**

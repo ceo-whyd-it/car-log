@@ -371,7 +371,9 @@ Create new trip template with GPS coordinates.
 
 ---
 
-## Tool 1.5: create_trip
+## Tool 1.5: create_trip ❌ NOT IMPLEMENTED
+
+**Implementation Status:** ❌ Documented but NOT implemented (critical blocker)
 
 ### Description
 Create single trip record with Slovak tax compliance fields.
@@ -439,7 +441,9 @@ Create single trip record with Slovak tax compliance fields.
 
 ---
 
-## Tool 1.6: create_trips_batch
+## Tool 1.6: create_trips_batch ❌ NOT IMPLEMENTED
+
+**Implementation Status:** ❌ Documented but NOT implemented (critical blocker)
 
 ### Description
 Create multiple trips in a single transaction (atomic).

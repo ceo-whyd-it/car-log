@@ -1,0 +1,41 @@
+FROM python:3.11-slim
+
+LABEL maintainer="Car Log Team"
+LABEL description="All-in-one Python MCP servers for Car Log"
+LABEL version="1.0"
+
+# Install system dependencies for QR scanning and PDF processing
+RUN apt-get update && apt-get install -y \
+    libzbar0 \
+    poppler-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy requirements and install Python dependencies
+COPY docker/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy MCP servers
+COPY mcp-servers/ /app/mcp-servers/
+
+# Set PYTHONPATH
+ENV PYTHONPATH=/app
+
+# Create data directory structure
+RUN mkdir -p /data/vehicles \
+    && mkdir -p /data/checkpoints \
+    && mkdir -p /data/trips \
+    && mkdir -p /data/templates \
+    && mkdir -p /data/reports
+
+# Copy and set permissions for entrypoint script
+COPY docker/docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD python -c "import sys; sys.exit(0)"
+
+# Entry point script to start all Python MCP servers
+ENTRYPOINT ["/docker-entrypoint.sh"]
