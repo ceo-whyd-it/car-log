@@ -1364,6 +1364,139 @@ graph TD
 
 ---
 
+## Track E: Docker Deployment (NEW)
+
+**Priority:** P0 (Deployment infrastructure)
+**Duration:** 2-3 hours
+**Status:** 📋 Documentation complete, implementation pending
+
+### E1: Docker Setup (2 hours)
+
+**Tasks:**
+- [ ] Build Docker images (Python + Node.js)
+- [ ] Test docker-compose.yml locally
+- [ ] Verify all 7 MCP servers start
+- [ ] Test shared volume mount (`/data`)
+- [ ] Verify environment variables
+- [ ] Test health checks
+
+**Files Created:**
+- ✅ docker/docker-compose.yml
+- ✅ docker/Dockerfile.python
+- ✅ docker/Dockerfile.nodejs
+- ✅ docker/docker-entrypoint.sh
+- ✅ docker/.env.example
+- ✅ docker/requirements.txt
+- ✅ docker/README.md
+
+**Validation:**
+```bash
+cd docker
+docker-compose up -d
+docker-compose ps  # All containers running
+docker-compose logs -f  # No errors
+```
+
+### E2: Docker Testing (1 hour)
+
+**Tasks:**
+- [ ] Test data persistence (restart containers)
+- [ ] Test with mock data
+- [ ] Verify MCP tool calls work
+- [ ] Test QR scanning (libzbar0)
+- [ ] Test PDF processing (poppler-utils)
+- [ ] Performance testing (resource usage)
+
+---
+
+## Track F: Claude Desktop Skills (NEW)
+
+**Priority:** P0 (User interface)
+**Duration:** 15-20 hours
+**Status:** 📋 Specifications complete, implementation pending
+
+### F1: Skill 1 - Vehicle Setup (2 hours)
+
+**Tasks:**
+- [ ] Implement VIN validation workflow
+- [ ] Add Slovak license plate format checking
+- [ ] Test with valid/invalid inputs
+- [ ] Error handling (duplicate plates)
+
+**Files Created:**
+- ✅ claude_skills/01-vehicle-setup.md
+
+### F2: Skill 2 - Checkpoint from Receipt (4 hours)
+
+**Tasks:**
+- [ ] Implement photo paste detection
+- [ ] QR code workflow (e-Kasa API)
+- [ ] EXIF GPS extraction workflow
+- [ ] Automatic gap detection trigger
+- [ ] Error handling (timeout, no QR, no GPS)
+
+**Files Created:**
+- ✅ claude_skills/02-checkpoint-from-receipt.md
+
+### F3: Skill 3 - Trip Reconstruction (5 hours)
+
+**Tasks:**
+- [ ] Implement orchestration pattern
+- [ ] GPS-first matching presentation
+- [ ] Confidence score display
+- [ ] Batch trip creation
+- [ ] Automatic validation integration
+
+**Files Created:**
+- ✅ claude_skills/03-trip-reconstruction.md
+
+### F4: Skill 4 - Template Creation (3 hours)
+
+**Tasks:**
+- [ ] Implement geocoding ambiguity handling
+- [ ] Route calculation alternatives
+- [ ] GPS mandatory validation
+- [ ] Day-of-week pattern collection
+
+**Files Created:**
+- ✅ claude_skills/04-template-creation.md
+
+### F5: Skill 5 - Report Generation (2 hours)
+
+**Tasks:**
+- [ ] Implement Slovak VAT compliance checklist
+- [ ] CSV/PDF format selection
+- [ ] Business trip filtering
+- [ ] Summary statistics display
+
+**Files Created:**
+- ✅ claude_skills/05-report-generation.md
+
+### F6: Skill 6 - Data Validation (2 hours)
+
+**Tasks:**
+- [ ] Implement proactive validation
+- [ ] 4 algorithm integration
+- [ ] Warning vs error distinction
+- [ ] Contextual suggestion generation
+
+**Files Created:**
+- ✅ claude_skills/06-data-validation.md
+
+### F7: Skills Integration Testing (2 hours)
+
+**Tasks:**
+- [ ] Test end-to-end workflow (all 6 skills)
+- [ ] Test skill chaining (Skill 2 → Skill 3)
+- [ ] Test error recovery
+- [ ] Performance testing
+- [ ] User experience testing
+
+**Files Created:**
+- ✅ claude_skills/README.md
+
+---
+
 ## Quick Start for Developers
 
 1. **Read specifications first:**

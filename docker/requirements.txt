@@ -1,0 +1,43 @@
+# Car Log - Consolidated Python Dependencies for Docker
+# All 6 Python MCP servers
+
+# ============================================
+# MCP Protocol
+# ============================================
+mcp>=1.0.0
+
+# ============================================
+# Core Dependencies
+# ============================================
+python-dateutil>=2.8.2
+
+# ============================================
+# Image Processing (ekasa-api, dashboard-ocr)
+# ============================================
+Pillow>=10.0.0
+pyzbar>=0.1.9           # QR code scanning (requires libzbar0 system package)
+pdf2image>=1.16.3       # PDF rendering for QR scanning
+piexif>=1.1.3          # EXIF data manipulation
+
+# ============================================
+# HTTP Requests (ekasa-api)
+# ============================================
+requests>=2.31.0
+
+# ============================================
+# Testing (Optional - for development)
+# ============================================
+# pytest>=7.4.0
+# pytest-asyncio>=0.21.0
+
+# ============================================
+# Notes
+# ============================================
+# System dependencies required (installed in Dockerfile):
+# - libzbar0: QR code scanning library
+# - poppler-utils: PDF rendering utilities
+#
+# Version ranges:
+# - mcp: Latest stable (1.x+)
+# - Pillow: Security updates important
+# - requests: Widely compatible

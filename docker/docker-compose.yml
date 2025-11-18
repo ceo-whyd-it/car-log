@@ -1,0 +1,79 @@
+version: '3.8'
+
+services:
+  # Python MCP Servers (all-in-one container)
+  car-log-python:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.python
+    container_name: car-log-python
+    environment:
+      # car-log-core
+      DATA_PATH: /data
+      USE_ATOMIC_WRITES: "true"
+
+      # trip-reconstructor
+      GPS_WEIGHT: "0.7"
+      ADDRESS_WEIGHT: "0.3"
+      CONFIDENCE_THRESHOLD: "70"
+
+      # validation
+      DISTANCE_VARIANCE_PERCENT: "10"
+      CONSUMPTION_VARIANCE_PERCENT: "15"
+      DEVIATION_THRESHOLD_PERCENT: "20"
+      DIESEL_MIN_L_PER_100KM: "5"
+      DIESEL_MAX_L_PER_100KM: "15"
+      GASOLINE_MIN_L_PER_100KM: "6"
+      GASOLINE_MAX_L_PER_100KM: "20"
+      LPG_MIN_L_PER_100KM: "8"
+      LPG_MAX_L_PER_100KM: "25"
+
+      # ekasa-api
+      EKASA_API_URL: "https://ekasa.financnasprava.sk/mdu/api/v1/opd/receipt"
+      MCP_TIMEOUT_SECONDS: "60"
+
+      # dashboard-ocr
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+
+      # report-generator
+      # Uses DATA_PATH from car-log-core
+    volumes:
+      - ../data:/data  # Shared data volume
+      - ../mcp-servers:/app/mcp-servers:ro  # Read-only code mount
+    restart: unless-stopped
+    networks:
+      - car-log-net
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Node.js MCP Server
+  geo-routing:
+    build:
+      context: ../mcp-servers/geo-routing
+      dockerfile: ../../docker/Dockerfile.nodejs
+    container_name: car-log-geo-routing
+    environment:
+      OSRM_BASE_URL: "https://router.project-osrm.org"
+      NOMINATIM_BASE_URL: "https://nominatim.openstreetmap.org"
+      CACHE_TTL_HOURS: "24"
+    restart: unless-stopped
+    networks:
+      - car-log-net
+    healthcheck:
+      test: ["CMD", "node", "-e", "process.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  car-log-net:
+    driver: bridge
+
+volumes:
+  data:
+    driver: local
