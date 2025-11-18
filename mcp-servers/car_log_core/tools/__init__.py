@@ -13,6 +13,10 @@ from . import (
     detect_gap,
     create_template,
     list_templates,
+    create_trip,
+    get_trip,
+    list_trips,
+    create_trips_batch,
 )
 
 __all__ = [
@@ -26,4 +30,8 @@ __all__ = [
     "detect_gap",
     "create_template",
     "list_templates",
+    "create_trip",
+    "get_trip",
+    "list_trips",
+    "create_trips_batch",
 ]
