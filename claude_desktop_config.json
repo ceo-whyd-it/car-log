@@ -72,6 +72,16 @@
       "env": {
         "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}"
       }
+    },
+    "report-generator": {
+      "command": "python",
+      "args": [
+        "-m",
+        "mcp_servers.report_generator"
+      ],
+      "env": {
+        "DATA_PATH": "~/Documents/MileageLog/data"
+      }
     }
   }
 }
