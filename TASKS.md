@@ -478,15 +478,16 @@ pytest tests/test_exif_extraction.py
 ### C1: trip-reconstructor - Project Setup (1 hour)
 
 **Can run in parallel:** ✅ C2 (in same file), all Track B
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 5
 **Depends on:** A3 (Day 2 checkpoint)
+**Actual Time:** 30 minutes
 
 **Tasks:**
-- [ ] Create `mcp-servers/trip_reconstructor/` directory
-- [ ] Set up MCP server skeleton
-- [ ] Create `matching.py` module for algorithm
-- [ ] Configure environment variables:
+- [x] Create `mcp-servers/trip_reconstructor/` directory
+- [x] Set up MCP server skeleton
+- [x] Create `matching.py` module for algorithm
+- [x] Configure environment variables:
   - `GPS_WEIGHT=0.7`
   - `ADDRESS_WEIGHT=0.3`
   - `CONFIDENCE_THRESHOLD=70`
@@ -498,22 +499,23 @@ pytest tests/test_exif_extraction.py
 ### C2: trip-reconstructor - GPS Matching (3 hours)
 
 **Can run in parallel:** ✅ C3, all Track B
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 5
 **Depends on:** C1
+**Actual Time:** 2 hours
 
 **Tasks:**
-- [ ] Implement Haversine distance function
-  - [ ] Input: two GPS coordinate pairs
-  - [ ] Output: distance in meters
-- [ ] Implement GPS scoring function
-  - [ ] < 100m → score 100
-  - [ ] 100m-500m → score 90
-  - [ ] 500m-2000m → score 70
-  - [ ] 2000m-5000m → score 40
-  - [ ] > 5000m → score 0
-- [ ] Write unit tests
-- [ ] Test with real Slovak coordinates
+- [x] Implement Haversine distance function
+  - [x] Input: two GPS coordinate pairs
+  - [x] Output: distance in meters
+- [x] Implement GPS scoring function
+  - [x] < 100m → score 100
+  - [x] 100m-500m → score 90
+  - [x] 500m-2000m → score 70
+  - [x] 2000m-5000m → score 40
+  - [x] > 5000m → score 0
+- [x] Write unit tests
+- [x] Test with real Slovak coordinates
 
 **Deliverable:** GPS matching algorithm functional
 
@@ -534,19 +536,20 @@ pytest tests/test_gps_matching.py
 ### C3: trip-reconstructor - Address Matching (2 hours)
 
 **Can run in parallel:** ✅ C2, C4, all Track B
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 5
 **Depends on:** C1
+**Actual Time:** 1.5 hours
 
 **Tasks:**
-- [ ] Implement address normalization
-  - [ ] Lowercase
-  - [ ] Remove accents (Slovak: á→a, č→c, etc.)
-  - [ ] Remove extra spaces
-- [ ] Implement string similarity (Levenshtein distance)
-- [ ] Implement address component extraction (street, city, POI)
-- [ ] Implement address scoring function
-- [ ] Write unit tests
+- [x] Implement address normalization
+  - [x] Lowercase
+  - [x] Remove accents (Slovak: á→a, č→c, etc.)
+  - [x] Remove extra spaces
+- [x] Implement string similarity (Levenshtein distance)
+- [x] Implement address component extraction (street, city, POI)
+- [x] Implement address scoring function
+- [x] Write unit tests
 
 **Deliverable:** Address matching functional
 
@@ -564,18 +567,19 @@ pytest tests/test_address_matching.py
 ### C4: trip-reconstructor - Hybrid Scoring (2 hours)
 
 **Can run in parallel:** ✅ C5, C6, all Track B
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 5
 **Depends on:** C2, C3
+**Actual Time:** 1.5 hours
 
 **Tasks:**
-- [ ] Implement hybrid scoring formula
-  - [ ] GPS match score × 0.7 (70% weight)
-  - [ ] Address match score × 0.3 (30% weight)
-  - [ ] Distance bonus if template has distance_km
-  - [ ] Day-of-week bonus if template has typical_days
-- [ ] Normalize final score to 0-100
-- [ ] Write unit tests
+- [x] Implement hybrid scoring formula
+  - [x] GPS match score × 0.7 (70% weight)
+  - [x] Address match score × 0.3 (30% weight)
+  - [x] Distance bonus if template has distance_km
+  - [x] Day-of-week bonus if template has typical_days
+- [x] Normalize final score to 0-100
+- [x] Write unit tests
 
 **Deliverable:** Hybrid scoring functional
 
@@ -592,20 +596,21 @@ pytest tests/test_hybrid_scoring.py
 ### C5: trip-reconstructor - Proposal Generation (2 hours)
 
 **Can run in parallel:** ✅ C4, C6, all Track B
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 5
 **Depends on:** C4
+**Actual Time:** 2 hours
 
 **Tasks:**
-- [ ] Implement `tools/match_templates.py` (main tool)
-  - [ ] Accept gap_data and templates as input (stateless!)
-  - [ ] Score all templates using hybrid algorithm
-  - [ ] Filter templates with confidence >= 70%
-  - [ ] Generate reconstruction proposal
-  - [ ] Calculate coverage percentage
-  - [ ] Return sorted matches + proposal
-- [ ] Write integration tests
-- [ ] Test with demo scenario (820 km gap, 2× Warehouse Run)
+- [x] Implement `tools/match_templates.py` (main tool)
+  - [x] Accept gap_data and templates as input (stateless!)
+  - [x] Score all templates using hybrid algorithm
+  - [x] Filter templates with confidence >= 70%
+  - [x] Generate reconstruction proposal
+  - [x] Calculate coverage percentage
+  - [x] Return sorted matches + proposal
+- [x] Write integration tests
+- [x] Test with demo scenario (820 km gap, 2× Warehouse Run)
 
 **Deliverable:** Template matching tool complete
 
@@ -626,17 +631,18 @@ pytest tests/test_trip_reconstruction.py
 ### C6: trip-reconstructor - Completeness Calculator (2 hours)
 
 **Can run in parallel:** ✅ C4, C5, all Track B
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 5
 **Depends on:** C1
+**Actual Time:** 1 hour
 
 **Tasks:**
-- [ ] Implement `tools/calculate_template_completeness.py`
-  - [ ] Count mandatory fields (name, from_coords, to_coords)
-  - [ ] Count optional fields filled
-  - [ ] Calculate completeness percentage
-  - [ ] Generate improvement suggestions
-- [ ] Write unit tests
+- [x] Implement `tools/calculate_template_completeness.py`
+  - [x] Count mandatory fields (name, from_coords, to_coords)
+  - [x] Count optional fields filled
+  - [x] Calculate completeness percentage
+  - [x] Generate improvement suggestions
+- [x] Write unit tests
 
 **Deliverable:** Completeness calculation functional
 
@@ -654,14 +660,15 @@ pytest tests/test_completeness.py
 ### C7: validation - Project Setup (1 hour)
 
 **Can run in parallel:** ✅ ALL Track C tasks
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 6
 **Depends on:** A3 (car-log-core trip structure)
+**Actual Time:** 30 minutes
 
 **Tasks:**
-- [ ] Create `mcp-servers/validation/` directory
-- [ ] Set up MCP server skeleton
-- [ ] Create `thresholds.py` with validation constants
+- [x] Create `mcp-servers/validation/` directory
+- [x] Set up MCP server skeleton
+- [x] Create `thresholds.py` with validation constants
   - `DISTANCE_VARIANCE_PERCENT = 10`
   - `CONSUMPTION_VARIANCE_PERCENT = 15`
   - `DEVIATION_THRESHOLD_PERCENT = 20`
@@ -675,17 +682,18 @@ pytest tests/test_completeness.py
 ### C8: validation - Distance Sum Check (2 hours)
 
 **Can run in parallel:** ✅ C9, C10, C11
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 6
 **Depends on:** C7
+**Actual Time:** 2 hours
 
 **Tasks:**
-- [ ] Implement `tools/validate_checkpoint_pair.py`
-  - [ ] Calculate odometer delta
-  - [ ] Sum all trip distances between checkpoints
-  - [ ] Check if difference <= 10%
-  - [ ] Return ok/warning/error + message
-- [ ] Write unit tests
+- [x] Implement `tools/validate_checkpoint_pair.py`
+  - [x] Calculate odometer delta
+  - [x] Sum all trip distances between checkpoints
+  - [x] Check if difference <= 10%
+  - [x] Return ok/warning/error + message
+- [x] Write unit tests
 
 **Deliverable:** Distance validation functional
 
@@ -703,17 +711,18 @@ pytest tests/test_distance_validation.py
 ### C9: validation - Fuel Consumption Check (2 hours)
 
 **Can run in parallel:** ✅ C8, C10, C11
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 6
 **Depends on:** C7
+**Actual Time:** 2 hours
 
 **Tasks:**
-- [ ] Implement `tools/validate_trip.py`
-  - [ ] Calculate expected fuel: (distance / 100) × avg_efficiency
-  - [ ] Compare with actual refuel amount
-  - [ ] Check if difference <= 15%
-  - [ ] Return ok/warning/error + message
-- [ ] Write unit tests
+- [x] Implement `tools/validate_trip.py`
+  - [x] Calculate expected fuel: (distance / 100) × avg_efficiency
+  - [x] Compare with actual refuel amount
+  - [x] Check if difference <= 15%
+  - [x] Return ok/warning/error + message
+- [x] Write unit tests
 
 **Deliverable:** Fuel validation functional
 
@@ -732,19 +741,20 @@ pytest tests/test_fuel_validation.py
 ### C10: validation - Efficiency Reasonability Check (2 hours)
 
 **Can run in parallel:** ✅ C8, C9, C11
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 6
 **Depends on:** C7
+**Actual Time:** 1.5 hours
 
 **Tasks:**
-- [ ] Implement `tools/check_efficiency.py`
-  - [ ] Get fuel type from vehicle
-  - [ ] Check efficiency against range:
+- [x] Implement `tools/check_efficiency.py`
+  - [x] Get fuel type from vehicle
+  - [x] Check efficiency against range:
     - Diesel: 5-15 L/100km
     - Gasoline: 6-20 L/100km
     - LPG: 8-25 L/100km
-  - [ ] Flag unrealistically low (<range) or high (>range)
-- [ ] Write unit tests
+  - [x] Flag unrealistically low (<range) or high (>range)
+- [x] Write unit tests
 
 **Deliverable:** Efficiency validation functional
 
@@ -763,17 +773,18 @@ pytest tests/test_efficiency_validation.py
 ### C11: validation - Deviation from Average (2 hours)
 
 **Can run in parallel:** ✅ C8, C9, C10
-**Status:** Pending
+**Status:** ✅ COMPLETE
 **Assignee:** Developer 6
 **Depends on:** C7
+**Actual Time:** 2 hours
 
 **Tasks:**
-- [ ] Implement `tools/check_deviation_from_average.py`
-  - [ ] Get vehicle's average efficiency
-  - [ ] Calculate trip efficiency deviation
-  - [ ] Warn if deviation > 20%
-  - [ ] Return ok/warning + message
-- [ ] Write unit tests
+- [x] Implement `tools/check_deviation_from_average.py`
+  - [x] Get vehicle's average efficiency
+  - [x] Calculate trip efficiency deviation
+  - [x] Warn if deviation > 20%
+  - [x] Return ok/warning + message
+- [x] Write unit tests
 
 **Deliverable:** Deviation validation functional
 
