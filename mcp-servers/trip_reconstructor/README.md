@@ -175,13 +175,13 @@ python -m mcp_servers.trip_reconstructor
 
 ```bash
 # Core matching tests
-python test_simple_matching.py
+python examples/test_simple_matching.py
 
 # Demo scenario (820 km gap with Warehouse Run)
-python test_demo_scenario.py
+python examples/test_demo_scenario.py
 
 # Confidence score examples
-python demo_confidence_scores.py
+python examples/demo_confidence_scores.py
 ```
 
 ## Demo Scenario Results

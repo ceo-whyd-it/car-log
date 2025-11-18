@@ -332,9 +332,9 @@ Add to `claude_desktop_config.json`:
 - `/home/user/car-log/mcp-servers/trip_reconstructor/tools/calculate_template_completeness.py` (242 lines)
 
 ### Tests
-- `/home/user/car-log/test_simple_matching.py` (all tests passing)
-- `/home/user/car-log/test_demo_scenario.py` (100% coverage achieved)
-- `/home/user/car-log/demo_confidence_scores.py` (confidence breakdown)
+- `/home/user/car-log/examples/test_simple_matching.py` (all tests passing)
+- `/home/user/car-log/examples/test_demo_scenario.py` (100% coverage achieved)
+- `/home/user/car-log/examples/demo_confidence_scores.py` (confidence breakdown)
 
 ### Documentation
 - `/home/user/car-log/mcp-servers/trip_reconstructor/README.md` (comprehensive guide)
