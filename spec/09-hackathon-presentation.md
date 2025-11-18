@@ -102,7 +102,7 @@ Our approach:
 **Key Differentiators:**
 
 1. **Stateless Design:** Each MCP server is independent with no shared state
-2. **Interface Contracts:** 24 tools with full JSON schemas enable parallel development
+2. **Interface Contracts:** 24 tools documented (23 implemented) with full JSON schemas enable parallel development
 3. **File-Based Storage:** Git-friendly, human-readable, no database setup required
 4. **GPS-First Algorithm:** 70% GPS weight, 30% address weight in template matching
 
@@ -543,7 +543,7 @@ def create_checkpoint(
     """
 ```
 
-- Narration: "26 tools across 7 servers. Clear JSON schemas enable parallel development."
+- Narration: "24 tools documented across 7 servers (23 implemented). Clear JSON schemas enable parallel development."
 
 **Production Notes:**
 - Mix of diagrams and code snippets
@@ -622,7 +622,7 @@ VAT Savings:
    - "Enables horizontal scaling and trivial testing (mock tool responses)."
 
 2. **Interface Contracts:**
-   - "26 tools with full JSON schemas defined upfront enabled 4 parallel development tracks."
+   - "24 tools documented (23 implemented) with full JSON schemas defined upfront enabled 4 parallel development tracks. Trip CRUD tools remain to be implemented."
    - "Clear contracts mean we built 7 servers simultaneously without integration conflicts."
 
 3. **GPS-First Algorithm:**
@@ -935,7 +935,7 @@ MCP 1st Birthday Hackathon (Nov 14-30, 2025)
 
 **8. Technical Documentation Link**
 - ⏳ Link to `docs/` folder in GitHub
-- ⏳ API specifications (26 tools documented)
+- ⏳ API specifications (24 tools documented, 23 implemented)
 - ⏳ Data model schemas
 - ⏳ Validation algorithm pseudocode
 
@@ -965,7 +965,7 @@ MCP 1st Birthday Hackathon (Nov 14-30, 2025)
 
 3. **Demo Functionality:**
    - [ ] All 7 MCP servers start without errors
-   - [ ] Claude Desktop discovers all 26 tools
+   - [ ] Claude Desktop discovers all 23 implemented tools (4-6 trip tools pending)
    - [ ] End-to-end workflow completes successfully
    - [ ] Reports generate correctly
 
@@ -1722,7 +1722,7 @@ python scripts/generate_demo_data.py
 **1. Innovation (30%)**
 - Novel use of MCP protocol
 - Architectural innovation (MCP-as-backend)
-- Technical depth (7 servers, 26 tools)
+- Technical depth (7 servers, 24 tools documented, 23 implemented)
 
 **Our score target: 9/10**
 
@@ -1784,7 +1784,7 @@ python scripts/generate_demo_data.py
 - **03-trip-reconstruction.md** - Matching algorithm details
 - **04-data-model.md** - JSON schemas for all data structures
 - **06-mcp-architecture-v2.md** - MCP server architecture design
-- **07-mcp-api-specifications.md** - Complete tool definitions (26 tools)
+- **07-mcp-api-specifications.md** - Complete tool definitions (24 tools documented, 23 implemented)
 - **08-implementation-plan.md** - 13-day parallel development plan
 - **00-ENHANCEMENTS-FROM-MILESTONE-SPEC.md** - Original strategy reference
 
