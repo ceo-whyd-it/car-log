@@ -1,0 +1,30 @@
+{
+  "checkpoint1_id": "chk-456-abc-789",
+  "checkpoint2_id": "chk-789-xyz-012",
+  "odometer_delta_km": 820,
+  "time_gap_days": 7,
+  "start_checkpoint": {
+    "datetime": "2025-11-01T08:00:00Z",
+    "odometer_km": 45000,
+    "location": {
+      "coords": {
+        "latitude": 48.1486,
+        "longitude": 17.1077
+      },
+      "address": "OMV Station, Hlavná 45, Bratislava"
+    }
+  },
+  "end_checkpoint": {
+    "datetime": "2025-11-08T14:25:00Z",
+    "odometer_km": 45820,
+    "location": {
+      "coords": {
+        "latitude": 48.7164,
+        "longitude": 21.2611
+      },
+      "address": "Shell Station, Mlynská 12, Košice"
+    }
+  },
+  "vehicle_id": "abc-123-def-456",
+  "notes": "Example gap scenario for trip reconstruction testing. 820km gap over 7 days between Bratislava and Košice - typical warehouse run scenario."
+}

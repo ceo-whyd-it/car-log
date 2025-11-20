@@ -1,0 +1,16 @@
+Date,Vehicle,Trip Start,Trip End,Distance (km),Fuel (L),Efficiency (L/100km),Driver,Purpose,Business Description,VIN
+2025-11-01,BA-789XY,Bratislava,Košice,410,34.85,8.5,John Smith,Business,Warehouse pickup,WVWZZZ3CZDP123456
+2025-11-04,BA-789XY,Košice,Bratislava,410,34.85,8.5,John Smith,Business,Return from warehouse,WVWZZZ3CZDP123456
+2025-11-08,BA-789XY,Bratislava,Žilina,200,17.0,8.5,John Smith,Business,Client meeting,WVWZZZ3CZDP123456
+2025-11-08,BA-789XY,Žilina,Bratislava,200,17.0,8.5,John Smith,Business,Return from client,WVWZZZ3CZDP123456
+2025-11-12,BA-789XY,Bratislava,Košice,410,34.85,8.5,John Smith,Business,Warehouse pickup,WVWZZZ3CZDP123456
+2025-11-15,BA-789XY,Košice,Bratislava,410,34.85,8.5,John Smith,Business,Return from warehouse,WVWZZZ3CZDP123456
+2025-11-18,BA-789XY,Bratislava,Košice,410,34.85,8.5,John Smith,Business,Warehouse pickup,WVWZZZ3CZDP123456
+2025-11-22,BA-789XY,Košice,Bratislava,410,34.85,8.5,John Smith,Business,Return from warehouse,WVWZZZ3CZDP123456
+2025-11-25,BA-789XY,Bratislava,Trenčín,130,11.05,8.5,John Smith,Business,Supplier visit,WVWZZZ3CZDP123456
+2025-11-25,BA-789XY,Trenčín,Bratislava,130,11.05,8.5,John Smith,Business,Return from supplier,WVWZZZ3CZDP123456
+2025-11-27,BA-789XY,Bratislava,Nitra,95,8.08,8.5,John Smith,Business,Branch office,WVWZZZ3CZDP123456
+2025-11-27,BA-789XY,Nitra,Bratislava,95,8.08,8.5,John Smith,Business,Return from branch,WVWZZZ3CZDP123456
+2025-11-29,BA-789XY,Bratislava,Košice,410,34.85,8.5,John Smith,Business,Warehouse pickup,WVWZZZ3CZDP123456
+2025-11-29,BA-789XY,Košice,Bratislava,410,34.85,8.5,John Smith,Business,Return from warehouse,WVWZZZ3CZDP123456
+2025-11-30,BA-789XY,Bratislava,Žilina,200,17.0,8.5,John Smith,Business,Year-end inventory,WVWZZZ3CZDP123456

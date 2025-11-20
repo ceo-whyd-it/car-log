@@ -1476,22 +1476,42 @@ docker-compose logs -f  # No errors
 
 ---
 
-### F1-F6: Skills Specifications (COMPLETE)
+### F1-F6: Skills Implementation (COMPLETE)
 
-**Status:** ✅ COMPLETE - All 6 skills documented
-**Assignee:** Agent 2 (completed)
-**Actual Time:** 8 hours
+**Status:** ✅ COMPLETE - All 6 skills created with proper structure
+**Assignee:** Agent 1-3 (completed November 20, 2025)
+**Actual Time:** 4 hours
 
-**Files Created:**
-- ✅ `claude_skills/01-vehicle-setup.md` (7,978 bytes)
-- ✅ `claude_skills/02-checkpoint-from-receipt.md` (4,326 bytes)
-- ✅ `claude_skills/03-trip-reconstruction.md` (3,101 bytes)
-- ✅ `claude_skills/04-template-creation.md` (2,777 bytes)
-- ✅ `claude_skills/05-report-generation.md` (2,973 bytes)
-- ✅ `claude_skills/06-data-validation.md` (3,035 bytes)
-- ✅ `claude_skills/README.md` (11,198 bytes)
+**Files Created (New Structure):**
+- ✅ `vehicle-setup/SKILL.md` (300 words, directive style)
+- ✅ `vehicle-setup/REFERENCE.md` (MCP tool specs)
+- ✅ `vehicle-setup/GUIDE.md` (moved from 01-vehicle-setup.md)
+- ✅ `checkpoint-from-receipt/SKILL.md` (500 words, orchestration)
+- ✅ `checkpoint-from-receipt/REFERENCE.md` (MCP tool specs)
+- ✅ `checkpoint-from-receipt/GUIDE.md` (moved from 02-checkpoint-from-receipt.md)
+- ✅ `trip-reconstruction/SKILL.md` (600 words, GPS-first algorithm)
+- ✅ `trip-reconstruction/REFERENCE.md` (MCP tool specs)
+- ✅ `trip-reconstruction/GUIDE.md` (moved from 03-trip-reconstruction.md)
+- ✅ `template-creation/SKILL.md` (400 words, GPS mandatory)
+- ✅ `template-creation/REFERENCE.md` (MCP tool specs)
+- ✅ `template-creation/GUIDE.md` (moved from 04-template-creation.md)
+- ✅ `report-generation/SKILL.md` (300 words, Slovak compliance)
+- ✅ `report-generation/REFERENCE.md` (MCP tool specs)
+- ✅ `report-generation/GUIDE.md` (moved from 05-report-generation.md)
+- ✅ `data-validation/SKILL.md` (300 words, 4 algorithms)
+- ✅ `data-validation/REFERENCE.md` (MCP tool specs)
+- ✅ `data-validation/GUIDE.md` (moved from 06-data-validation.md)
+- ✅ 6 `examples/` folders with sample JSON/CSV
 
-**Total:** 24,190 bytes of skill specifications
+**Total:** 24 files (6 SKILL.md + 6 REFERENCE.md + 6 GUIDE.md + 6 examples folders)
+
+**Key Achievements:**
+- ✅ Proper Claude Skills structure per official guidelines
+- ✅ Concise SKILL.md files (200-600 words each, directive style)
+- ✅ Comprehensive GUIDE.md preserved (existing content)
+- ✅ MCP tool specifications in REFERENCE.md
+- ✅ Clear separation: Skills (for Claude) vs Guides (for humans)
+- ✅ Manual installation ready (user copies SKILL.md to Claude Desktop)
 
 ---
 
@@ -1678,12 +1698,31 @@ This section consolidates ALL manual tasks you need to complete, with references
 
 ### **Task 2: Claude Desktop Skills Testing** ⏳
 
+**What's Different Now:**
+- Skills are now in separate folders (vehicle-setup/, checkpoint-from-receipt/, etc.)
+- **Load SKILL.md files** into Claude Desktop (concise prompts)
+- **Read GUIDE.md files** for detailed reference (comprehensive guides)
+- **Check REFERENCE.md** for MCP tool specs
+
+**Installation:**
+```bash
+cd /home/user/car-log/claude_skills
+
+# Copy each SKILL.md to Claude Desktop:
+cat vehicle-setup/SKILL.md           # Copy to Claude Desktop
+cat checkpoint-from-receipt/SKILL.md # Copy to Claude Desktop
+cat trip-reconstruction/SKILL.md     # Copy to Claude Desktop
+cat template-creation/SKILL.md       # Copy to Claude Desktop
+cat report-generation/SKILL.md       # Copy to Claude Desktop
+cat data-validation/SKILL.md         # Copy to Claude Desktop
+```
+
 **Priority:** P0
 **Estimated Time:** 2-3 hours
 **Prerequisites:** Claude Desktop installed, all 6 skills loaded, MCP servers running
 
 **What to do:**
-1. Load all 6 skill files into Claude Desktop
+1. Load all 6 SKILL.md files into Claude Desktop
 2. Test each skill individually (6 tests)
 3. Test integration scenarios (3 tests)
 4. Record performance benchmarks
@@ -1701,12 +1740,12 @@ This section consolidates ALL manual tasks you need to complete, with references
 - 📖 **Best Practices:** `claude_skills/BEST_PRACTICES.md` (usage patterns)
 
 **Skills to Test:**
-1. [ ] **Skill 1:** Vehicle Setup (`01-vehicle-setup.md`)
-2. [ ] **Skill 2:** Checkpoint from Receipt (`02-checkpoint-from-receipt.md`)
-3. [ ] **Skill 3:** Trip Reconstruction (`03-trip-reconstruction.md`)
-4. [ ] **Skill 4:** Template Creation (`04-template-creation.md`)
-5. [ ] **Skill 5:** Report Generation (`05-report-generation.md`)
-6. [ ] **Skill 6:** Data Validation (`06-data-validation.md`)
+1. [ ] **Skill 1:** Vehicle Setup (`vehicle-setup/SKILL.md`)
+2. [ ] **Skill 2:** Checkpoint from Receipt (`checkpoint-from-receipt/SKILL.md`)
+3. [ ] **Skill 3:** Trip Reconstruction (`trip-reconstruction/SKILL.md`)
+4. [ ] **Skill 4:** Template Creation (`template-creation/SKILL.md`)
+5. [ ] **Skill 5:** Report Generation (`report-generation/SKILL.md`)
+6. [ ] **Skill 6:** Data Validation (`data-validation/SKILL.md`)
 
 **Integration Tests:**
 1. [ ] Complete end-to-end workflow (20 min)

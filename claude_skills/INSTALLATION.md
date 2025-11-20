@@ -80,152 +80,114 @@ Ensure all required MCP servers are configured in `claude_desktop_config.json`:
 }
 ```
 
-### Step 3: Add Skills to Claude Desktop
+### Step 3: Install Skills in Claude Desktop
 
-**Option A: Custom Instructions (Recommended)**
+**Understanding the Structure:**
 
-1. Open Claude Desktop
-2. Go to Settings > Custom Instructions
-3. Add the following skills configuration:
+Each skill folder contains:
+- **SKILL.md** - Concise prompt for Claude (~200-600 words) ← **Load this into Claude Desktop**
+- **GUIDE.md** - Comprehensive guide for humans (reference documentation)
+- **REFERENCE.md** - MCP tool specifications (technical reference)
+- **examples/** - Sample data for testing
 
-```markdown
-# Car Log Skills
+**Manual Installation Steps:**
 
-You are an expert at Slovak tax-compliant vehicle mileage logging. You have access to 7 MCP servers that handle:
-- Vehicle and checkpoint CRUD (car-log-core)
-- Trip reconstruction with GPS-first matching (trip-reconstructor)
-- Slovak e-Kasa receipt processing (ekasa-api)
-- Dashboard photo OCR with EXIF GPS (dashboard-ocr)
-- Geocoding and routing (geo-routing)
-- Validation algorithms (validation)
-- Report generation (report-generator)
+#### Option A: Copy Individual Skills (Recommended)
 
-## Skill 1: Vehicle Setup
+1. Navigate to skill folders:
+   ```bash
+   cd /home/user/car-log/claude_skills
+   ls -d */  # Shows: vehicle-setup/ checkpoint-from-receipt/ etc.
+   ```
 
-**Trigger words:** "add vehicle", "register car", "new vehicle", license plate patterns (BA-*), "company car"
+2. For each skill, open SKILL.md and copy content to Claude Desktop:
 
-**Workflow:**
-1. Collect vehicle details conversationally
-2. Validate VIN (17 chars, no I/O/Q) - MANDATORY for Slovak VAT Act 2025
-3. Validate license plate (XX-123XX format)
-4. Use L/100km format (not km/L)
-5. Create vehicle via car-log-core.create_vehicle
-6. Confirm with next steps
+   **In Claude Desktop:**
+   - Open Settings → Custom Instructions (or Skills, depending on version)
+   - Create new skill or add to existing instructions
+   - Paste SKILL.md content
+   - Save
 
-**Error handling:**
-- Duplicate license plates → show existing vehicle
-- Invalid VIN → explain I/O/Q rule, suggest corrections
-- Unrealistic odometer → flag and confirm
+3. Install all 6 skills in this order:
+   ```bash
+   # Copy content from each SKILL.md file:
+   cat vehicle-setup/SKILL.md
+   cat checkpoint-from-receipt/SKILL.md
+   cat trip-reconstruction/SKILL.md
+   cat template-creation/SKILL.md
+   cat report-generation/SKILL.md
+   cat data-validation/SKILL.md
+   ```
 
-## Skill 2: Checkpoint from Receipt Photo
+#### Option B: Combined Installation (Faster)
 
-**Trigger words:** User pastes image, "refuel", "fuel receipt", "gas station"
+Create a combined skills file in Claude Desktop Custom Instructions:
 
-**Workflow:**
-1. Detect image paste
-2. Scan QR code (multi-scale: 1x, 2x, 3x)
-3. Fetch e-Kasa receipt (timeout: 60s, show progress)
-4. Request dashboard photo
-5. Extract GPS + odometer from EXIF/OCR
-6. Create checkpoint via car-log-core.create_checkpoint
-7. Automatic gap detection
-8. Trigger trip reconstruction if gap > 100km
-
-**Progress indicators:**
-- "Scanning QR code... trying 2x scale..."
-- "Fetching from e-Kasa API (may take 30s)..."
-- "Extracting GPS and odometer..."
-
-**Error handling:**
-- No QR → manual receipt ID entry
-- Timeout → fallback to manual entry
-- No GPS → suggest retake or manual location
-- Low OCR confidence → confirm odometer reading
-
-## Skill 3: Trip Reconstruction
-
-**Trigger words:** Automatic after gap detection, "reconstruct trips", "fill gap"
-
-**Workflow:**
-1. Analyze gap (car-log-core.analyze_gap)
-2. Fetch templates (car-log-core.list_templates)
-3. Run GPS-first matching (70% GPS, 30% address)
-4. Present high-confidence proposals (>= 70%)
-5. User approval
-6. Batch trip creation (car-log-core.create_trips_batch)
-7. Automatic validation (4 algorithms)
-8. Show results with validation status
-
-**Confidence tiers:**
-- 90-100%: High confidence, recommend acceptance
-- 70-89%: Medium confidence, show warnings
-- <70%: No automatic proposal, offer manual entry
-
-**User communication:**
-- Always explain confidence breakdown
-- Show GPS match distance ("within 50m")
-- Explain bonuses (day-of-week, distance match)
-- Clear validation results
-
-## Slovak Compliance Rules
-
-**ALWAYS enforce:**
-- VIN: 17 characters, no I/O/Q (ISO 3779)
-- License plate: XX-123XX format (e.g., BA-456CD)
-- Fuel efficiency: L/100km (NEVER km/L)
-- Driver name: Required for all trips
-- Receipt data: Price excl/incl VAT, VAT rate
-
-**Validation thresholds:**
-- Distance sum: ±10%
-- Fuel consumption: ±15%
-- Efficiency range: Diesel 5-15 L/100km, Gasoline 6-20 L/100km
-
-## GPS-First Philosophy
-
-**Why GPS matters:**
-- 70% weight in template matching
-- 100m accuracy vs. ambiguous addresses
-- Enables high-confidence reconstruction (90%+)
-
-**Always:**
-- Extract EXIF GPS from photos
-- Store coordinates as source of truth
-- Use addresses as labels only
+```bash
+# Concatenate all SKILL.md files
+cat vehicle-setup/SKILL.md \
+    checkpoint-from-receipt/SKILL.md \
+    trip-reconstruction/SKILL.md \
+    template-creation/SKILL.md \
+    report-generation/SKILL.md \
+    data-validation/SKILL.md > combined-skills.txt
 ```
 
-**Option B: Skills Files (Alternative)**
+Then paste `combined-skills.txt` into Claude Desktop Custom Instructions.
 
-If your Claude Desktop version supports custom skills files:
+**Verification:**
 
-1. Create a `skills/` directory in Claude Desktop config folder
-2. Copy skill files:
-   ```bash
-   cp claude_skills/01-vehicle-setup.md ~/Library/Application\ Support/Claude/skills/
-   cp claude_skills/02-checkpoint-from-receipt.md ~/Library/Application\ Support/Claude/skills/
-   cp claude_skills/03-trip-reconstruction.md ~/Library/Application\ Support/Claude/skills/
-   ```
-3. Restart Claude Desktop
+Test each skill:
+1. "Add vehicle BA-123CD" → Should trigger vehicle-setup skill
+2. Paste receipt photo → Should trigger checkpoint-from-receipt skill
+3. "Reconstruct trips" → Should trigger trip-reconstruction skill
+4. "Create template Warehouse Run" → Should trigger template-creation skill
+5. "Generate November report" → Should trigger report-generation skill
+6. Validation runs automatically after data entry
 
-### Step 4: Verify MCP Server Availability
+### Step 4: Reference Documentation
+
+**For users (comprehensive guides):**
+- Read `<skill-folder>/GUIDE.md` for detailed workflows, examples, and testing scenarios
+
+**For developers (MCP tool specs):**
+- Read `<skill-folder>/REFERENCE.md` for MCP tool request/response formats
+
+**For testing:**
+- Use `<skill-folder>/examples/*.json` as test data
+- Follow `MANUAL_TEST_CHECKLIST.md` for comprehensive testing
+
+### Troubleshooting Installation
+
+**Skill not triggering?**
+- Check trigger words in SKILL.md match user input
+- Verify all 7 MCP servers running (`docker-compose ps`)
+- See `TROUBLESHOOTING.md` for common issues
+
+**MCP tool calls failing?**
+- Verify MCP server configuration in claude_desktop_config.json
+- Check server logs: `docker-compose logs -f`
+- Restart servers: `docker-compose restart`
+
+### Step 5: Verify MCP Server Availability
 
 1. Open Claude Desktop
 2. Start a new conversation
 3. Ask: "What MCP tools do you have access to?"
 4. Verify you see all 7 servers:
-   - car-log-core (8 tools)
+   - car-log-core (14 tools)
    - ekasa-api (2 tools)
    - dashboard-ocr (1 tool)
-   - trip-reconstructor (1 tool)
+   - trip-reconstructor (2 tools)
    - geo-routing (3 tools)
    - validation (4 tools)
-   - report-generator (3 tools)
+   - report-generator (2 tools)
 
-Expected total: **22-28 tools** depending on implementation status.
+Expected total: **28 tools** (all P0+P1 features implemented).
 
-### Step 5: Test Each Skill Individually
+### Step 6: Test Each Skill Individually
 
-See `TESTING_F1-F3.md` for comprehensive test scenarios.
+See `TESTING_F1-F3.md` and `TESTING_F4-F6.md` for comprehensive test scenarios.
 
 **Quick smoke tests:**
 

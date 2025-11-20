@@ -12,18 +12,78 @@ Claude Skills transform Car Log from a traditional MCP server backend into a **c
 
 ---
 
-## Skills Summary
+## Skills Structure
 
-| # | Skill | Priority | Workflow | Time Saved |
-|---|-------|----------|----------|------------|
-| 1 | **Vehicle Setup** | P0 | Slovak VIN validation → compliant registration | 3 min → 30 sec |
-| 2 | **Checkpoint from Receipt** | P0 | Photo paste → QR scan → EXIF → checkpoint | 3 min → 30 sec |
-| 3 | **Trip Reconstruction** | P0 | GPS-first matching → 92% confidence proposals | 15 min → 2 min |
-| 4 | **Template Creation** | P0 | Address → GPS geocoding → route calculation | 5 min → 1 min |
-| 5 | **Report Generation** | P0 | Slovak VAT Act 2025 compliant CSV/PDF | 10 min → 1 min |
-| 6 | **Data Validation** | P0 | Proactive 4-algorithm validation | Manual → Automatic |
+```
+claude_skills/
+├── vehicle-setup/                   # Skill 1: Vehicle registration
+│   ├── SKILL.md                     # ← Load into Claude Desktop (300 words)
+│   ├── GUIDE.md                     # Comprehensive guide (15KB)
+│   ├── REFERENCE.md                 # MCP tool specs
+│   └── examples/
+│       └── test-vehicle.json
+│
+├── checkpoint-from-receipt/         # Skill 2: Receipt processing
+│   ├── SKILL.md                     # ← Load into Claude Desktop (500 words)
+│   ├── GUIDE.md                     # Comprehensive guide (21KB)
+│   ├── REFERENCE.md                 # MCP tool specs
+│   └── examples/
+│       └── sample-checkpoint.json
+│
+├── trip-reconstruction/             # Skill 3: GPS-first matching
+│   ├── SKILL.md                     # ← Load into Claude Desktop (600 words)
+│   ├── GUIDE.md                     # Comprehensive guide (25KB)
+│   ├── REFERENCE.md                 # MCP tool specs
+│   └── examples/
+│       └── gap-scenario.json
+│
+├── template-creation/               # Skill 4: Route templates
+│   ├── SKILL.md                     # ← Load into Claude Desktop (400 words)
+│   ├── GUIDE.md                     # Comprehensive guide (12KB)
+│   ├── REFERENCE.md                 # MCP tool specs
+│   └── examples/
+│       └── warehouse-run-template.json
+│
+├── report-generation/               # Skill 5: Slovak VAT compliance reports
+│   ├── SKILL.md                     # ← Load into Claude Desktop (300 words)
+│   ├── GUIDE.md                     # Comprehensive guide (17KB)
+│   ├── REFERENCE.md                 # MCP tool specs
+│   └── examples/
+│       └── sample-report.csv
+│
+├── data-validation/                 # Skill 6: 4 validation algorithms
+│   ├── SKILL.md                     # ← Load into Claude Desktop (300 words)
+│   ├── GUIDE.md                     # Comprehensive guide (16KB)
+│   ├── REFERENCE.md                 # MCP tool specs
+│   └── examples/
+│       └── validation-scenarios.json
+│
+└── Documentation Files:
+    ├── INSTALLATION.md              # How to install skills
+    ├── BEST_PRACTICES.md            # Usage patterns
+    ├── TROUBLESHOOTING.md           # Common issues
+    ├── INTEGRATION_TESTING.md       # Test scenarios
+    ├── MANUAL_TEST_CHECKLIST.md     # User testing guide
+    ├── PERFORMANCE.md               # Benchmarks
+    ├── DEMO_SCENARIO.md             # Demo script
+    ├── TESTING_F1-F3.md             # Detailed test cases
+    └── TESTING_F4-F6.md             # Detailed test cases
+```
 
-**Total Time Savings:** ~30 minutes per refuel cycle → **10x faster workflow**
+## Installation Quick Start
+
+**For users:**
+1. Copy each `SKILL.md` to Claude Desktop Custom Instructions
+2. Read `GUIDE.md` for detailed workflows
+3. Use `examples/` for testing
+4. Follow `MANUAL_TEST_CHECKLIST.md`
+
+**For developers:**
+1. Read `REFERENCE.md` for MCP tool specs
+2. See `../spec/07-mcp-api-specifications.md` for complete API
+3. Use `examples/` as test fixtures
+
+**Full installation guide:** See [INSTALLATION.md](INSTALLATION.md)
 
 ---
 

@@ -1,0 +1,24 @@
+{
+  "vehicle_id": "uuid-1234",
+  "checkpoint_type": "refuel",
+  "datetime": "2025-11-01T14:30:00Z",
+  "odometer_km": 125340,
+  "location": {
+    "coords": {
+      "latitude": 48.1486,
+      "longitude": 17.1077
+    },
+    "address": "OMV Station, Hlavná 45, Bratislava",
+    "source": "exif"
+  },
+  "receipt": {
+    "receipt_id": "O-123456789ABC",
+    "vendor_name": "OMV Tankstelle",
+    "fuel_type": "Diesel",
+    "fuel_liters": 52.3,
+    "price_excl_vat": 63.64,
+    "price_incl_vat": 75.84,
+    "vat_rate": 0.20
+  },
+  "driver_name": "Ján Novák"
+}
