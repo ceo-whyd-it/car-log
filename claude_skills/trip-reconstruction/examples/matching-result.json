@@ -1,0 +1,49 @@
+{
+  "success": true,
+  "proposals": [
+    {
+      "template_id": "tpl-123-warehouse",
+      "template_name": "Warehouse Run",
+      "confidence": 92,
+      "matching_mode": "MODE_B_HYBRID",
+      "gps_score": 98,
+      "address_score": 75,
+      "bonuses": {
+        "day_match": 5,
+        "distance_match": 5
+      },
+      "confidence_breakdown": {
+        "gps_component": 68.6,
+        "address_component": 22.5,
+        "day_bonus": 5,
+        "distance_bonus": 5,
+        "total": 92
+      },
+      "trips": [
+        {
+          "trip_start_location": "Bratislava Office",
+          "trip_end_location": "Košice Warehouse",
+          "distance_km": 410,
+          "trip_start_datetime": "2025-11-01T08:00:00Z",
+          "trip_end_datetime": "2025-11-01T12:30:00Z",
+          "purpose": "Business",
+          "business_description": "Warehouse pickup"
+        },
+        {
+          "trip_start_location": "Košice Warehouse",
+          "trip_end_location": "Bratislava Office",
+          "distance_km": 410,
+          "trip_start_datetime": "2025-11-06T14:00:00Z",
+          "trip_end_datetime": "2025-11-06T18:30:00Z",
+          "purpose": "Business",
+          "business_description": "Return from warehouse"
+        }
+      ],
+      "coverage_km": 820,
+      "coverage_percent": 100
+    }
+  ],
+  "best_confidence": 92,
+  "match_count": 1,
+  "notes": "High-confidence match (92%) - GPS within 50m, day-of-week matches typical pattern (Monday, Thursday), distance exactly matches gap."
+}
