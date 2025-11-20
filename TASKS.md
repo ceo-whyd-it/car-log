@@ -1633,6 +1633,313 @@ IMPLEMENTATION_SUMMARY.md ✅ (NEW - Agent 4, project root)
 
 ---
 
+## 📋 MANUAL FOLLOW UP
+
+**Status:** Ready for user execution
+**Total Time Required:** 10-12 hours over 10 days
+**Deadline:** November 30, 2025
+
+This section consolidates ALL manual tasks you need to complete, with references to detailed documentation.
+
+---
+
+### **Task 1: Docker Deployment Testing** ⏳
+
+**Priority:** P0
+**Estimated Time:** 2-3 hours
+**Prerequisites:** Docker Desktop installed and running
+
+**What to do:**
+1. Read quick start guide first
+2. Follow step-by-step manual testing guide
+3. Document results using provided template
+4. Fix any critical issues found
+
+**Documentation:**
+- 📖 **Quick Start:** `docker/QUICK_START.md` (5 min read)
+- 📖 **Main Guide:** `docker/MANUAL_TEST_GUIDE.md` (2-3 hours, 22 steps)
+- 📖 **Results Template:** `docker/TEST_EXECUTION_RESULTS.md` (fill in as you test)
+- 📖 **Config Verification:** `docker/DOCKER_CONFIG_VERIFICATION.md` (reference)
+- 📖 **Test Plan:** `docker/DOCKER_TEST_PLAN.md` (detailed plan)
+- 📖 **Summary:** `docker/TRACK_E_COMPLETION_SUMMARY.md` (overview)
+
+**Success Criteria:**
+- [ ] Both containers build successfully
+- [ ] All 7 MCP servers start without errors
+- [ ] Health checks pass
+- [ ] Data persistence works
+- [ ] Resource usage < 300MB total
+
+**After Completion:**
+- Update TASKS.md Track E2 as ✅ COMPLETE
+- Document any issues found
+
+---
+
+### **Task 2: Claude Desktop Skills Testing** ⏳
+
+**Priority:** P0
+**Estimated Time:** 2-3 hours
+**Prerequisites:** Claude Desktop installed, all 6 skills loaded, MCP servers running
+
+**What to do:**
+1. Load all 6 skill files into Claude Desktop
+2. Test each skill individually (6 tests)
+3. Test integration scenarios (3 tests)
+4. Record performance benchmarks
+5. Capture screenshots for documentation
+6. Document bugs/issues found
+
+**Documentation:**
+- 📖 **Main Guide:** `claude_skills/MANUAL_TEST_CHECKLIST.md` (2-3 hours, step-by-step)
+- 📖 **Installation:** `claude_skills/INSTALLATION.md` (setup guide)
+- 📖 **Skills F1-F3 Tests:** `claude_skills/TESTING_F1-F3.md` (28 test scenarios)
+- 📖 **Skills F4-F6 Tests:** `claude_skills/TESTING_F4-F6.md` (23 test scenarios)
+- 📖 **Integration Tests:** `claude_skills/INTEGRATION_TESTING.md` (5 scenarios)
+- 📖 **Troubleshooting:** `claude_skills/TROUBLESHOOTING.md` (10 common issues)
+- 📖 **Performance:** `claude_skills/PERFORMANCE.md` (benchmarks)
+- 📖 **Best Practices:** `claude_skills/BEST_PRACTICES.md` (usage patterns)
+
+**Skills to Test:**
+1. [ ] **Skill 1:** Vehicle Setup (`01-vehicle-setup.md`)
+2. [ ] **Skill 2:** Checkpoint from Receipt (`02-checkpoint-from-receipt.md`)
+3. [ ] **Skill 3:** Trip Reconstruction (`03-trip-reconstruction.md`)
+4. [ ] **Skill 4:** Template Creation (`04-template-creation.md`)
+5. [ ] **Skill 5:** Report Generation (`05-report-generation.md`)
+6. [ ] **Skill 6:** Data Validation (`06-data-validation.md`)
+
+**Integration Tests:**
+1. [ ] Complete end-to-end workflow (20 min)
+2. [ ] Error recovery flow (15 min)
+3. [ ] Cross-skill data flow (10 min)
+
+**Success Criteria:**
+- [ ] All 6 skills load correctly
+- [ ] All skills trigger properly
+- [ ] MCP tool calls work
+- [ ] Slovak compliance verified
+- [ ] Performance < 5s per operation (except e-Kasa: 5-30s)
+
+**After Completion:**
+- Update TASKS.md Track F8 as ✅ COMPLETE
+- Fix bugs found (if any)
+- Proceed to demo preparation
+
+---
+
+### **Task 3: Demo Video Recording** ⏳
+
+**Priority:** P0
+**Estimated Time:** 3-4 hours (1 hour practice + 1 hour recording + 1 hour editing)
+**Prerequisites:** Docker and Skills testing complete
+
+**What to do:**
+1. Review demo scenario script (5 min read)
+2. Prepare demo data (follow script)
+3. Practice demo 2-3 times
+4. Record 5-minute demo video
+5. Create 5-slide presentation
+6. Edit and finalize
+
+**Documentation:**
+- 📖 **Demo Script:** `claude_skills/DEMO_SCENARIO.md` (complete 5-minute script with timing)
+- 📖 **Presentation Outline:** `spec/09-hackathon-presentation.md` (slides structure)
+
+**Demo Structure (5 minutes total):**
+- **Part 1:** Problem Statement (30s) - Slovak VAT Act 2025 compliance
+- **Part 2:** Architecture (60s) - 7 MCP servers AS backend
+- **Part 3:** Live Demo (180s) - Complete workflow
+- **Part 4:** Slovak Compliance (30s) - Automatic validation
+- **Part 5:** Results (30s) - 10x faster, GitHub link
+
+**Demo Data Prepared:**
+- Vehicle: Ford Transit BA-456CD
+- Gap: 820 km (Nov 1 → Nov 8)
+- Template: Warehouse Run (Bratislava ↔ Košice, 410 km)
+- Result: 2 trips, 100% coverage, validated
+
+**Contingency Plans:**
+- If e-Kasa times out → Use cached data
+- If GPS fails → Show manual entry
+- If Claude crashes → Switch to architecture slides
+- If templates don't match → Show template creation
+
+**Success Criteria:**
+- [ ] Demo runs smoothly (no crashes)
+- [ ] All features showcased
+- [ ] Slovak compliance highlighted
+- [ ] 5 minutes total duration
+- [ ] Professional quality video
+
+**After Completion:**
+- Update TASKS.md Track D6 as ✅ COMPLETE
+- Prepare for final polish
+
+---
+
+### **Task 4: Final Polish & Bug Fixes** ⏳
+
+**Priority:** P0
+**Estimated Time:** 2-3 hours
+**Prerequisites:** Testing complete, bugs identified
+
+**What to do:**
+1. Fix critical bugs found during testing
+2. Update documentation (if needed)
+3. Clean up code (remove debug prints, TODOs)
+4. Run full test suite one final time
+5. Verify all P0 requirements met
+6. Package for submission
+
+**Documentation:**
+- 📖 **Implementation Summary:** `IMPLEMENTATION_SUMMARY.md` (complete status)
+- 📖 **Project Overview:** `README.md` (main documentation)
+- 📖 **Claude Instructions:** `CLAUDE.md` (project guidance)
+
+**Final Verification Checklist:**
+- [ ] All 7 MCP servers functional
+- [ ] All 28 tools working
+- [ ] 20/20 integration tests passing
+- [ ] All 6 skills tested
+- [ ] Slovak compliance verified
+- [ ] Demo video recorded
+- [ ] Documentation complete
+
+**After Completion:**
+- Update TASKS.md Track D7 as ✅ COMPLETE
+- Proceed to submission
+
+---
+
+### **Task 5: Hackathon Submission** ⏳
+
+**Priority:** P0
+**Estimated Time:** 1 hour
+**Deadline:** November 30, 2025
+**Prerequisites:** All testing complete, demo ready
+
+**What to do:**
+1. Review submission requirements
+2. Package all deliverables:
+   - Source code (GitHub repo)
+   - Demo video (5 minutes)
+   - Presentation slides (5 slides)
+   - README.md (complete documentation)
+3. Create submission PR/package
+4. Submit to hackathon platform
+5. Verify submission received
+
+**Submission Checklist:**
+- [ ] GitHub repository public/accessible
+- [ ] Demo video uploaded and linked
+- [ ] Presentation slides included
+- [ ] README.md comprehensive
+- [ ] All documentation included
+- [ ] License file present
+- [ ] Contact information correct
+
+**After Completion:**
+- Update TASKS.md overall status as ✅ 100% COMPLETE
+- 🎉 Celebrate!
+
+---
+
+### **Quick Reference: Where to Find Documentation**
+
+**Docker Testing:**
+```bash
+cd docker
+cat QUICK_START.md                    # Start here (5 min)
+cat MANUAL_TEST_GUIDE.md             # Main guide (2-3 hours)
+cat TEST_EXECUTION_RESULTS.md        # Document results
+```
+
+**Claude Skills Testing:**
+```bash
+cd claude_skills
+cat MANUAL_TEST_CHECKLIST.md         # Start here (2-3 hours)
+cat TROUBLESHOOTING.md               # If issues arise
+cat INTEGRATION_TESTING.md           # Integration scenarios
+```
+
+**Demo Preparation:**
+```bash
+cat claude_skills/DEMO_SCENARIO.md   # 5-minute script
+cat spec/09-hackathon-presentation.md # Presentation structure
+```
+
+**Overall Status:**
+```bash
+cat IMPLEMENTATION_SUMMARY.md        # Complete project overview
+cat README.md                        # Main documentation
+```
+
+---
+
+### **Testing Timeline Suggestion**
+
+**Week 1 (Nov 20-22):**
+- **Day 1 (Nov 20):** Docker testing (3 hours) + Skills testing start (1 hour)
+- **Day 2 (Nov 21):** Skills testing complete (2 hours) + Bug fixes (2 hours)
+- **Day 3 (Nov 22):** Demo practice (2 hours)
+
+**Weekend (Nov 23-24):**
+- **Day 4 (Nov 23):** Demo recording (3 hours) + Slides (1 hour)
+- **Day 5 (Nov 24):** Final polish (2 hours) + Buffer
+
+**Week 2 (Nov 25-30):**
+- **Days 6-10:** Buffer for contingencies (5 days, ~10 hours available)
+- **Nov 30:** Final submission (1 hour)
+
+**Total:** 12 hours estimated, 15+ hours available = **Comfortable buffer** ✅
+
+---
+
+### **Support & Resources**
+
+**If You Get Stuck:**
+1. Check `TROUBLESHOOTING.md` first (10 common issues + solutions)
+2. Review `IMPLEMENTATION_SUMMARY.md` for context
+3. Check specific guide for detailed steps
+4. Document issue and continue with other tasks
+
+**All Documentation Files (23 total):**
+
+**Docker (5 files):**
+- docker/QUICK_START.md
+- docker/MANUAL_TEST_GUIDE.md
+- docker/TEST_EXECUTION_RESULTS.md
+- docker/DOCKER_CONFIG_VERIFICATION.md
+- docker/TRACK_E_COMPLETION_SUMMARY.md
+
+**Skills Core (6 files):**
+- claude_skills/01-vehicle-setup.md
+- claude_skills/02-checkpoint-from-receipt.md
+- claude_skills/03-trip-reconstruction.md
+- claude_skills/04-template-creation.md
+- claude_skills/05-report-generation.md
+- claude_skills/06-data-validation.md
+
+**Skills Testing (6 files):**
+- claude_skills/INSTALLATION.md
+- claude_skills/TESTING_F1-F3.md
+- claude_skills/TESTING_F4-F6.md
+- claude_skills/BEST_PRACTICES.md
+- claude_skills/INTEGRATION_TESTING.md
+- claude_skills/MANUAL_TEST_CHECKLIST.md
+
+**Skills Support (4 files):**
+- claude_skills/DEMO_SCENARIO.md
+- claude_skills/TROUBLESHOOTING.md
+- claude_skills/PERFORMANCE.md
+- claude_skills/README.md
+
+**Project Root (2 files):**
+- IMPLEMENTATION_SUMMARY.md
+- README.md
+
+---
+
 ## Quick Start for Developers
 
 1. **Read specifications first:**
@@ -1662,6 +1969,6 @@ IMPLEMENTATION_SUMMARY.md ✅ (NEW - Agent 4, project root)
 
 ---
 
-**Last Updated:** November 18, 2025
-**Next Checkpoint:** Day 2 (Vehicle + Checkpoint CRUD)
-**Days Remaining:** 13 days until November 30, 2025
+**Last Updated:** November 20, 2025 (Added Manual Follow Up section)
+**Next Steps:** Manual testing (Docker + Skills) - 4-6 hours total
+**Days Remaining:** 10 days until November 30, 2025
