@@ -391,8 +391,305 @@ Required fields first, optional fields if user wants:
 
 ---
 
+## Testing Scenarios
+
+### Test 1: Standard Registration (Happy Path)
+```
+Input: "Add my Ford Transit BA-789XY diesel 125000km VIN WVWZZZ3CZDP123456"
+
+Expected Flow:
+1. Parse all fields from one message
+2. Validate VIN (17 chars, no I/O/Q) ✓
+3. Validate license plate (XX-123XX) ✓
+4. Show summary
+5. Create vehicle
+6. Confirm success with next steps
+
+Expected Tools Called:
+- car-log-core.list_vehicles (check for duplicates)
+- car-log-core.create_vehicle
+
+Success Criteria:
+✓ All fields extracted correctly
+✓ VIN validation passes
+✓ License plate formatted with hyphen
+✓ Vehicle created successfully
+✓ User prompted for next steps
+```
+
+### Test 2: Guided Registration (Conversational)
+```
+Input: "I need to add my company car"
+
+Expected Flow:
+1. Ask for vehicle type → "BMW 5 series"
+2. Ask for license plate → "BA456CD" (no hyphen)
+3. Auto-correct to "BA-456CD", confirm with user
+4. Ask for VIN → "WVWZZZ3CZDP123456"
+5. Validate VIN ✓
+6. Ask for fuel type → "Gasoline"
+7. Ask for odometer → "85000"
+8. Show summary, confirm
+9. Create vehicle
+
+Success Criteria:
+✓ Step-by-step guidance clear
+✓ Format auto-correction works
+✓ User can review before creation
+```
+
+### Test 3: Invalid VIN (Contains I/O/Q)
+```
+Input: "VIN: WVOZZZ3CZDP123456" (contains O)
+
+Expected Behavior:
+❌ Reject VIN
+💬 "VIN contains invalid character 'O'. Slovak VINs cannot contain I, O, or Q."
+💬 "It might be number 0 (zero) instead of letter O."
+💬 "Please double-check and re-enter:"
+
+Success Criteria:
+✓ VIN rejected immediately
+✓ Clear error message
+✓ Helpful suggestion provided
+```
+
+### Test 4: Invalid License Plate Format
+```
+Input: "License plate: BA789XY" (no hyphen)
+
+Expected Behavior:
+⚠️ Auto-correct to "BA-789XY"
+💬 "License plate format should be BA-789XY (with hyphen). Is this correct?"
+
+Success Criteria:
+✓ Auto-correction attempted
+✓ User confirmation requested
+```
+
+### Test 5: Duplicate License Plate
+```
+Input: "BA-789XY" (already exists)
+
+Expected Behavior:
+❌ Detect duplicate
+💬 "Vehicle with license plate BA-789XY already exists:"
+💬 [Show existing vehicle details]
+💬 "Did you mean to:
+     1. Add a different vehicle
+     2. View existing vehicle details
+     3. Update odometer reading"
+
+Expected Tools Called:
+- car-log-core.list_vehicles (returns existing vehicle)
+
+Success Criteria:
+✓ Duplicate detected
+✓ Existing vehicle shown
+✓ Clear options provided
+```
+
+### Test 6: Unrealistic Odometer
+```
+Input: "Odometer: 5000000 km"
+
+Expected Behavior:
+⚠️ Flag as suspicious
+💬 "Odometer reading seems high (5,000,000 km). That's 125× around Earth!"
+💬 "Please confirm reading in kilometers:"
+
+Success Criteria:
+✓ Validation triggers on >1,000,000 km
+✓ Helpful context provided
+```
+
+### Test 7: Fuel Efficiency Expectations
+```
+Input: Diesel commercial van
+
+Expected Behavior:
+💬 "Diesel efficiency: 5-15 L/100km"
+💬 "Expected average: 8.5 L/100km for commercial vans"
+
+Success Criteria:
+✓ L/100km format used (not km/L)
+✓ Reasonable range provided
+✓ Context for vehicle type
+```
+
+### Test 8: Multi-Vehicle User
+```
+Input: "Add second vehicle"
+
+Expected Behavior:
+1. Show existing vehicles:
+   "You have 1 vehicle registered:
+    • Ford Transit (BA-789XY) - 125,000 km"
+2. Ask "What's the new vehicle?"
+3. Continue registration flow
+
+Expected Tools Called:
+- car-log-core.list_vehicles (show existing)
+
+Success Criteria:
+✓ Existing vehicles displayed
+✓ Clear distinction from new vehicle
+```
+
+---
+
+## MCP Tool Call Examples
+
+### Example 1: Create Vehicle (Full Data)
+```json
+// Request
+{
+  "tool": "car-log-core.create_vehicle",
+  "parameters": {
+    "name": "Ford Transit Delivery Van",
+    "license_plate": "BA-789XY",
+    "vin": "WVWZZZ3CZDP123456",
+    "make": "Ford",
+    "model": "Transit",
+    "year": 2022,
+    "fuel_type": "Diesel",
+    "initial_odometer_km": 125000
+  }
+}
+
+// Response
+{
+  "success": true,
+  "vehicle_id": "abc-123-def-456",
+  "vehicle": {
+    "vehicle_id": "abc-123-def-456",
+    "name": "Ford Transit Delivery Van",
+    "license_plate": "BA-789XY",
+    "vin": "WVWZZZ3CZDP123456",
+    "make": "Ford",
+    "model": "Transit",
+    "year": 2022,
+    "fuel_type": "Diesel",
+    "initial_odometer_km": 125000,
+    "current_odometer_km": 125000,
+    "total_distance_km": 0,
+    "created_at": "2025-11-20T14:30:00Z"
+  }
+}
+```
+
+### Example 2: Check Existing Vehicles
+```json
+// Request
+{
+  "tool": "car-log-core.list_vehicles",
+  "parameters": {}
+}
+
+// Response
+{
+  "success": true,
+  "vehicles": [
+    {
+      "vehicle_id": "abc-123-def-456",
+      "name": "Ford Transit Delivery Van",
+      "license_plate": "BA-789XY",
+      "current_odometer_km": 125000,
+      "total_distance_km": 0
+    }
+  ]
+}
+```
+
+---
+
+## Integration Patterns
+
+### Pattern 1: Duplicate Check Before Create
+```javascript
+// Always check for duplicates first
+const existing = await mcp.call("car-log-core.list_vehicles");
+const duplicate = existing.vehicles.find(v => v.license_plate === inputPlate);
+
+if (duplicate) {
+  // Show duplicate message
+} else {
+  // Proceed with creation
+}
+```
+
+### Pattern 2: Progressive Field Collection
+```javascript
+// Collect required fields first
+const required = {
+  name: await ask("What kind of vehicle?"),
+  license_plate: await ask("License plate (XX-123XX)?"),
+  vin: await askWithValidation("VIN (17 chars)?", validateVIN),
+  fuel_type: await ask("Fuel type?"),
+  initial_odometer_km: await ask("Current odometer (km)?")
+};
+
+// Optional fields only if user wants
+if (await confirm("Add make/model/year? (optional)")) {
+  required.make = await ask("Make?");
+  required.model = await ask("Model?");
+  required.year = await ask("Year?");
+}
+```
+
+### Pattern 3: Format Auto-Correction
+```javascript
+// Auto-correct license plate format
+function correctLicensePlate(input) {
+  // Remove all hyphens and spaces
+  const clean = input.replace(/[-\s]/g, '');
+
+  // Match pattern: 1-2 letters, 3 digits, 2 letters
+  const match = clean.match(/^([A-Z]{1,2})(\d{3})([A-Z]{2})$/i);
+
+  if (match) {
+    return `${match[1].toUpperCase()}-${match[2]}${match[3].toUpperCase()}`;
+  }
+
+  return null; // Invalid format
+}
+```
+
+---
+
+## Edge Cases Handled
+
+### 1. VIN with Lowercase
+```
+Input: "wvwzzz3czdp123456"
+Output: Convert to uppercase → "WVWZZZ3CZDP123456"
+```
+
+### 2. License Plate Variations
+```
+Input: "BA 789 XY" → "BA-789XY"
+Input: "BA789XY" → "BA-789XY"
+Input: "ba-789xy" → "BA-789XY"
+```
+
+### 3. Fuel Type Aliases
+```
+Input: "nafta" → "Diesel" (Slovak)
+Input: "benzín" → "Gasoline" (Slovak)
+Input: "95" → "Gasoline" (octane)
+```
+
+### 4. Odometer Variations
+```
+Input: "125,000" → 125000 (remove comma)
+Input: "125 000" → 125000 (remove space)
+Input: "125000 km" → 125000 (remove unit)
+```
+
+---
+
 **Implementation Status:** 📋 Specification ready, implementation pending
 
-**Estimated Effort:** 2-3 hours (with MCP tool already functional)
+**Estimated Effort:** 2 hours (with MCP tool already functional)
 
-**Dependencies:** `car-log-core.create_vehicle` tool (already implemented ✅)
+**Dependencies:** `car-log-core.create_vehicle`, `car-log-core.list_vehicles` (both implemented ✅)

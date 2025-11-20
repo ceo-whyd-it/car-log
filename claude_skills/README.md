@@ -318,60 +318,88 @@ Expected: 4 validation checks run automatically
 
 ### Integration Testing
 
+**Complete Testing Guide:** See [INTEGRATION_TESTING.md](INTEGRATION_TESTING.md)
+
+**Quick Test Workflow:**
 ```bash
-# End-to-end workflow
-1. Add vehicle (Skill 1)
-2. Paste receipt (Skill 2)
-3. Detect gap → reconstruct (Skill 3)
-4. Create template from trip (Skill 4)
-5. Generate report (Skill 5)
-6. Validation runs throughout (Skill 6)
+# End-to-end workflow (20 minutes)
+1. Add vehicle (Skill 1) - 5 min
+2. Paste receipt (Skill 2) - 5 min
+3. Detect gap → reconstruct (Skill 3) - 10 min
+4. Create template from trip (Skill 4) - 5 min
+5. Generate report (Skill 5) - 3 min
+6. Validation runs throughout (Skill 6) - automatic
+
+Complete manual testing checklist: MANUAL_TEST_CHECKLIST.md
+Demo scenario for video: DEMO_SCENARIO.md
 ```
+
+**Test Scenarios Available:**
+1. Complete workflow (happy path)
+2. Template creation with geocoding
+3. Error handling and recovery
+4. Cross-skill data flow
+5. Performance benchmarks
 
 ---
 
 ## Troubleshooting
 
-### Skill Not Triggering
+**Complete Troubleshooting Guide:** See [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
 
+**Quick Reference:**
+
+### Skill Not Triggering
 **Check:** Trigger words match user input
-**Fix:** Add more trigger word variations
+**Fix:** Add more trigger word variations or use exact trigger phrase
 
 ### MCP Tool Call Fails
-
 **Check:** MCP servers running (`docker-compose ps`)
 **Fix:** Restart servers (`docker-compose restart`)
 
 ### GPS Extraction Fails
-
 **Check:** Photo has EXIF data (not screenshot)
-**Fix:** Use phone camera app with location enabled
+**Fix:** Use phone camera app with location enabled, or enter GPS manually
 
 ### e-Kasa Timeout
-
 **Check:** Internet connection, API status
-**Fix:** Fallback to manual entry
+**Fix:** Retry or fallback to manual entry
+
+### Template Matching Low Confidence
+**Check:** Templates have GPS coordinates
+**Fix:** GPS is mandatory for 90%+ confidence
+
+**For detailed solutions:** See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) (10 common issues + environment-specific)
 
 ---
 
 ## Performance
 
-**Typical Response Times:**
+**Complete Performance Benchmarks:** See [PERFORMANCE.md](PERFORMANCE.md)
 
-| Action | Time | Bottleneck |
-|--------|------|------------|
-| Vehicle setup | 1-2s | Validation logic |
-| QR scan | 3-5s | Multi-scale detection |
-| e-Kasa API | 5-30s | External API |
-| GPS extraction | 1-2s | EXIF reading |
-| Template matching | 2-4s | Haversine calculations |
-| Report generation | 3-5s | File I/O |
-| Validation | 1-2s | 4 algorithms |
+**Target Response Times:**
+
+| Operation | Target | Acceptable | Timeout |
+|-----------|--------|------------|---------|
+| Vehicle setup | 1-2s | < 5s | > 10s |
+| QR scan | 2-3s | < 5s | > 10s |
+| e-Kasa API | 5-15s | < 60s | > 60s |
+| GPS extraction | 1-2s | < 3s | > 5s |
+| Template matching (100 templates) | 2-4s | < 5s | > 10s |
+| Report generation (1000 trips) | 3-5s | < 10s | > 15s |
+| Validation (all 4 algorithms) | 1-2s | < 5s | > 10s |
+
+**Bottlenecks:**
+- e-Kasa API: 5-30s (external, variable)
+- PDF QR scanning: 2-5s (multi-scale)
+- Template matching 1000+: 10-15s (needs optimization)
 
 **Optimization:**
-- Cache geocoding results (24h TTL)
-- Parallel MCP tool calls when possible
-- Preload templates for matching
+- ✅ 24hr geocoding cache
+- ✅ Atomic writes (crash-safe)
+- ✅ Monthly folders (reduce file count)
+- ⏳ Index files for reports (post-MVP)
+- ⏳ R-tree spatial index for templates (post-MVP)
 
 ---
 
@@ -395,10 +423,21 @@ Expected: 4 validation checks run automatically
 
 ## Documentation References
 
+### Skills Documentation
+- [INTEGRATION_TESTING.md](INTEGRATION_TESTING.md) - End-to-end test scenarios (5 test cases)
+- [DEMO_SCENARIO.md](DEMO_SCENARIO.md) - Complete 5-minute demo script
+- [TROUBLESHOOTING.md](TROUBLESHOOTING.md) - Common issues and solutions (10 issues)
+- [MANUAL_TEST_CHECKLIST.md](MANUAL_TEST_CHECKLIST.md) - User testing checklist (2-3 hours)
+- [PERFORMANCE.md](PERFORMANCE.md) - Performance benchmarks and optimization
+
+### Claude Skills Resources
 - **Claude Skills Documentation:** https://docs.claude.com/en/docs/agents-and-tools/agent-skills/best-practices
 - **Creating Custom Skills:** https://support.claude.com/en/articles/12512198
+
+### Project Documentation
 - **MCP Tool Specifications:** `../spec/07-mcp-api-specifications.md`
 - **Claude Desktop Setup:** `../CLAUDE_DESKTOP_SETUP.md`
+- **Implementation Plan:** `../spec/08-implementation-plan.md`
 - **Workflow Diagrams:** `../spec/09-hackathon-presentation.md`
 
 ---
@@ -414,8 +453,48 @@ After implementing these skills:
 - ✅ Data validation: Manual → Automatic
 - ✅ **Overall: 10x productivity improvement**
 
+**Current Status (November 20, 2025):**
+- ✅ Backend: 100% complete (7 MCP servers, 28 tools, 20/20 integration tests passing)
+- 📋 Skills: 100% documented (6 skills specified)
+- ⏳ Testing: Ready for manual testing in Claude Desktop
+- ⏳ Demo: Script complete, ready to record
+
 ---
 
-**Last Updated:** November 18, 2025
-**Status:** 📋 Specifications complete, implementation pending
-**Estimated Implementation:** 15-20 hours total (all 6 skills)
+## Getting Started
+
+**Quick Start (5 steps):**
+
+1. **Setup MCP Servers:**
+   ```bash
+   cd docker
+   docker-compose up -d
+   ```
+
+2. **Configure Claude Desktop:**
+   - Copy `../claude_desktop_config.json` to Claude Desktop config directory
+   - Restart Claude Desktop
+
+3. **Load Skills:**
+   - Open Claude Desktop → Settings → Skills
+   - Load all 6 skill files (01-06)
+
+4. **Run Manual Test:**
+   - Follow [MANUAL_TEST_CHECKLIST.md](MANUAL_TEST_CHECKLIST.md)
+   - Complete all 6 skills + 3 integration tests
+
+5. **Record Demo:**
+   - Use [DEMO_SCENARIO.md](DEMO_SCENARIO.md)
+   - Target: 5 minutes total
+
+**Next Steps:**
+- Manual testing (2-3 hours)
+- Bug fixes (as needed)
+- Demo video recording (1 hour)
+- Hackathon submission (Nov 30 deadline)
+
+---
+
+**Last Updated:** November 20, 2025
+**Status:** ✅ Documentation complete, ready for testing
+**Documentation Files:** 5 guides (INTEGRATION_TESTING, DEMO_SCENARIO, TROUBLESHOOTING, MANUAL_TEST_CHECKLIST, PERFORMANCE)
