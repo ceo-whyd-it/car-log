@@ -51,7 +51,7 @@ def get_day_of_week(iso_datetime: str) -> str:
     try:
         dt = datetime.fromisoformat(iso_datetime.replace("Z", "+00:00"))
         return dt.strftime("%A")
-    except:
+    except (ValueError, AttributeError, TypeError):
         return None
 
 
