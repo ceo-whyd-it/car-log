@@ -55,12 +55,66 @@ Complete specification for a **Slovak tax-compliant company vehicle mileage logg
 **For Product Managers:** Start here → [spec/01-product-overview.md](./spec/01-product-overview.md)
 **For Architects:** Start here → [spec/06-mcp-architecture-v2.md](./spec/06-mcp-architecture-v2.md)
 **For Hackathon Judges:** Start here → [spec/09-hackathon-presentation.md](./spec/09-hackathon-presentation.md)
-**🐳 For Deployment:** Docker setup → [docker/README.md](./docker/README.md)
+**🚀 For Installation:** Claude Desktop deployment → [deployment/README.md](./deployment/README.md)
+**🐳 For Docker:** Container deployment → [docker/README.md](./docker/README.md)
 **🎯 For Claude Skills:** Conversational UI → [claude_skills/README.md](./claude_skills/README.md)
 
 ---
 
-## 🐳 Docker Deployment (NEW)
+## 🚀 Claude Desktop Deployment (NEW - Recommended)
+
+**Install Car Log MCP servers for use with Claude Desktop:**
+
+### Quick Install
+
+**Windows:**
+```cmd
+cd car-log
+deployment\scripts\deploy-windows.bat
+```
+
+**macOS:**
+```bash
+cd car-log
+./deployment/scripts/deploy-macos.sh
+```
+
+**Linux:**
+```bash
+cd car-log
+./deployment/scripts/deploy-linux.sh
+```
+
+### What It Does
+
+1. ✅ Creates deployment directory: `~/.car-log-deployment/`
+2. ✅ Installs all 7 MCP servers (6 Python + 1 Node.js)
+3. ✅ Installs dependencies automatically
+4. ✅ Generates Claude Desktop configuration
+5. ✅ Preserves data outside git repository
+
+### Features
+
+- **Cross-platform**: Windows (.bat), macOS/Linux (.sh) scripts
+- **Safe**: Installs outside git repo, won't interfere with development
+- **Complete**: All 7 MCP servers (28 tools total)
+- **Helper scripts**:
+  - `merge-config` - Auto-merge with existing Claude config
+  - `update` - Update to latest version (preserves data)
+  - `uninstall` - Clean removal with data backup
+
+### See Also
+
+- **Complete Guide:** [deployment/README.md](./deployment/README.md)
+- **Prerequisites:** Python 3.11+, Node.js 18+, Claude Desktop
+- **Config Location:**
+  - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+  - macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+  - Linux: `~/.config/Claude/claude_desktop_config.json`
+
+---
+
+## 🐳 Docker Deployment (Advanced)
 
 **Run all 7 MCP servers with one command:**
 
