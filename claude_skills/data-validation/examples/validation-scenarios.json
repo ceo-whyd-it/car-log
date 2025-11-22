@@ -1,0 +1,241 @@
+{
+  "scenario_1_all_pass": {
+    "description": "Perfect data - all validation checks pass",
+    "checkpoint_pair": {
+      "checkpoint1_odometer": 50000,
+      "checkpoint2_odometer": 50820,
+      "odometer_delta_km": 820
+    },
+    "trips": [
+      {"distance_km": 410, "description": "Bratislava to Košice"},
+      {"distance_km": 410, "description": "Košice to Bratislava"}
+    ],
+    "trips_sum_km": 820,
+    "fuel_data": {
+      "expected_fuel_liters": 69.7,
+      "actual_fuel_liters": 72.8,
+      "vehicle_avg_efficiency": 8.5,
+      "trip_efficiency": 8.9
+    },
+    "fuel_type": "Diesel",
+    "validation_results": {
+      "distance_sum": {
+        "variance_percent": 0,
+        "threshold_percent": 10,
+        "status": "ok",
+        "symbol": "✅"
+      },
+      "fuel_consumption": {
+        "variance_percent": 4.4,
+        "threshold_percent": 15,
+        "status": "ok",
+        "symbol": "✅"
+      },
+      "efficiency_range": {
+        "efficiency": 8.9,
+        "min_range": 5,
+        "max_range": 15,
+        "status": "ok",
+        "symbol": "✅"
+      },
+      "deviation_from_average": {
+        "deviation_percent": 4.7,
+        "threshold_percent": 20,
+        "status": "ok",
+        "symbol": "✅"
+      }
+    },
+    "display": "✅ Distance: 820 km (0% variance)\n✅ Fuel: 72.8L (+4.4%, within ±15%)\n✅ Efficiency: 8.9 L/100km (Diesel: 5-15)\n✅ Deviation: +4.7% from average\n\nAll checks passed! ✓"
+  },
+  "scenario_2_warning": {
+    "description": "High fuel consumption - warnings but still acceptable",
+    "checkpoint_pair": {
+      "checkpoint1_odometer": 50000,
+      "checkpoint2_odometer": 50820,
+      "odometer_delta_km": 820
+    },
+    "trips": [
+      {"distance_km": 410, "description": "Bratislava to Košice (heavy cargo)"},
+      {"distance_km": 410, "description": "Košice to Bratislava (heavy cargo)"}
+    ],
+    "trips_sum_km": 820,
+    "fuel_data": {
+      "expected_fuel_liters": 69.7,
+      "actual_fuel_liters": 85.0,
+      "vehicle_avg_efficiency": 8.5,
+      "trip_efficiency": 10.4
+    },
+    "fuel_type": "Diesel",
+    "validation_results": {
+      "distance_sum": {
+        "variance_percent": 0,
+        "threshold_percent": 10,
+        "status": "ok",
+        "symbol": "✅"
+      },
+      "fuel_consumption": {
+        "variance_percent": 22.0,
+        "threshold_percent": 15,
+        "status": "warning",
+        "symbol": "⚠️"
+      },
+      "efficiency_range": {
+        "efficiency": 10.4,
+        "min_range": 5,
+        "max_range": 15,
+        "status": "ok",
+        "symbol": "✅"
+      },
+      "deviation_from_average": {
+        "deviation_percent": 22.4,
+        "threshold_percent": 20,
+        "status": "warning",
+        "symbol": "⚠️"
+      }
+    },
+    "display": "✅ Distance: 820 km (0% variance)\n⚠️  Fuel: 85.0L (+22.0%, exceeds ±15%)\n✅ Efficiency: 10.4 L/100km (Diesel: 5-15)\n⚠️  Deviation: +22.4% from average\n\nWarnings detected. Review recommended.\n💡 Possible causes:\n   • Heavy cargo or trailer\n   • Traffic or route changes\n   • Aggressive driving"
+  },
+  "scenario_3_distance_error": {
+    "description": "Distance variance too high - missing trip",
+    "checkpoint_pair": {
+      "checkpoint1_odometer": 50000,
+      "checkpoint2_odometer": 50820,
+      "odometer_delta_km": 820
+    },
+    "trips": [
+      {"distance_km": 410, "description": "Bratislava to Košice"}
+    ],
+    "trips_sum_km": 410,
+    "fuel_data": {
+      "expected_fuel_liters": 34.85,
+      "actual_fuel_liters": 72.8,
+      "vehicle_avg_efficiency": 8.5,
+      "trip_efficiency": 8.9
+    },
+    "fuel_type": "Diesel",
+    "validation_results": {
+      "distance_sum": {
+        "variance_percent": 50.0,
+        "threshold_percent": 10,
+        "status": "error",
+        "symbol": "❌"
+      },
+      "fuel_consumption": {
+        "variance_percent": 108.8,
+        "threshold_percent": 15,
+        "status": "warning",
+        "symbol": "⚠️"
+      },
+      "efficiency_range": {
+        "efficiency": 8.9,
+        "min_range": 5,
+        "max_range": 15,
+        "status": "ok",
+        "symbol": "✅"
+      },
+      "deviation_from_average": {
+        "deviation_percent": 4.7,
+        "threshold_percent": 20,
+        "status": "ok",
+        "symbol": "✅"
+      }
+    },
+    "display": "❌ Distance: 410 km (-50.0%, exceeds ±10%)\n⚠️  Fuel: 72.8L (+108.8%, exceeds ±15%)\n✅ Efficiency: 8.9 L/100km (Diesel: 5-15)\n✅ Deviation: +4.7% from average\n\nERROR: Distance variance too high!\n💡 Possible causes:\n   • Missing trip between checkpoints\n   • Incorrect odometer reading\n   • Trip distance miscalculated"
+  },
+  "scenario_4_efficiency_error": {
+    "description": "Efficiency out of range - likely data entry error",
+    "checkpoint_pair": {
+      "checkpoint1_odometer": 50000,
+      "checkpoint2_odometer": 50820,
+      "odometer_delta_km": 820
+    },
+    "trips": [
+      {"distance_km": 410, "description": "Bratislava to Košice"},
+      {"distance_km": 410, "description": "Košice to Bratislava"}
+    ],
+    "trips_sum_km": 820,
+    "fuel_data": {
+      "expected_fuel_liters": 69.7,
+      "actual_fuel_liters": 205.0,
+      "vehicle_avg_efficiency": 8.5,
+      "trip_efficiency": 25.0
+    },
+    "fuel_type": "Diesel",
+    "validation_results": {
+      "distance_sum": {
+        "variance_percent": 0,
+        "threshold_percent": 10,
+        "status": "ok",
+        "symbol": "✅"
+      },
+      "fuel_consumption": {
+        "variance_percent": 194.1,
+        "threshold_percent": 15,
+        "status": "warning",
+        "symbol": "⚠️"
+      },
+      "efficiency_range": {
+        "efficiency": 25.0,
+        "min_range": 5,
+        "max_range": 15,
+        "status": "error",
+        "symbol": "❌"
+      },
+      "deviation_from_average": {
+        "deviation_percent": 194.1,
+        "threshold_percent": 20,
+        "status": "warning",
+        "symbol": "⚠️"
+      }
+    },
+    "display": "✅ Distance: 820 km (0% variance)\n⚠️  Fuel: 205.0L (+194.1%, exceeds ±15%)\n❌ Efficiency: 25.0 L/100km (Diesel: 5-15)\n⚠️  Deviation: +194.1% from average\n\nERROR: Efficiency out of range!\n💡 Possible causes:\n   • Data entry error (205L instead of 20.5L?)\n   • Wrong fuel type selected\n   • Distance miscalculated"
+  },
+  "scenario_5_gasoline_normal": {
+    "description": "Gasoline vehicle with normal efficiency",
+    "checkpoint_pair": {
+      "checkpoint1_odometer": 30000,
+      "checkpoint2_odometer": 30820,
+      "odometer_delta_km": 820
+    },
+    "trips": [
+      {"distance_km": 410, "description": "Highway trip"},
+      {"distance_km": 410, "description": "Return trip"}
+    ],
+    "trips_sum_km": 820,
+    "fuel_data": {
+      "expected_fuel_liters": 82.0,
+      "actual_fuel_liters": 86.1,
+      "vehicle_avg_efficiency": 10.0,
+      "trip_efficiency": 10.5
+    },
+    "fuel_type": "Gasoline",
+    "validation_results": {
+      "distance_sum": {
+        "variance_percent": 0,
+        "threshold_percent": 10,
+        "status": "ok",
+        "symbol": "✅"
+      },
+      "fuel_consumption": {
+        "variance_percent": 5.0,
+        "threshold_percent": 15,
+        "status": "ok",
+        "symbol": "✅"
+      },
+      "efficiency_range": {
+        "efficiency": 10.5,
+        "min_range": 6,
+        "max_range": 20,
+        "status": "ok",
+        "symbol": "✅"
+      },
+      "deviation_from_average": {
+        "deviation_percent": 5.0,
+        "threshold_percent": 20,
+        "status": "ok",
+        "symbol": "✅"
+      }
+    },
+    "display": "✅ Distance: 820 km (0% variance)\n✅ Fuel: 86.1L (+5.0%, within ±15%)\n✅ Efficiency: 10.5 L/100km (Gasoline: 6-20)\n✅ Deviation: +5.0% from average\n\nAll checks passed! ✓"
+  }
+}

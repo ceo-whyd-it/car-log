@@ -1,0 +1,10 @@
+{
+  "name": "Ford Transit Delivery Van",
+  "license_plate": "BA-789XY",
+  "vin": "WVWZZZ3CZDP123456",
+  "fuel_type": "Diesel",
+  "make": "Ford",
+  "model": "Transit",
+  "year": 2022,
+  "initial_odometer_km": 125000
+}
