@@ -16,7 +16,6 @@ from matching import (
     normalize_text,
     score_address_match,
     calculate_hybrid_score,
-    match_checkpoint_to_template,
 )
 from tools.match_templates import execute as match_templates_execute
 from tools.calculate_template_completeness import execute as calculate_completeness_execute
@@ -199,7 +198,7 @@ async def test_template_matching():
     # Check reconstruction proposal
     proposal = result.get('reconstruction_proposal', {})
     if proposal.get('has_proposal'):
-        print(f"\nReconstruction Proposal:")
+        print("\nReconstruction Proposal:")
         print(f"  Gap distance: {proposal['gap_distance_km']} km")
         print(f"  Reconstructed: {proposal['reconstructed_km']} km")
         print(f"  Coverage: {proposal['coverage_percent']}%")
@@ -236,7 +235,7 @@ async def test_template_completeness():
         "template": complete_template
     })
 
-    print(f"Complete template:")
+    print("Complete template:")
     print(f"  Valid: {result['is_valid']}")
     print(f"  Completeness: {result['completeness_percent']}%")
     print(f"  Quality: {result['quality']}")
@@ -253,7 +252,7 @@ async def test_template_completeness():
         "template": minimal_template
     })
 
-    print(f"\nMinimal template:")
+    print("\nMinimal template:")
     print(f"  Valid: {result2['is_valid']}")
     print(f"  Completeness: {result2['completeness_percent']}%")
     print(f"  Quality: {result2['quality']}")

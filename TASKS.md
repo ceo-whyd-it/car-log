@@ -1,6 +1,125 @@
 # Car Log Implementation Tasks
 
 **Project:** Slovak Tax-Compliant Mileage Logger (MCP Hackathon)
+**Deadline:** November 30, 2025 (9 days remaining)
+**Status:** ⚠️ CRITICAL GAP - Trip CRUD Tools Missing (3-4 hours to implement)
+**Last Updated:** November 21, 2025
+**Current Branch:** `imp-v2` (validation improvements complete, ready to merge)
+
+---
+
+## 🎯 CURRENT STATUS SUMMARY
+
+### **What's Complete:** ✅
+
+- ✅ **6/7 MCP servers fully functional** (car-log-core, trip-reconstructor, geo-routing, ekasa-api, dashboard-ocr, validation)
+- ✅ **Report-generator (7th server) ready** - reads trip files from storage
+- ✅ **10 CRUD tools implemented** (vehicle, checkpoint, template operations + gap detection)
+- ✅ **Template matching working** - produces reconstruction proposals with 70%+ confidence
+- ✅ **All validation algorithms working** (distance, fuel, efficiency, deviation)
+- ✅ **70/71 tests passing** (98.6% success rate)
+- ✅ **Day 7 Integration Checkpoint PASSED** (20/20 tests)
+- ✅ **Atomic write infrastructure** (crash-safe file storage)
+- ✅ **Slovak compliance validated** (VIN format, L/100km, driver name)
+- ✅ **Linting clean** (0 errors after ruff fixes on imp-v2 branch)
+
+### **What's Blocking Demo:** ❌
+
+**ONLY ONE ISSUE:** Trip CRUD tools not implemented (4 tools, ~615 lines total)
+
+---
+
+## ⚠️ CRITICAL: TRIP CRUD IMPLEMENTATION REQUIRED
+
+**BLOCKING ISSUE:** Trip CRUD tools are **NOT IMPLEMENTED** - this is the ONLY blocker for end-to-end demo.
+
+**Current Workflow Status:**
+```
+✅ Receipt Processing → Checkpoint Creation
+✅ Gap Detection → Template Matching (produces proposals)
+❌ [MISSING TOOLS] → Trip Storage ← THIS IS THE BLOCKER
+⚠️  Report Generation (reads trip files, but no files exist)
+```
+
+**What Happens Without Trip CRUD:**
+```python
+# User flow in Claude Desktop:
+1. "Create checkpoint from receipt"     → ✅ Works
+2. "Detect gap and match templates"     → ✅ Works (returns proposals)
+3. "Create trips from these proposals"  → ❌ FAILS (no tool exists!)
+4. "Generate monthly report"            → ⚠️ Returns empty report (0 trips)
+```
+
+**Missing Tools (car-log-core):**
+- ❌ `create_trip.py` - Create single trip with Slovak compliance fields (~220 lines)
+- ❌ `create_trips_batch.py` - Batch trip creation from reconstruction proposals (~150 lines)
+- ❌ `list_trips.py` - List trips with filters (date range, vehicle, purpose) (~170 lines)
+- ❌ `get_trip.py` - Retrieve trip by ID (~75 lines)
+- ⏳ `update_trip.py` - Update trip details (P1 - optional, can skip)
+- ⏳ `delete_trip.py` - Delete trip (P1 - optional, can skip)
+
+**Good News - Implementation is EASY:**
+- ✅ Complete patterns exist (create_vehicle.py, list_checkpoints.py)
+- ✅ Storage infrastructure ready (atomic_write_json, monthly folders)
+- ✅ Report generator already expects trip files (will just work!)
+- ✅ Tests validate trip data format (minimal new tests needed)
+- ✅ Trip data model documented (CLAUDE.md lines 588-616)
+
+**Estimated Time:** 3-4 hours (reduced from 4-6 because we have complete patterns!)
+
+| Tool | Time | Copy From | Modifications |
+|------|------|-----------|---------------|
+| create_trip.py | 1h | create_vehicle.py | Add Slovak compliance validation |
+| create_trips_batch.py | 45m | create_checkpoint.py | Add batch loop + all-or-nothing |
+| list_trips.py | 45m | list_checkpoints.py | Already has monthly folders! |
+| get_trip.py | 20m | get_vehicle.py | Change folder path to trips/YYYY-MM/ |
+| Tool registration | 5m | __init__.py | Import new tools |
+| Basic tests | 30m | Existing test patterns | Validation |
+
+**Templates to Copy:**
+- `mcp-servers/car_log_core/tools/create_vehicle.py` (219 lines) → create_trip.py
+- `mcp-servers/car_log_core/tools/list_checkpoints.py` (168 lines) → list_trips.py
+- `mcp-servers/car_log_core/tools/get_vehicle.py` (73 lines) → get_trip.py
+- `mcp-servers/car_log_core/storage.py` (125 lines) → Already has all functions needed!
+
+**Action Required:** Implement 4 trip CRUD tools (3-4 hours) to unblock end-to-end demo.
+
+---
+
+## 🚀 NEXT ACTIONS (Priority Order)
+
+### **IMMEDIATE (3-4 hours) - BLOCKING DEMO:**
+
+1. **Implement Trip CRUD Tools** (Section A6 below)
+   - [ ] create_trip.py (1h) - Copy from create_vehicle.py
+   - [ ] get_trip.py (20m) - Copy from get_vehicle.py
+   - [ ] list_trips.py (45m) - Copy from list_checkpoints.py
+   - [ ] create_trips_batch.py (45m) - New batch wrapper
+   - [ ] Update __init__.py (5m) - Register new tools
+   - [ ] Write tests (30m) - Validate Slovak compliance
+
+**Why:** This is the ONLY thing blocking end-to-end demo. Everything else works!
+
+### **AFTER TRIP CRUD (2-3 hours):**
+
+2. **Merge imp-v2 branch** (10m)
+   - Contains validation improvements (piexif, linting fixes, Unicode fixes)
+   - All 70 tests passing
+
+3. **End-to-End Integration Testing** (1-2h)
+   - Test complete workflow: Receipt → Checkpoint → Gap → Match → Create Trips → Report
+   - Generate demo dataset
+   - Practice 5-minute demo script
+
+4. **Demo Preparation** (1h)
+   - Record demo video (3 min workflow + 1.5 min architecture + 0.5 min compliance)
+   - Create presentation slides (5 slides)
+   - Final polish
+
+### **HACKATHON READY (Nov 30):**
+
+5. **Submission** - All systems functional, demo complete!
+
 **Deadline:** November 30, 2025 (10 days remaining)
 **Status:** ✅ 90% COMPLETE - Backend + Documentation Done, Manual Testing Pending
 **Last Updated:** November 20, 2025 (Agent 4 - Integration Testing Documentation)
@@ -256,6 +375,165 @@ python scripts/generate_mock_data.py --scenario demo
 
 ---
 
+### A6: car-log-core - Trip CRUD (P0) ❌ NOT IMPLEMENTED - PRIORITY 1
+
+**Can run in parallel:** ✅ Can be done independently (no blocking dependencies)
+**Status:** ❌ NOT STARTED - **THIS IS THE ONLY BLOCKER FOR DEMO**
+**Assignee:** URGENT - Needs assignment TODAY
+**Estimated Time:** 3-4 hours (down from 4-6 - we have complete patterns!)
+**Blocks:** End-to-end workflow, demo, report generation, hackathon submission
+
+**Implementation Strategy - Copy Existing Patterns:**
+
+**Step 1: create_trip.py (~1 hour)**
+```bash
+# Copy template that already works:
+cp mcp-servers/car_log_core/tools/create_vehicle.py \
+   mcp-servers/car_log_core/tools/create_trip.py
+
+# Modify INPUT_SCHEMA and validation:
+# - Add Slovak compliance fields (driver_name, trip_start_datetime, etc.)
+# - Add validate_trip_slovak_compliance() function
+# - Change folder from "vehicles" to "trips"
+# - Use ensure_month_folder() for monthly structure (already exists in storage.py!)
+# - Update trip data structure per CLAUDE.md lines 588-616
+```
+
+**Step 2: get_trip.py (~20 minutes)**
+```bash
+# Copy template:
+cp mcp-servers/car_log_core/tools/get_vehicle.py \
+   mcp-servers/car_log_core/tools/get_trip.py
+
+# Modify:
+# - Change folder lookup from vehicles/ to trips/YYYY-MM/
+# - Parse trip_id to extract month from trip_start_datetime
+# - Update error messages
+```
+
+**Step 3: list_trips.py (~45 minutes)**
+```bash
+# Copy template (ALREADY handles monthly folders!):
+cp mcp-servers/car_log_core/tools/list_checkpoints.py \
+   mcp-servers/car_log_core/tools/list_trips.py
+
+# Modify:
+# - Change folder from "checkpoints" to "trips"
+# - Add filter by purpose (Business/Personal)
+# - Update response structure
+# - Keep existing date range filtering (already works!)
+```
+
+**Step 4: create_trips_batch.py (~45 minutes)**
+```python
+# New file, simple batch wrapper:
+async def execute(arguments: Dict[str, Any]) -> Dict[str, Any]:
+    """Create multiple trips atomically (all or nothing)"""
+    trips_data = arguments.get("trips", [])
+    created_trip_ids = []
+    temp_files = []
+
+    try:
+        # Validate all trips first (fail fast)
+        for trip_data in trips_data:
+            valid, error = validate_trip_slovak_compliance(trip_data)
+            if not valid:
+                return {"success": False, "error": error}
+
+        # Create all trips
+        for trip_data in trips_data:
+            result = await create_trip.execute(trip_data)
+            if not result["success"]:
+                # Rollback: delete all created trips
+                for trip_id in created_trip_ids:
+                    # Delete trip file
+                rollback_created_trips(created_trip_ids)
+                return result
+            created_trip_ids.append(result["trip_id"])
+
+        return {
+            "success": True,
+            "trip_ids": created_trip_ids,
+            "count": len(created_trip_ids),
+            "message": f"Created {len(created_trip_ids)} trips successfully"
+        }
+    except Exception as e:
+        rollback_created_trips(created_trip_ids)
+        return {"success": False, "error": str(e)}
+```
+
+**Step 5: Register tools (~5 minutes)**
+```python
+# Update mcp-servers/car_log_core/tools/__init__.py:
+from . import (
+    # ... existing imports ...
+    create_trip,
+    get_trip,
+    list_trips,
+    create_trips_batch,
+)
+
+__all__ = [
+    # ... existing exports ...
+    "create_trip",
+    "get_trip",
+    "list_trips",
+    "create_trips_batch",
+]
+```
+
+**Step 6: Basic tests (~30 minutes)**
+```python
+# Copy test patterns from tests/test_car_log_core.py
+# Test Slovak compliance validation
+# Test L/100km format (never km/L)
+# Test batch creation (all-or-nothing)
+```
+
+**Tasks Checklist:**
+- [ ] Copy create_vehicle.py → create_trip.py (1h)
+  - [ ] Update INPUT_SCHEMA with Slovak compliance fields
+  - [ ] Add validate_trip_slovak_compliance() function
+  - [ ] Change to monthly folder structure (use ensure_month_folder)
+  - [ ] Validate L/100km format (NEVER km/L)
+  - [ ] Test with demo data
+- [ ] Copy get_vehicle.py → get_trip.py (20m)
+  - [ ] Update folder path to trips/YYYY-MM/
+  - [ ] Parse month from trip_start_datetime
+- [ ] Copy list_checkpoints.py → list_trips.py (45m)
+  - [ ] Change folder from checkpoints to trips
+  - [ ] Add purpose filter (Business/Personal)
+  - [ ] Keep existing date/vehicle filters
+- [ ] Create create_trips_batch.py (45m)
+  - [ ] Batch validation (fail fast)
+  - [ ] Batch creation with rollback
+  - [ ] All-or-nothing guarantee
+- [ ] Update __init__.py (5m)
+- [ ] Write basic tests (30m)
+
+**Deliverable:** Trip CRUD functional, end-to-end workflow unblocked
+
+**Infrastructure Already Available:**
+- ✅ storage.py has atomic_write_json() - crash-safe writes
+- ✅ storage.py has ensure_month_folder() - monthly structure
+- ✅ storage.py has list_json_files() - read trips from folders
+- ✅ Trip data model documented (CLAUDE.md lines 588-616)
+- ✅ Report generator expects trip files (will just work!)
+- ✅ Tests validate trip format (minimal new tests needed)
+
+**CRITICAL:** This is the ONLY blocker for:
+- ✅ Template matching → Trip creation workflow
+- ✅ Report generation (needs trip data)
+- ✅ Demo completion (5-minute end-to-end flow)
+- ✅ Hackathon submission
+
+**Validation:**
+```bash
+# After implementation:
+pytest tests/test_trip_crud.py -v
+python -m pytest tests/test_report_generation.py -v  # Should still pass
+python scripts/generate_mock_data.py --scenario demo
+ls data/trips/2025-11/*.json  # Should show trip files
 ### A6: car-log-core - Trip CRUD (P0) ✅ COMPLETE
 
 **Can run in parallel:** ✅ Can be done independently
@@ -314,7 +592,7 @@ python tests/test_trip_crud.py
 **Spec Reference:**
 - spec/06-mcp-architecture-v2.md lines 374-473 (Tools 1.5, 1.6)
 - spec/04-data-model.md - Trip schema
-- CLAUDE.md - Trip data model
+- CLAUDE.md lines 588-616 - Trip data model (complete TypeScript definition)
 
 ---
 

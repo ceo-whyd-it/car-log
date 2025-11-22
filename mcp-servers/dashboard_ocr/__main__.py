@@ -8,13 +8,10 @@ Server: dashboard-ocr
 Status: P0 (EXIF extraction only; OCR with Claude Vision is P1)
 """
 
-import sys
 import json
 import logging
-from typing import Any
 
-from mcp.server.models import InitializationOptions
-from mcp.types import Tool, TextContent, ToolResult
+from mcp.types import Tool, TextContent
 from mcp.server import Server
 
 from tools.extract_metadata import extract_metadata, check_photo_quality

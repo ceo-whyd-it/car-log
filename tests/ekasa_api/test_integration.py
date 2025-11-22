@@ -10,7 +10,6 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../mcp-servers'))
 
 import pytest
-from pathlib import Path
 from unittest.mock import patch, Mock
 
 
@@ -23,7 +22,6 @@ class TestEKasaWorkflow:
     @patch('requests.get')
     async def test_full_workflow_mock(self, mock_get, mock_decode):
         """Test complete workflow: Image -> QR -> API -> Fuel data"""
-        from ekasa_api.tools.scan_qr_code import scan_qr_code
         from ekasa_api.tools.fetch_receipt_data import fetch_receipt_data
 
         # Mock QR detection

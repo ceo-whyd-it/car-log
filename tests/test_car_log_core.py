@@ -5,7 +5,6 @@ Tests all CRUD operations and validates Slovak compliance requirements.
 """
 
 import asyncio
-import json
 import os
 import sys
 from pathlib import Path
@@ -111,7 +110,7 @@ class TestCarLogCore:
         })
         assert result["success"], f"Failed: {result.get('error')}"
         assert result["vehicle"]["average_efficiency_l_per_100km"] == 8.5
-        print(f"✓ Updated efficiency to 8.5 L/100km")
+        print("✓ Updated efficiency to 8.5 L/100km")
 
         print("\n✓ All vehicle CRUD tests passed!")
         return vehicle_id
@@ -209,7 +208,7 @@ class TestCarLogCore:
         assert result["distance_km"] == 450
         assert result["has_gps"] is True
         assert result["reconstruction_recommended"] is True
-        print(f"✓ Gap detected:")
+        print("✓ Gap detected:")
         print(f"  Distance: {result['distance_km']} km")
         print(f"  Time: {result['days']} days ({result['hours']} hours)")
         print(f"  Avg: {result['avg_km_per_day']} km/day")
@@ -260,7 +259,7 @@ class TestCarLogCore:
         })
         assert not result["success"], "Should have failed with duplicate name"
         assert result["error"]["code"] == "DUPLICATE"
-        print(f"✓ Correctly rejected duplicate template name")
+        print("✓ Correctly rejected duplicate template name")
 
         # Test 4: List all templates
         print("\n4. List all templates...")

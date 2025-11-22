@@ -116,7 +116,7 @@ def find_previous_checkpoint(vehicle_id: str, current_datetime: datetime, data_p
                     cp_dt = datetime.fromisoformat(checkpoint["datetime"].replace("Z", "+00:00"))
                     if cp_dt < current_datetime:
                         all_checkpoints.append(checkpoint)
-                except:
+                except (ValueError, KeyError, TypeError):
                     continue
 
     if not all_checkpoints:

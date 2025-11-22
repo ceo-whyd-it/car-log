@@ -141,7 +141,7 @@ async def execute(arguments: Dict[str, Any]) -> Dict[str, Any]:
 
                         if end_dt and cp_dt > end_dt:
                             continue
-                    except:
+                    except (ValueError, KeyError, TypeError):
                         continue
 
                 checkpoints.append(checkpoint)

@@ -10,7 +10,7 @@ Checks:
 
 from typing import Dict, Any
 
-from ..thresholds import CONSUMPTION_VARIANCE_PERCENT, get_efficiency_range
+from ..thresholds import CONSUMPTION_VARIANCE_PERCENT
 from .check_efficiency import validate_efficiency_range
 from .check_deviation_from_average import calculate_deviation
 

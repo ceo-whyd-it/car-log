@@ -25,13 +25,10 @@ Usage:
 """
 
 import argparse
-import json
 import sys
 import time
 from pathlib import Path
 from typing import Dict, List, Any, Tuple
-import subprocess
-import requests
 
 
 # ============================================================================
@@ -134,13 +131,13 @@ class TestSuite:
 
     def run_test(self, test_name: str, test_func, *args, **kwargs) -> TestResult:
         """Run a single test and record result"""
-        print(f"  🧪 {test_name}...", end=" ")
+        print(f"  [TEST] {test_name}...", end=" ")
 
         try:
             result = test_func(*args, **kwargs)
             if isinstance(result, TestResult):
                 self.results.append(result)
-                status = "✅ PASS" if result.passed else "❌ FAIL"
+                status = "[PASS] PASS" if result.passed else "[FAIL] FAIL"
                 print(status)
                 if not result.passed or self.verbose:
                     if result.message:
@@ -151,14 +148,14 @@ class TestSuite:
                 passed = bool(result)
                 test_result = TestResult(test_name, passed)
                 self.results.append(test_result)
-                status = "✅ PASS" if passed else "❌ FAIL"
+                status = "[PASS] PASS" if passed else "[FAIL] FAIL"
                 print(status)
                 return test_result
 
         except Exception as e:
             test_result = TestResult(test_name, False, f"Exception: {str(e)}")
             self.results.append(test_result)
-            print(f"❌ FAIL - Exception: {str(e)}")
+            print(f"[FAIL] FAIL - Exception: {str(e)}")
             return test_result
 
     def summary(self) -> Tuple[int, int, int]:
@@ -169,16 +166,16 @@ class TestSuite:
         elapsed = time.time() - self.start_time
 
         print("\n" + "=" * 70)
-        print("📊 TEST SUMMARY")
+        print("[STAT] TEST SUMMARY")
         print("=" * 70)
         print(f"Total tests:   {total}")
-        print(f"Passed:        {passed} ✅")
-        print(f"Failed:        {failed} {'❌' if failed > 0 else ''}")
+        print(f"Passed:        {passed} [PASS]")
+        print(f"Failed:        {failed} {'[FAIL]' if failed > 0 else ''}")
         print(f"Success rate:  {(passed/total*100) if total > 0 else 0:.1f}%")
         print(f"Elapsed time:  {elapsed:.2f}s")
 
         if failed > 0:
-            print("\n❌ FAILED TESTS:")
+            print("\n[FAIL] FAILED TESTS:")
             for r in self.results:
                 if not r.passed:
                     print(f"   - {r.test_name}: {r.message}")
@@ -217,7 +214,7 @@ def test_server_discovery(server_config: Dict) -> TestResult:
             return TestResult(
                 f"Server Discovery: {server_name}",
                 False,
-                f"Missing __main__.py entry point"
+                "Missing __main__.py entry point"
             )
 
     # Node.js server
@@ -308,7 +305,7 @@ def smoke_test_car_log_core() -> TestResult:
             return TestResult(
                 "Smoke Test: car-log-core",
                 False,
-                "⚠️  Atomic write pattern not found in storage.py"
+                "[WARN]  Atomic write pattern not found in storage.py"
             )
 
     return TestResult(
@@ -342,7 +339,7 @@ def smoke_test_trip_reconstructor() -> TestResult:
             return TestResult(
                 "Smoke Test: trip-reconstructor",
                 False,
-                "⚠️  GPS matching algorithm not found"
+                "[WARN]  GPS matching algorithm not found"
             )
 
     return TestResult(
@@ -410,7 +407,7 @@ def smoke_test_validation() -> TestResult:
             return TestResult(
                 "Smoke Test: validation",
                 False,
-                "⚠️  Distance threshold (±10%) not found"
+                "[WARN]  Distance threshold (±10%) not found"
             )
 
     return TestResult(
@@ -426,7 +423,7 @@ def smoke_test_validation() -> TestResult:
 
 def test_data_flow_checkpoint_creation() -> TestResult:
     """
-    Test cross-server data flow: Receipt → Checkpoint
+    Test cross-server data flow: Receipt -> Checkpoint
 
     Workflow:
     1. ekasa-api.scan_qr_code(receipt_photo)
@@ -453,7 +450,7 @@ def test_data_flow_checkpoint_creation() -> TestResult:
 
 def test_data_flow_trip_reconstruction() -> TestResult:
     """
-    Test cross-server data flow: Gap → Templates → Trips
+    Test cross-server data flow: Gap -> Templates -> Trips
 
     Workflow:
     1. car-log-core.detect_gap(checkpoint1, checkpoint2)
@@ -551,9 +548,9 @@ def test_error_handling() -> TestResult:
     Verify proper error responses
 
     Tests:
-    1. Invalid VIN → VALIDATION_ERROR
-    2. Non-existent resource → NOT_FOUND
-    3. Missing GPS coordinates → GPS_REQUIRED (for GPS-dependent operations)
+    1. Invalid VIN -> VALIDATION_ERROR
+    2. Non-existent resource -> NOT_FOUND
+    3. Missing GPS coordinates -> GPS_REQUIRED (for GPS-dependent operations)
     """
     # Check if error response format is defined
     car_log_core = Path("mcp-servers/car_log_core")
@@ -597,7 +594,7 @@ def run_all_tests(verbose: bool = False, server_filter: List[str] = None) -> boo
     Returns True if all critical tests pass
     """
     print("\n" + "=" * 70)
-    print("🚦 DAY 7 INTEGRATION CHECKPOINT - AUTOMATED TEST SUITE")
+    print("[DAY 7] DAY 7 INTEGRATION CHECKPOINT - AUTOMATED TEST SUITE")
     print("=" * 70)
     print("\nThis is a critical GO/NO-GO checkpoint.")
     print("All P0 servers must pass before proceeding to Days 8-11.\n")
@@ -610,7 +607,7 @@ def run_all_tests(verbose: bool = False, server_filter: List[str] = None) -> boo
         servers_to_test = [s for s in P0_SERVERS if s["name"] in server_filter]
 
     # TEST PHASE 1: Server Discovery
-    print("\n📦 PHASE 1: Server Discovery")
+    print("\n[PKG] PHASE 1: Server Discovery")
     print("-" * 70)
     for server_config in servers_to_test:
         suite.run_test(
@@ -620,7 +617,7 @@ def run_all_tests(verbose: bool = False, server_filter: List[str] = None) -> boo
         )
 
     # TEST PHASE 2: Tool Signatures
-    print("\n🔧 PHASE 2: Tool Signature Validation")
+    print("\n[TOOL] PHASE 2: Tool Signature Validation")
     print("-" * 70)
     for server_config in servers_to_test:
         suite.run_test(
@@ -630,7 +627,7 @@ def run_all_tests(verbose: bool = False, server_filter: List[str] = None) -> boo
         )
 
     # TEST PHASE 3: Smoke Tests
-    print("\n💨 PHASE 3: Smoke Tests (Basic Functionality)")
+    print("\n[FAST] PHASE 3: Smoke Tests (Basic Functionality)")
     print("-" * 70)
     if not server_filter or "car-log-core" in server_filter:
         suite.run_test("car-log-core smoke test", smoke_test_car_log_core)
@@ -642,18 +639,18 @@ def run_all_tests(verbose: bool = False, server_filter: List[str] = None) -> boo
         suite.run_test("validation smoke test", smoke_test_validation)
 
     # TEST PHASE 4: Data Flow Integration
-    print("\n🔄 PHASE 4: Cross-Server Data Flow")
+    print("\n[SYNC] PHASE 4: Cross-Server Data Flow")
     print("-" * 70)
     suite.run_test("Checkpoint creation workflow", test_data_flow_checkpoint_creation)
     suite.run_test("Trip reconstruction workflow", test_data_flow_trip_reconstruction)
 
     # TEST PHASE 5: Slovak Compliance
-    print("\n🇸🇰 PHASE 5: Slovak Tax Compliance")
+    print("\nSK PHASE 5: Slovak Tax Compliance")
     print("-" * 70)
     suite.run_test("Slovak compliance validation", test_slovak_compliance)
 
     # TEST PHASE 6: Error Handling
-    print("\n⚠️  PHASE 6: Error Handling")
+    print("\n[WARN]  PHASE 6: Error Handling")
     print("-" * 70)
     suite.run_test("Error response format", test_error_handling)
 
@@ -663,13 +660,13 @@ def run_all_tests(verbose: bool = False, server_filter: List[str] = None) -> boo
     # Decision gate
     print("\n" + "=" * 70)
     if failed == 0:
-        print("✅ GO - All tests passed! Proceed to Days 8-11 integration.")
+        print("[PASS] GO - All tests passed! Proceed to Days 8-11 integration.")
         print("=" * 70)
         return True
     else:
-        print("❌ NO-GO - Failed tests detected. Fix issues before proceeding.")
+        print("[FAIL] NO-GO - Failed tests detected. Fix issues before proceeding.")
         print("=" * 70)
-        print("\n📋 RECOMMENDED ACTIONS:")
+        print("\n[INFO] RECOMMENDED ACTIONS:")
         print("1. Review failed tests above")
         print("2. Fix implementation issues")
         print("3. Re-run this test: python tests/integration_checkpoint_day7.py")

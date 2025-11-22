@@ -14,8 +14,7 @@ from unittest.mock import patch, Mock
 from ekasa_api.api_client import fetch_receipt_with_retry
 from ekasa_api.exceptions import (
     APITimeoutError,
-    ReceiptNotFoundError,
-    EKasaError
+    ReceiptNotFoundError
 )
 
 
