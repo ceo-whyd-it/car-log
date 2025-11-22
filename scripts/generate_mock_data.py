@@ -46,7 +46,7 @@ def generate_demo_scenario():
     - 2 trips: 2× Warehouse Run = 820 km (100% coverage)
     """
     data_path = get_data_path()
-    print(f"📁 Data path: {data_path}")
+    print(f"[DATA] Data path: {data_path}")
 
     # Create directories
     (data_path / "vehicles").mkdir(parents=True, exist_ok=True)
@@ -54,7 +54,7 @@ def generate_demo_scenario():
     (data_path / "trips" / "2025-11").mkdir(parents=True, exist_ok=True)
     (data_path / "templates").mkdir(parents=True, exist_ok=True)
 
-    print("✨ Demo scenario complete!")
+    print("[OK] Demo scenario complete!")
     print(f"\nData location: {data_path}")
 
 
@@ -80,7 +80,7 @@ def main():
     if args.scenario == "demo":
         generate_demo_scenario()
     else:
-        print(f"❌ Scenario '{args.scenario}' not yet implemented")
+        print(f"[ERROR] Scenario '{args.scenario}' not yet implemented")
         print("Currently supported: demo")
 
 

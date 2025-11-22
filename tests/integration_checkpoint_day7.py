@@ -334,7 +334,7 @@ def smoke_test_trip_reconstructor() -> TestResult:
     # Check for GPS matching implementation
     matching_file = server_path / "matching.py"
     if matching_file.exists():
-        content = matching_file.read_text()
+        content = matching_file.read_text(encoding='utf-8')
         if "haversine" not in content.lower() and "gps" not in content.lower():
             return TestResult(
                 "Smoke Test: trip-reconstructor",
