@@ -80,7 +80,7 @@ def validate_vin(vin: str) -> tuple[bool, str]:
     return True, ""
 
 
-def validate_license_plate(plate: str) -> tuple[bool, str]:
+def validate_license_plate(plate: str) -> tuple[bool, str, str]:
     """
     Validate Slovak license plate format (XX-123XX).
 
@@ -88,12 +88,18 @@ def validate_license_plate(plate: str) -> tuple[bool, str]:
         plate: License plate string
 
     Returns:
-        (is_valid, error_message)
+        (is_standard_format, warning_message, error_message)
     """
-    if not re.match(r"^[A-Z]{2}-[0-9]{3}[A-Z]{2}$", plate):
-        return False, "License plate must match Slovak format XX-123XX (e.g., BA-456CD)"
+    # Check if it matches standard Slovak format
+    if re.match(r"^[A-Z]{2}-[0-9]{3}[A-Z]{2}$", plate):
+        return True, "", ""
 
-    return True, ""
+    # Non-standard format - return warning but allow it
+    if len(plate) < 3:
+        return False, "", "License plate is too short (minimum 3 characters)"
+
+    warning = f"License plate '{plate}' doesn't match standard Slovak format XX-123XX (e.g., BA-456CD). This may be a foreign or special plate."
+    return False, warning, ""
 
 
 async def execute(arguments: Dict[str, Any]) -> Dict[str, Any]:
@@ -139,8 +145,10 @@ async def execute(arguments: Dict[str, Any]) -> Dict[str, Any]:
             }
 
         # Validate license plate
-        plate_valid, plate_error = validate_license_plate(license_plate)
-        if not plate_valid:
+        plate_is_standard, plate_warning, plate_error = validate_license_plate(license_plate)
+
+        # Only error if plate is critically invalid (too short)
+        if plate_error:
             return {
                 "success": False,
                 "error": {
@@ -149,6 +157,11 @@ async def execute(arguments: Dict[str, Any]) -> Dict[str, Any]:
                     "field": "license_plate",
                 },
             }
+
+        # Store warning for later inclusion in response
+        warnings = []
+        if plate_warning:
+            warnings.append(plate_warning)
 
         # Validate fuel type
         valid_fuel_types = ["Diesel", "Gasoline", "LPG", "Hybrid", "Electric"]
@@ -202,12 +215,18 @@ async def execute(arguments: Dict[str, Any]) -> Dict[str, Any]:
 
         atomic_write_json(vehicle_file, vehicle)
 
-        return {
+        result = {
             "success": True,
             "vehicle_id": vehicle_id,
             "vehicle": vehicle,
             "message": "Vehicle created successfully",
         }
+
+        # Add warnings if any
+        if warnings:
+            result["warnings"] = warnings
+
+        return result
 
     except Exception as e:
         return {

@@ -12,7 +12,14 @@ import sys
 from mcp.server import Server
 from mcp.types import Tool, TextContent
 
-from .tools.scan_qr_code import scan_qr_code
+# Try to import QR scanning (requires libzbar system library)
+try:
+    from .tools.scan_qr_code import scan_qr_code
+    QR_AVAILABLE = True
+except (ImportError, FileNotFoundError) as e:
+    QR_AVAILABLE = False
+    scan_qr_code = None
+
 from .tools.fetch_receipt_data import fetch_receipt_data
 
 # Configure logging
@@ -33,8 +40,11 @@ async def list_tools() -> list[Tool]:
     """
     List available tools in the e-Kasa API server.
     """
-    return [
-        Tool(
+    tools = []
+
+    # Only include QR scanning if library is available
+    if QR_AVAILABLE:
+        tools.append(Tool(
             name="scan_qr_code",
             description=(
                 "Extract QR code from receipt image or PDF. "
@@ -51,33 +61,36 @@ async def list_tools() -> list[Tool]:
                 },
                 "required": ["image_path"]
             }
+        ))
+
+    # fetch_receipt_data is always available
+    tools.append(Tool(
+        name="fetch_receipt_data",
+        description=(
+            "Fetch receipt data from Slovak e-Kasa API. "
+            "Public endpoint, no authentication required. "
+            "Automatically detects fuel items using Slovak naming patterns. "
+            "May take 5-30 seconds to complete."
         ),
-        Tool(
-            name="fetch_receipt_data",
-            description=(
-                "Fetch receipt data from Slovak e-Kasa API. "
-                "Public endpoint, no authentication required. "
-                "Automatically detects fuel items using Slovak naming patterns. "
-                "May take 5-30 seconds to complete."
-            ),
-            inputSchema={
-                "type": "object",
-                "properties": {
-                    "receipt_id": {
-                        "type": "string",
-                        "description": "e-Kasa receipt identifier from QR code"
-                    },
-                    "timeout_seconds": {
-                        "type": "number",
-                        "default": 60,
-                        "maximum": 60,
-                        "description": "Override default timeout (max 60s)"
-                    }
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "receipt_id": {
+                    "type": "string",
+                    "description": "e-Kasa receipt identifier from QR code"
                 },
-                "required": ["receipt_id"]
-            }
-        )
-    ]
+                "timeout_seconds": {
+                    "type": "number",
+                    "default": 60,
+                    "maximum": 60,
+                    "description": "Override default timeout (max 60s)"
+                }
+            },
+            "required": ["receipt_id"]
+        }
+    ))
+
+    return tools
 
 
 @app.call_tool()
@@ -89,6 +102,8 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
         logger.info(f"Tool called: {name} with arguments: {arguments}")
 
         if name == "scan_qr_code":
+            if not QR_AVAILABLE:
+                raise ValueError("QR code scanning is not available (libzbar library not installed)")
             result = await scan_qr_code(**arguments)
         elif name == "fetch_receipt_data":
             result = await fetch_receipt_data(**arguments)

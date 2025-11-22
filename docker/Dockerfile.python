@@ -16,8 +16,8 @@ WORKDIR /app
 COPY docker/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy MCP servers
-COPY mcp-servers/ /app/mcp-servers/
+# Copy MCP servers (rename directory from mcp-servers to mcp_servers for Python imports)
+COPY mcp-servers/ /app/mcp_servers/
 
 # Set PYTHONPATH
 ENV PYTHONPATH=/app
