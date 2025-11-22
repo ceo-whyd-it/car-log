@@ -50,7 +50,7 @@ echo.
 
 REM Copy MCP server source code
 echo [3/7] Copying MCP server code...
-xcopy /E /I /Y "%~dp0..\..\mcp-servers" "%DEPLOY_DIR%\mcp-servers" >nul
+xcopy /E /I /Y "%~dp0..\..\mcp-servers" "%DEPLOY_DIR%\mcp_servers" >nul
 if errorlevel 1 (
     echo ERROR: Failed to copy MCP servers
     pause
@@ -81,7 +81,7 @@ echo.
 
 REM Install Node.js dependencies for geo-routing
 echo [6/7] Installing Node.js dependencies...
-cd /d "%DEPLOY_DIR%\mcp-servers\geo-routing"
+cd /d "%DEPLOY_DIR%\mcp_servers\geo-routing"
 call npm install
 if errorlevel 1 (
     echo ERROR: Failed to install Node.js dependencies
@@ -161,7 +161,7 @@ echo             }
 echo         },
 echo         "geo-routing": {
 echo             "command": "node",
-echo             "args": [os.path.join^(deploy_dir, "mcp-servers", "geo-routing", "index.js"^)],
+echo             "args": [os.path.join^(deploy_dir, "mcp_servers", "geo-routing", "index.js"^)],
 echo             "env": {
 echo                 "OSRM_BASE_URL": "https://router.project-osrm.org",
 echo                 "NOMINATIM_BASE_URL": "https://nominatim.openstreetmap.org",

@@ -88,7 +88,7 @@ echo             }
 echo         },
 echo         "geo-routing": {
 echo             "command": "node",
-echo             "args": [os.path.join^(deploy_dir, "mcp-servers", "geo-routing", "index.js"^)],
+echo             "args": [os.path.join^(deploy_dir, "mcp_servers", "geo-routing", "index.js"^)],
 echo             "env": {
 echo                 "OSRM_BASE_URL": "https://router.project-osrm.org",
 echo                 "NOMINATIM_BASE_URL": "https://nominatim.openstreetmap.org",

@@ -34,12 +34,12 @@ if /i not "%confirm%"=="yes" (
 echo.
 echo [1/5] Backing up current deployment...
 set BACKUP_DIR=%DEPLOY_DIR%-backup-%DATE:~-4,4%%DATE:~-10,2%%DATE:~-7,2%
-xcopy /E /I /Y "%DEPLOY_DIR%\mcp-servers" "%BACKUP_DIR%\mcp-servers" >nul
+xcopy /E /I /Y "%DEPLOY_DIR%\mcp_servers" "%BACKUP_DIR%\mcp_servers" >nul
 echo OK - Backup created: %BACKUP_DIR%
 echo.
 
 echo [2/5] Copying updated MCP server code...
-xcopy /E /I /Y "%~dp0..\..\mcp-servers" "%DEPLOY_DIR%\mcp-servers" >nul
+xcopy /E /I /Y "%~dp0..\..\mcp-servers" "%DEPLOY_DIR%\mcp_servers" >nul
 echo OK - Code updated
 echo.
 
@@ -56,7 +56,7 @@ echo OK - Python dependencies updated
 echo.
 
 echo [5/5] Updating Node.js dependencies...
-cd /d "%DEPLOY_DIR%\mcp-servers\geo-routing"
+cd /d "%DEPLOY_DIR%\mcp_servers\geo-routing"
 call npm update --silent
 echo OK - Node.js dependencies updated
 echo.
