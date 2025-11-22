@@ -7,7 +7,7 @@ Primarily used for saving approved template-matched trip proposals.
 
 import uuid
 from datetime import datetime
-from typing import Dict, Any, List
+from typing import Dict, Any
 
 from ..storage import (
     get_data_path,

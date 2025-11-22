@@ -142,7 +142,7 @@ async def execute(arguments: Dict[str, Any]) -> Dict[str, Any]:
 
                         if end_dt and trip_dt > end_dt:
                             continue
-                    except:
+                    except (ValueError, AttributeError, TypeError):
                         continue
 
                 trips.append(trip)
