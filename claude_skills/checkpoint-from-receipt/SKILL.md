@@ -1,7 +1,6 @@
 ---
 name: "Checkpoint from Receipt"
 description: "Create checkpoints from receipt photos using QR scanning, e-Kasa API, and GPS extraction (10-40s)"
-version: "1.0.0"
 ---
 
 # Checkpoint from Receipt Skill

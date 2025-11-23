@@ -68,11 +68,20 @@ class SkillPackager:
 
             frontmatter = match.group(1)
 
-            # Check required fields
-            required_fields = ['name', 'description', 'version']
+            # Check required fields (per Claude Desktop spec)
+            required_fields = ['name', 'description']
             for field in required_fields:
                 if not re.search(rf'^{field}:\s*["\']?.+["\']?$', frontmatter, re.MULTILINE):
                     return False, f"Missing required field: {field}"
+
+            # Check for disallowed fields
+            # Allowed: name, description, license, allowed-tools, metadata
+            allowed_fields = ['name', 'description', 'license', 'allowed-tools', 'metadata']
+            for line in frontmatter.split('\n'):
+                if ':' in line:
+                    field = line.split(':')[0].strip()
+                    if field and field not in allowed_fields:
+                        return False, f"Disallowed field in frontmatter: {field}. Allowed: {', '.join(allowed_fields)}"
 
             # Validate description length (max 200 characters)
             desc_match = re.search(r'description:\s*["\'](.+?)["\']', frontmatter)

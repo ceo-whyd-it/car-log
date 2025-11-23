@@ -1,7 +1,6 @@
 ---
 name: "Trip Reconstruction"
 description: "Fill gaps between checkpoints using hybrid GPS (70%) + address (30%) template matching with high confidence"
-version: "1.0.0"
 ---
 
 # Skill 3: Trip Reconstruction (GPS-First Matching)
