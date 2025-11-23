@@ -84,7 +84,7 @@
    - `receipt2_nov8.jpg` (QR code visible, 20.5L Diesel)
    - `dashboard2_nov8.jpg` (EXIF GPS: Košice)
 3. Data directory clean or mock data loaded
-4. All MCP servers running (verify with `docker-compose ps`)
+4. All MCP servers running (verify with `Restart Claude Desktop and verify tools available`)
 
 **Demo Data:**
 - Vehicle: Ford Transit, BA-456CD, VIN: WBAXX01234ABC5678
@@ -287,7 +287,7 @@ All mandatory fields present:
 ✓ Fuel efficiency (L/100km)
 ✓ Business purpose description
 
-Report saved: ~/Documents/MileageLog/data/reports/2025-11/november-2025.csv
+Report saved: ~/.car-log-deployment/data/reports/2025-11/november-2025.csv
 ```
 
 **Voiceover:**
@@ -399,7 +399,7 @@ Report saved: ~/Documents/MileageLog/data/reports/2025-11/november-2025.csv
 - [ ] Update GitHub README with demo instructions
 
 ### Day of Demo
-- [ ] Start all MCP servers: `docker-compose up -d`
+- [ ] Start all MCP servers: `Run local deployment: install.bat (Windows) or deploy-macos.sh`
 - [ ] Verify Claude Desktop connected to servers
 - [ ] Load clean data (or demo dataset)
 - [ ] Test photo paste functionality
@@ -497,7 +497,7 @@ A: Yes! The MCP architecture is generic. Only the e-Kasa integration is Slovakia
 A: We tested various weights. GPS is more accurate (objective coordinates) while addresses can be ambiguous ("Košice" has 3 matches). 70/30 balances precision and user-friendliness. Users can adjust weights in config if needed.
 
 **Q: How do you handle privacy (GPS tracking)?**
-A: All data is stored locally in `~/Documents/MileageLog/data/`. No cloud sync, no external database. User has full control. For companies concerned about employee tracking, the manager can configure write-only access (employees log, manager reviews).
+A: All data is stored locally in `~/.car-log-deployment/data/`. No cloud sync, no external database. User has full control. For companies concerned about employee tracking, the manager can configure write-only access (employees log, manager reviews).
 
 ---
 

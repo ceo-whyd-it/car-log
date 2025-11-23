@@ -500,9 +500,9 @@ Expected:
 ## Testing Checklist
 
 ### Pre-Testing Setup
-- [ ] All 7 MCP servers running (`docker-compose ps` or local processes)
+- [ ] All 7 MCP servers running (`Restart Claude Desktop and verify MCP servers loaded` or local processes)
 - [ ] Claude Desktop configured with all servers
-- [ ] Data directories exist: `~/Documents/MileageLog/data/`
+- [ ] Data directories exist: `~/.car-log-deployment/data/`
 - [ ] Test data prepared (sample receipts, dashboard photos)
 - [ ] Skills loaded into Claude Desktop (01-06)
 
@@ -562,7 +562,7 @@ Expected:
 
 Quick Reference:
 - Skill not triggering → Check trigger words in skill file
-- MCP tool fails → Restart MCP servers (`docker-compose restart`)
+- MCP tool fails → Restart MCP servers (`Re-run deployment and restart Claude Desktop`)
 - GPS extraction fails → Use phone camera (not screenshot)
 - e-Kasa timeout → Retry or manual entry
 - Validation warnings → Review thresholds in `validation/thresholds.py`
