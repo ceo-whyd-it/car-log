@@ -16,20 +16,20 @@ def verify_tool(tool_module, tool_name):
 
     # Check INPUT_SCHEMA exists
     if not hasattr(tool_module, 'INPUT_SCHEMA'):
-        print(f"  ✗ Missing INPUT_SCHEMA")
+        print("  ✗ Missing INPUT_SCHEMA")
         return False
-    print(f"  ✓ INPUT_SCHEMA defined")
+    print("  ✓ INPUT_SCHEMA defined")
 
     # Check execute function exists and is async
     if not hasattr(tool_module, 'execute'):
-        print(f"  ✗ Missing execute function")
+        print("  ✗ Missing execute function")
         return False
 
     execute_func = getattr(tool_module, 'execute')
     if not inspect.iscoroutinefunction(execute_func):
-        print(f"  ✗ execute function is not async")
+        print("  ✗ execute function is not async")
         return False
-    print(f"  ✓ async execute function defined")
+    print("  ✓ async execute function defined")
 
     # Check execute signature
     sig = inspect.signature(execute_func)
@@ -37,7 +37,7 @@ def verify_tool(tool_module, tool_name):
     if params != ['arguments']:
         print(f"  ✗ execute signature incorrect: {params}")
         return False
-    print(f"  ✓ execute signature correct")
+    print("  ✓ execute signature correct")
 
     return True
 

@@ -12,6 +12,7 @@ import asyncio
 import logging
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
+from mcp.types import Tool
 
 from .tools import (
     create_vehicle,
@@ -24,10 +25,12 @@ from .tools import (
     detect_gap,
     create_template,
     list_templates,
+    delete_template,
     create_trip,
     create_trips_batch,
     list_trips,
     get_trip,
+    delete_trip,
 )
 
 # Configure logging
@@ -43,80 +46,90 @@ async def list_tools():
     """List all available tools."""
     return [
         # Vehicle tools
-        {
-            "name": "create_vehicle",
-            "description": "Create new vehicle with Slovak tax compliance (VIN required)",
-            "inputSchema": create_vehicle.INPUT_SCHEMA,
-        },
-        {
-            "name": "get_vehicle",
-            "description": "Retrieve vehicle by ID",
-            "inputSchema": get_vehicle.INPUT_SCHEMA,
-        },
-        {
-            "name": "list_vehicles",
-            "description": "List all vehicles with optional filters",
-            "inputSchema": list_vehicles.INPUT_SCHEMA,
-        },
-        {
-            "name": "update_vehicle",
-            "description": "Update vehicle details",
-            "inputSchema": update_vehicle.INPUT_SCHEMA,
-        },
+        Tool(
+            name="create_vehicle",
+            description="Create new vehicle with Slovak tax compliance (VIN required)",
+            inputSchema=create_vehicle.INPUT_SCHEMA,
+        ),
+        Tool(
+            name="get_vehicle",
+            description="Retrieve vehicle by ID",
+            inputSchema=get_vehicle.INPUT_SCHEMA,
+        ),
+        Tool(
+            name="list_vehicles",
+            description="List all vehicles with optional filters",
+            inputSchema=list_vehicles.INPUT_SCHEMA,
+        ),
+        Tool(
+            name="update_vehicle",
+            description="Update vehicle details",
+            inputSchema=update_vehicle.INPUT_SCHEMA,
+        ),
         # Checkpoint tools
-        {
-            "name": "create_checkpoint",
-            "description": "Create checkpoint from refuel or manual entry",
-            "inputSchema": create_checkpoint.INPUT_SCHEMA,
-        },
-        {
-            "name": "get_checkpoint",
-            "description": "Retrieve checkpoint by ID",
-            "inputSchema": get_checkpoint.INPUT_SCHEMA,
-        },
-        {
-            "name": "list_checkpoints",
-            "description": "List checkpoints with filters (vehicle_id, date range)",
-            "inputSchema": list_checkpoints.INPUT_SCHEMA,
-        },
+        Tool(
+            name="create_checkpoint",
+            description="Create checkpoint from refuel or manual entry",
+            inputSchema=create_checkpoint.INPUT_SCHEMA,
+        ),
+        Tool(
+            name="get_checkpoint",
+            description="Retrieve checkpoint by ID",
+            inputSchema=get_checkpoint.INPUT_SCHEMA,
+        ),
+        Tool(
+            name="list_checkpoints",
+            description="List checkpoints with filters (vehicle_id, date range)",
+            inputSchema=list_checkpoints.INPUT_SCHEMA,
+        ),
         # Gap detection
-        {
-            "name": "detect_gap",
-            "description": "Analyze distance/time gap between two checkpoints",
-            "inputSchema": detect_gap.INPUT_SCHEMA,
-        },
+        Tool(
+            name="detect_gap",
+            description="Analyze distance/time gap between two checkpoints",
+            inputSchema=detect_gap.INPUT_SCHEMA,
+        ),
         # Template tools
-        {
-            "name": "create_template",
-            "description": "Create trip template (GPS mandatory, addresses optional)",
-            "inputSchema": create_template.INPUT_SCHEMA,
-        },
-        {
-            "name": "list_templates",
-            "description": "List all trip templates",
-            "inputSchema": list_templates.INPUT_SCHEMA,
-        },
+        Tool(
+            name="create_template",
+            description="Create trip template (GPS mandatory, addresses optional)",
+            inputSchema=create_template.INPUT_SCHEMA,
+        ),
+        Tool(
+            name="list_templates",
+            description="List all trip templates",
+            inputSchema=list_templates.INPUT_SCHEMA,
+        ),
+        Tool(
+            name="delete_template",
+            description="Delete trip template by ID",
+            inputSchema=delete_template.INPUT_SCHEMA,
+        ),
         # Trip tools
-        {
-            "name": "create_trip",
-            "description": "Create single trip with Slovak compliance (driver_name, L/100km)",
-            "inputSchema": create_trip.INPUT_SCHEMA,
-        },
-        {
-            "name": "create_trips_batch",
-            "description": "Batch create trips from reconstruction proposals",
-            "inputSchema": create_trips_batch.INPUT_SCHEMA,
-        },
-        {
-            "name": "list_trips",
-            "description": "List trips with filters (vehicle, date range, purpose)",
-            "inputSchema": list_trips.INPUT_SCHEMA,
-        },
-        {
-            "name": "get_trip",
-            "description": "Retrieve trip by ID",
-            "inputSchema": get_trip.INPUT_SCHEMA,
-        },
+        Tool(
+            name="create_trip",
+            description="Create single trip with Slovak compliance (driver_name, L/100km)",
+            inputSchema=create_trip.INPUT_SCHEMA,
+        ),
+        Tool(
+            name="create_trips_batch",
+            description="Batch create trips from reconstruction proposals",
+            inputSchema=create_trips_batch.INPUT_SCHEMA,
+        ),
+        Tool(
+            name="list_trips",
+            description="List trips with filters (vehicle, date range, purpose)",
+            inputSchema=list_trips.INPUT_SCHEMA,
+        ),
+        Tool(
+            name="get_trip",
+            description="Retrieve trip by ID",
+            inputSchema=get_trip.INPUT_SCHEMA,
+        ),
+        Tool(
+            name="delete_trip",
+            description="Delete trip by ID",
+            inputSchema=delete_trip.INPUT_SCHEMA,
+        ),
     ]
 
 
@@ -144,6 +157,8 @@ async def call_tool(name: str, arguments: dict):
             return await create_template.execute(arguments)
         elif name == "list_templates":
             return await list_templates.execute(arguments)
+        elif name == "delete_template":
+            return await delete_template.execute(arguments)
         elif name == "create_trip":
             return await create_trip.execute(arguments)
         elif name == "create_trips_batch":
@@ -152,6 +167,8 @@ async def call_tool(name: str, arguments: dict):
             return await list_trips.execute(arguments)
         elif name == "get_trip":
             return await get_trip.execute(arguments)
+        elif name == "delete_trip":
+            return await delete_trip.execute(arguments)
         else:
             return {
                 "success": False,

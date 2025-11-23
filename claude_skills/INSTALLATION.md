@@ -5,8 +5,8 @@ This guide explains how to install and configure the Car Log skills for Claude D
 ## Prerequisites
 
 - Claude Desktop installed (macOS/Windows/Linux)
-- MCP servers configured and running (see main README.md)
-- Car Log data directory set up: `~/Documents/MileageLog/data/`
+- MCP servers deployed via local installation (see main README.md)
+- Car Log deployment directory: `~/.car-log-deployment/` (created automatically by install script)
 
 ## Installation Steps
 
@@ -27,58 +27,32 @@ This guide explains how to install and configure the Car Log skills for Claude D
 ~/.config/Claude/claude_desktop_config.json
 ```
 
-### Step 2: Configure MCP Servers
+### Step 2: Deploy MCP Servers
 
-Ensure all required MCP servers are configured in `claude_desktop_config.json`:
+**IMPORTANT:** MCP servers are deployed using the local installation method. Do NOT configure manually.
 
-```json
-{
-  "mcpServers": {
-    "car-log-core": {
-      "command": "python",
-      "args": ["-m", "mcp_servers.car_log_core"],
-      "env": {
-        "DATA_PATH": "~/Documents/MileageLog/data",
-        "USE_ATOMIC_WRITES": "true"
-      }
-    },
-    "ekasa-api": {
-      "command": "python",
-      "args": ["-m", "mcp_servers.ekasa_api"],
-      "env": {
-        "MCP_TIMEOUT_SECONDS": "60"
-      }
-    },
-    "dashboard-ocr": {
-      "command": "python",
-      "args": ["-m", "mcp_servers.dashboard_ocr"],
-      "env": {
-        "ANTHROPIC_API_KEY": "your-api-key-here"
-      }
-    },
-    "trip-reconstructor": {
-      "command": "python",
-      "args": ["-m", "mcp_servers.trip_reconstructor"],
-      "env": {
-        "GPS_WEIGHT": "0.7",
-        "ADDRESS_WEIGHT": "0.3"
-      }
-    },
-    "geo-routing": {
-      "command": "node",
-      "args": ["mcp-servers/geo-routing/index.js"]
-    },
-    "validation": {
-      "command": "python",
-      "args": ["-m", "mcp_servers.validation"]
-    },
-    "report-generator": {
-      "command": "python",
-      "args": ["-m", "mcp_servers.report_generator"]
-    }
-  }
-}
+**Windows:**
+```cmd
+cd D:\github_projects\car-log
+install.bat
 ```
+
+**macOS/Linux:**
+```bash
+cd ~/path/to/car-log
+./deployment/scripts/deploy-macos.sh  # or deploy-linux.sh
+```
+
+This automatically:
+- Creates `~/.car-log-deployment/` directory
+- Copies all 7 MCP servers
+- Installs Python and Node.js dependencies
+- Generates `claude_desktop_config.json` with correct paths
+- Creates data directories
+
+**Configuration is automatic.** The deployment script generates the correct config for your platform with proper paths to:
+- Windows batch wrappers: `C:\Users\YourName\.car-log-deployment\run-*.bat`
+- Data directory: `C:\Users\YourName\.car-log-deployment\data\` (Windows) or `~/.car-log-deployment/data/` (macOS/Linux)
 
 ### Step 3: Install Skills in Claude Desktop
 
@@ -161,29 +135,30 @@ Test each skill:
 
 **Skill not triggering?**
 - Check trigger words in SKILL.md match user input
-- Verify all 7 MCP servers running (`docker-compose ps`)
+- Verify all 7 MCP servers loaded (restart Claude Desktop)
 - See `TROUBLESHOOTING.md` for common issues
 
 **MCP tool calls failing?**
-- Verify MCP server configuration in claude_desktop_config.json
-- Check server logs: `docker-compose logs -f`
-- Restart servers: `docker-compose restart`
+- Verify MCP server configuration in `claude_desktop_config.json`
+- Check Claude Desktop logs: `%APPDATA%\Claude\logs\` (Windows) or `~/Library/Logs/Claude/` (macOS)
+- Re-run deployment script to update servers
+- Restart Claude Desktop
 
 ### Step 5: Verify MCP Server Availability
 
-1. Open Claude Desktop
+1. **Restart Claude Desktop** (important - quit completely and reopen)
 2. Start a new conversation
 3. Ask: "What MCP tools do you have access to?"
-4. Verify you see all 7 servers:
-   - car-log-core (14 tools)
-   - ekasa-api (2 tools)
-   - dashboard-ocr (1 tool)
-   - trip-reconstructor (2 tools)
-   - geo-routing (3 tools)
-   - validation (4 tools)
-   - report-generator (2 tools)
+4. Verify you see all 7 servers with **24 tools total**:
+   - car-log-core: 14 tools (vehicles, checkpoints, templates, trips)
+   - trip-reconstructor: 1 tool
+   - validation: 1 tool
+   - ekasa-api: 2 tools
+   - dashboard-ocr: 2 tools
+   - report-generator: 1 tool
+   - geo-routing: 3 tools
 
-Expected total: **28 tools** (all P0+P1 features implemented).
+Expected total: **24 tools** across 7 MCP servers.
 
 ### Step 6: Test Each Skill Individually
 
@@ -322,40 +297,31 @@ Expected: Gap analysis → template matching → proposals
 
 ## Data Directory Structure
 
-Verify the data directory exists and has correct permissions:
+The deployment script automatically creates the data directory at `~/.car-log-deployment/data/`.
 
-```bash
-# Create directories
-mkdir -p ~/Documents/MileageLog/data/{vehicles,checkpoints,trips,templates,reports}
+**Windows:** `C:\Users\YourName\.car-log-deployment\data\`
+**macOS/Linux:** `~/.car-log-deployment/data/`
 
-# Set permissions (macOS/Linux)
-chmod 755 ~/Documents/MileageLog
-chmod 755 ~/Documents/MileageLog/data
-
-# Verify
-ls -la ~/Documents/MileageLog/data/
+Expected structure (created automatically):
 ```
-
-Expected structure:
-```
-~/Documents/MileageLog/data/
+.car-log-deployment/data/
 ├── vehicles/
 │   └── {vehicle_id}.json
 ├── checkpoints/
 │   ├── 2025-11/
-│   │   ├── {checkpoint_id}.json
-│   │   └── index.json
+│   │   └── {checkpoint_id}.json
 │   └── 2025-12/
 ├── trips/
 │   ├── 2025-11/
-│   │   ├── {trip_id}.json
-│   │   └── index.json
+│   │   └── {trip_id}.json
 │   └── 2025-12/
 ├── templates/
 │   └── {template_id}.json
 └── reports/
-    └── {report_id}.{csv|pdf}
+    └── {report_name}.csv
 ```
+
+**Note:** Directories are created automatically. No manual setup required.
 
 ## Security Considerations
 
@@ -389,17 +355,25 @@ security find-generic-password -s "Claude Desktop" -a "ANTHROPIC_API_KEY" -w
 
 1. **Backup data regularly:**
    ```bash
-   tar -czf mileage-backup-$(date +%Y%m%d).tar.gz ~/Documents/MileageLog/data/
+   # Windows (PowerShell)
+   Compress-Archive -Path "$env:USERPROFILE\.car-log-deployment\data" -DestinationPath "mileage-backup-$(Get-Date -Format yyyyMMdd).zip"
+
+   # macOS/Linux
+   tar -czf mileage-backup-$(date +%Y%m%d).tar.gz ~/.car-log-deployment/data/
    ```
 
 2. **Encrypt backups:**
    ```bash
-   gpg -c mileage-backup-20251120.tar.gz
+   # macOS/Linux
+   gpg -c mileage-backup-20251123.tar.gz
+
+   # Windows: Use 7-Zip with password or BitLocker
    ```
 
-3. **Use file permissions:**
+3. **Use file permissions (macOS/Linux only):**
    ```bash
-   chmod 600 ~/Documents/MileageLog/data/*/*.json
+   chmod 700 ~/.car-log-deployment/data
+   chmod 600 ~/.car-log-deployment/data/*/*.json
    ```
 
 ## Next Steps

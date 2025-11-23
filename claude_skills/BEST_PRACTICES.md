@@ -302,7 +302,7 @@ Fuel consumption: All within ±15% ✓
 • €389 VAT deductible
 • 100% Slovak compliant
 
-Reports saved to ~/Documents/MileageLog/reports/"
+Reports saved to ~/.car-log-deployment/data/reports/"
 ```
 
 ---
@@ -520,7 +520,7 @@ User: "Generate November report"
 
 Claude: [Generate CSV first - fast]
 "✅ CSV report ready (2 seconds)
-• ~/Documents/MileageLog/reports/BA-789XY-nov-2025.csv
+• ~/.car-log-deployment/data/reports/BA-789XY-nov-2025.csv
 
 Would you also like PDF format? (adds 5 seconds)"
 
@@ -528,7 +528,7 @@ User: "Yes"
 
 Claude: [Generate PDF - slow]
 "✅ PDF report ready (5 seconds)
-• ~/Documents/MileageLog/reports/BA-789XY-nov-2025.pdf"
+• ~/.car-log-deployment/data/reports/BA-789XY-nov-2025.pdf"
 ```
 
 ---
@@ -632,7 +632,7 @@ Would you like to create another template?"
 All trips now recorded. Generate report? (yes/no)"
 
 "✅ Report generated!
-Files saved to ~/Documents/MileageLog/reports/
+Files saved to ~/.car-log-deployment/data/reports/
 Email to accountant? (P1 feature coming soon)"
 ```
 

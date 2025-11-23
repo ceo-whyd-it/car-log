@@ -11,12 +11,12 @@ Before troubleshooting specific issues, run these quick checks:
 
 ```bash
 # Check MCP servers are running
-docker-compose ps
+# Restart Claude Desktop to verify MCP servers loaded
 # OR (if running locally)
-ps aux | grep -E "(car_log_core|ekasa_api|geo_routing|trip_reconstructor|validation|dashboard_ocr|report_generator)"
+# No process check needed - MCP servers run on-demand by Claude Desktop
 
 # Check data directory exists
-ls -la ~/Documents/MileageLog/data/
+ls -la ~/.car-log-deployment/data/
 
 # Check Claude Desktop logs
 tail -f ~/Library/Logs/Claude/mcp*.log   # macOS
@@ -110,7 +110,7 @@ Error: Tool execution timeout
 ```bash
 # Docker deployment
 cd docker
-docker-compose ps
+# Restart Claude Desktop to verify MCP servers loaded
 # If not running:
 docker-compose up -d
 
@@ -175,7 +175,7 @@ Some tools take time (e-Kasa API: 5-30s). Increase timeout in config:
 mcp call car-log-core.list_vehicles '{"user_id": "test"}'
 
 # Check server logs
-docker-compose logs -f car-log-core
+# Check Claude Desktop logs: -f car-log-core
 ```
 
 ---
@@ -304,7 +304,7 @@ Claude: "Receipt saved manually."
 curl "https://ekasa.financnasprava.sk/mdu/api/v1/opd/receipt/{receipt_id}"
 
 # Check ekasa-api server logs
-docker-compose logs -f ekasa-api
+# Check Claude Desktop logs: -f ekasa-api
 ```
 
 ---
@@ -431,7 +431,7 @@ Claude: "I'll help you create a trip. Where did it start?"
 **Debug Commands:**
 ```bash
 # Check template completeness
-cat ~/Documents/MileageLog/data/templates/{template_id}.json
+cat ~/.car-log-deployment/data/templates/{template_id}.json
 
 # Verify GPS coordinates present
 jq '.from_coords, .to_coords' template.json
@@ -549,7 +549,7 @@ python -c "from mcp_servers.validation.tools.validate_trip import validate_trip;
 
 #### Check File Exists
 ```bash
-ls -la ~/Documents/MileageLog/data/trips/2025-11/
+ls -la ~/.car-log-deployment/data/trips/2025-11/
 
 # Expected output:
 {trip_id}.json
@@ -559,7 +559,7 @@ If missing → File was never created or deleted.
 
 #### Check File Permissions
 ```bash
-ls -l ~/Documents/MileageLog/data/trips/2025-11/{trip_id}.json
+ls -l ~/.car-log-deployment/data/trips/2025-11/{trip_id}.json
 
 # Should be readable/writable by user
 chmod 644 {trip_id}.json
@@ -576,7 +576,7 @@ jq . {trip_id}.json
 #### Check for Temp Files
 Atomic write creates temp files:
 ```bash
-ls -la ~/Documents/MileageLog/data/trips/2025-11/*.tmp
+ls -la ~/.car-log-deployment/data/trips/2025-11/*.tmp
 
 # If .tmp files exist → Write was interrupted
 # Safe to delete .tmp files
@@ -650,7 +650,7 @@ Skill 3 depends on:
 
 Verify all are functional:
 ```bash
-docker-compose ps
+# Restart Claude Desktop to verify MCP servers loaded
 # All services should be "Up"
 ```
 
@@ -699,7 +699,7 @@ iostat 1
 - Symptom: Template creation takes 10+ seconds
 - Solution: Cache enabled (24h TTL), check cache:
   ```bash
-  docker-compose logs geo-routing | grep -i cache
+  # Check Claude Desktop logs: geo-routing | grep -i cache
   ```
 
 **Template Matching (100+ templates):**
@@ -707,7 +707,7 @@ iostat 1
 - Solution: Should still be < 5s. If slower:
   ```bash
   # Check number of templates
-  ls -l ~/Documents/MileageLog/data/templates/ | wc -l
+  ls -l ~/.car-log-deployment/data/templates/ | wc -l
   # If > 500 → Consider indexing (post-MVP)
   ```
 
@@ -716,7 +716,7 @@ iostat 1
 - Solution: Use monthly index:
   ```bash
   # Check if index exists
-  ls ~/Documents/MileageLog/data/trips/2025-11/index.json
+  ls ~/.car-log-deployment/data/trips/2025-11/index.json
   # If missing → Create index (optional optimization)
   ```
 
@@ -727,10 +727,10 @@ iostat 1
 #### Clear Caches
 ```bash
 # Geo-routing cache
-docker-compose restart geo-routing
+# Re-run deployment: install.bat or deploy-macos.sh, then restart Claude Desktop geo-routing
 
 # Or delete cache file
-rm ~/Documents/MileageLog/data/.cache/geocoding.cache
+rm ~/.car-log-deployment/data/.cache/geocoding.cache
 ```
 
 **Debug Commands:**
@@ -773,8 +773,8 @@ brew install python@3.11
 #### Permission Denied
 ```bash
 # Fix data directory permissions
-chmod -R 755 ~/Documents/MileageLog/data/
-chown -R $USER:$USER ~/Documents/MileageLog/data/
+chmod -R 755 ~/.car-log-deployment/data/
+chown -R $USER:$USER ~/.car-log-deployment/data/
 ```
 
 #### Node.js Not Found
@@ -789,7 +789,7 @@ sudo apt-get install -y nodejs
 #### Container Won't Start
 ```bash
 # Check logs
-docker-compose logs car-log-core
+# Check Claude Desktop logs: car-log-core
 
 # Common issues:
 # - Port conflict: Change port in docker-compose.yml
@@ -852,7 +852,7 @@ python scripts/generate_mock_data.py --scenario demo
 Nuclear option - start fresh:
 ```bash
 docker-compose down -v  # Deletes volumes
-rm -rf ~/Documents/MileageLog/data/*  # Deletes data (BACKUP FIRST!)
+rm -rf ~/.car-log-deployment/data/*  # Deletes data (BACKUP FIRST!)
 docker-compose up -d
 # Reconfigure Claude Desktop
 ```
@@ -874,7 +874,7 @@ When reporting issues, include:
 ```
 1. Claude Desktop version
 2. OS version
-3. MCP server logs (docker-compose logs)
+3. MCP server logs (# Check Claude Desktop logs:)
 4. Skill file content
 5. Error message (exact text)
 6. Steps to reproduce

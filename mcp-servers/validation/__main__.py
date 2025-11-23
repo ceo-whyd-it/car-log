@@ -12,6 +12,7 @@ import asyncio
 import logging
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
+from mcp.types import Tool
 
 from .tools import (
     validate_checkpoint_pair,
@@ -32,26 +33,26 @@ app = Server("validation")
 async def list_tools():
     """List all available tools."""
     return [
-        {
-            "name": "validate_checkpoint_pair",
-            "description": "Validate gap between two checkpoints (distance sum ±10%)",
-            "inputSchema": validate_checkpoint_pair.INPUT_SCHEMA,
-        },
-        {
-            "name": "validate_trip",
-            "description": "Comprehensive trip validation (distance, fuel, efficiency, deviation)",
-            "inputSchema": validate_trip.INPUT_SCHEMA,
-        },
-        {
-            "name": "check_efficiency",
-            "description": "Check fuel efficiency reasonability against fuel type ranges",
-            "inputSchema": check_efficiency.INPUT_SCHEMA,
-        },
-        {
-            "name": "check_deviation_from_average",
-            "description": "Compare trip efficiency to vehicle average (±20% warning)",
-            "inputSchema": check_deviation_from_average.INPUT_SCHEMA,
-        },
+        Tool(
+            name="validate_checkpoint_pair",
+            description="Validate gap between two checkpoints (distance sum ±10%)",
+            inputSchema=validate_checkpoint_pair.INPUT_SCHEMA,
+        ),
+        Tool(
+            name="validate_trip",
+            description="Comprehensive trip validation (distance, fuel, efficiency, deviation)",
+            inputSchema=validate_trip.INPUT_SCHEMA,
+        ),
+        Tool(
+            name="check_efficiency",
+            description="Check fuel efficiency reasonability against fuel type ranges",
+            inputSchema=check_efficiency.INPUT_SCHEMA,
+        ),
+        Tool(
+            name="check_deviation_from_average",
+            description="Compare trip efficiency to vehicle average (±20% warning)",
+            inputSchema=check_deviation_from_average.INPUT_SCHEMA,
+        ),
     ]
 
 

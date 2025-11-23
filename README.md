@@ -55,32 +55,74 @@ Complete specification for a **Slovak tax-compliant company vehicle mileage logg
 **For Product Managers:** Start here → [spec/01-product-overview.md](./spec/01-product-overview.md)
 **For Architects:** Start here → [spec/06-mcp-architecture-v2.md](./spec/06-mcp-architecture-v2.md)
 **For Hackathon Judges:** Start here → [spec/09-hackathon-presentation.md](./spec/09-hackathon-presentation.md)
-**🐳 For Deployment:** Docker setup → [docker/README.md](./docker/README.md)
+**🚀 For Installation (RECOMMENDED):** Local deployment → See [Installation](#installation) below
 **🎯 For Claude Skills:** Conversational UI → [claude_skills/README.md](./claude_skills/README.md)
+**🐳 For Docker (Future):** Container deployment → [Docker Deployment](#docker-deployment-future) below
 
 ---
 
-## 🐳 Docker Deployment (NEW)
+## Installation
 
-**Run all 7 MCP servers with one command:**
+### Prerequisites
 
-```bash
-cd docker
-docker-compose up -d
+- **Python 3.11+** ([download](https://www.python.org/downloads/))
+- **Node.js 18+** ([download](https://nodejs.org/))
+- **Claude Desktop** ([download](https://claude.ai/download))
+
+### Quick Install (Local Deployment - RECOMMENDED)
+
+The local deployment installs all MCP servers to `~/.car-log-deployment/` (Windows: `C:\Users\YourName\.car-log-deployment\`).
+
+**Windows:**
+```cmd
+cd car-log
+install.bat
 ```
 
-**Architecture:** Hybrid setup (1 Python + 1 Node.js container) with shared data volume.
+**macOS/Linux:**
+```bash
+cd car-log
+./deployment/scripts/deploy-macos.sh  # or deploy-linux.sh
+```
 
-**What's included:**
-- ✅ All 6 Python MCP servers (car-log-core, trip-reconstructor, validation, ekasa-api, dashboard-ocr, report-generator)
-- ✅ 1 Node.js server (geo-routing)
-- ✅ Shared `/data` volume for JSON storage
-- ✅ Environment-driven configuration
-- ✅ Health checks and restart policies
+### What Gets Installed
 
-**Files:** `docker/docker-compose.yml`, `Dockerfile.python`, `Dockerfile.nodejs`, `.env.example`, entrypoint script
+1. ✅ **Deployment directory:** `~/.car-log-deployment/`
+2. ✅ **All 7 MCP servers:**
+   - `car-log-core` - CRUD operations (vehicles, checkpoints, templates, trips)
+   - `trip-reconstructor` - Template matching algorithm
+   - `validation` - 4 validation algorithms
+   - `ekasa-api` - Slovak receipt processing
+   - `dashboard-ocr` - EXIF extraction from photos
+   - `report-generator` - CSV/PDF report generation
+   - `geo-routing` - Geocoding and routing (Node.js)
+3. ✅ **Dependencies:** Python packages + Node.js modules
+4. ✅ **Configuration:** Claude Desktop config generation
+5. ✅ **Data directories:** Empty folders for runtime data
 
-**See:** [docker/README.md](./docker/README.md) for complete setup instructions
+### Post-Installation
+
+1. **Restart Claude Desktop** to load the new MCP servers
+2. **Verify installation** by asking Claude: "What MCP tools do you have available?"
+3. **Expected tools:** You should see 24 tools from all 7 servers:
+   - car-log-core: 14 tools
+   - trip-reconstructor: 1 tool
+   - validation: 1 tool
+   - ekasa-api: 2 tools
+   - dashboard-ocr: 2 tools
+   - report-generator: 1 tool
+   - geo-routing: 3 tools
+
+### Configuration Files
+
+**Claude Desktop config location:**
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Linux: `~/.config/Claude/claude_desktop_config.json`
+
+**Generated config:** `~/.car-log-deployment/claude_desktop_config.json`
+
+For detailed setup instructions, see [deployment/README.md](./deployment/README.md)
 
 ---
 
@@ -312,128 +354,34 @@ See [spec/08-implementation-plan.md](./spec/08-implementation-plan.md) for detai
 
 ## Getting Started
 
-### Prerequisites
+After completing the [Installation](#installation) section above, you're ready to use Car Log!
 
-- **Python 3.11+** (for Python MCP servers)
-- **Node.js 18+** (for geo-routing server)
-- **Claude Desktop** (for conversational interface)
+### Usage with Claude Desktop
 
-### Installation
+After installation and restarting Claude Desktop, start a conversation:
 
-1. **Clone the repository:**
-   ```bash
-   git clone <repository-url>
-   cd car-log
-   ```
-
-2. **Install Python dependencies:**
-   ```bash
-   # Install for each Python server
-   pip install -r mcp-servers/car_log_core/requirements.txt
-   pip install -r mcp-servers/trip_reconstructor/requirements.txt
-   pip install -r mcp-servers/validation/requirements.txt
-   pip install -r mcp-servers/ekasa_api/requirements.txt
-   pip install -r mcp-servers/dashboard_ocr/requirements.txt
-   pip install -r mcp-servers/report_generator/requirements.txt
-   ```
-
-3. **Install Node.js dependencies:**
-   ```bash
-   cd mcp-servers/geo-routing
-   npm install
-   cd ../..
-   ```
-
-4. **Create data directories:**
-   ```bash
-   mkdir -p ~/Documents/MileageLog/data/{vehicles,checkpoints,trips,templates,reports}
-   ```
-
-5. **Configure Claude Desktop:**
-   ```bash
-   # Copy the sample configuration
-   # macOS: ~/Library/Application Support/Claude/claude_desktop_config.json
-   # Linux: ~/.config/Claude/claude_desktop_config.json
-   # Windows: %APPDATA%\Claude\claude_desktop_config.json
-
-   # Copy contents from claude_desktop_config.json in this repo
-   ```
-
-   See [CLAUDE_DESKTOP_SETUP.md](./CLAUDE_DESKTOP_SETUP.md) for detailed setup instructions.
-
-6. **Run tests to verify installation:**
-   ```bash
-   pytest tests/ -v
-   # Expected: 70 passed, 1 skipped
-   ```
-
-### Quick Start Guide
-
-#### 1. Generate Demo Data
-
-```bash
-python scripts/generate_mock_data.py --scenario demo
-```
-
-This creates:
-- 1 vehicle (Ford Transit)
-- 2 checkpoints (Nov 1-8, 820 km gap)
-- 3 templates (Warehouse Run, Client Visit, Branch Office)
-- 2 trips (2× Warehouse Run)
-
-#### 2. Test MCP Servers
-
-Run the Day 7 integration checkpoint:
-
-```bash
-python tests/integration_checkpoint_day7.py
-# Expected: 20/20 tests passed (100% success rate)
-```
-
-#### 3. Use with Claude Desktop
-
-After configuring Claude Desktop (step 5 above), restart Claude Desktop and start conversing:
-
-**Example conversation:**
+**Example workflow:**
 ```
 You: Create a new vehicle for me
 Claude: I'll help you create a vehicle. What are the details?
+
 You: Ford Transit, license plate BA-456CD, VIN WBAXX01234ABC5678, Diesel, 45000 km
 Claude: [Creates vehicle using car-log-core.create_vehicle]
 
-You: I just refueled. Can you help me create a checkpoint?
-Claude: I'll help you log this refuel checkpoint. What's the odometer reading?
-You: 45820 km, at Bratislava, I refueled 70 liters of Diesel for €110
+You: I just refueled. Create a checkpoint: odometer 45820 km, at Bratislava, 70 liters of Diesel for €110
 Claude: [Creates checkpoint using car-log-core.create_checkpoint]
 
 You: Can you detect if there are any gaps in my mileage log?
-Claude: [Uses car-log-core.detect_gap to find the 820 km gap]
+Claude: [Uses car-log-core.analyze_gap to find gaps between checkpoints]
 
-You: Can you suggest trips to fill this gap?
-Claude: [Uses trip-reconstructor.match_templates to suggest Warehouse Run template]
+You: Create a template for my regular Košice route
+Claude: [Uses car-log-core.create_template with GPS coordinates]
 
 You: Generate a report for November 2025
-Claude: [Uses report-generator.generate_csv]
+Claude: [Uses report-generator.generate_report]
 ```
 
 See [spec/09-hackathon-presentation.md](./spec/09-hackathon-presentation.md) for complete demo script.
-
-#### 4. Generate Reports
-
-```bash
-# Via Python (if not using Claude Desktop)
-python -c "
-from mcp_servers.report_generator.tools.generate_csv import execute
-import asyncio
-
-result = asyncio.run(execute({
-    'start_date': '2025-11-01',
-    'end_date': '2025-11-30',
-    'business_only': True
-}))
-print(result)
-"
-```
 
 ### Project Structure
 
@@ -460,48 +408,56 @@ car-log/
 ### Development Workflow
 
 1. **Make changes to MCP server code** (e.g., `mcp-servers/car_log_core/`)
-2. **Write tests** in `tests/`
-3. **Run tests**: `pytest tests/test_<module>.py -v`
-4. **Update TASKS.md** to track progress
-5. **Commit with descriptive message**
-6. **Test in Claude Desktop** after code changes
+2. **Re-run deployment script** to update `~/.car-log-deployment/`
+   ```cmd
+   # Windows
+   install.bat
 
-### Testing
+   # macOS/Linux
+   ./deployment/scripts/deploy-macos.sh
+   ```
+3. **Restart Claude Desktop** to reload servers
+4. **Test changes** through conversational interaction
+
+### Testing (For Developers)
+
+If you're developing and testing the MCP servers directly:
 
 ```bash
+# Set PYTHONPATH to include mcp-servers directory
+export PYTHONPATH="${PYTHONPATH}:$(pwd)/mcp-servers"  # macOS/Linux
+set PYTHONPATH=%PYTHONPATH%;%CD%\mcp-servers          # Windows
+
 # Run all tests
 pytest tests/ -v
 
 # Run specific test suite
 pytest tests/test_validation.py -v
-
-# Run with coverage
-pytest tests/ --cov=mcp_servers --cov-report=html
-
-# Run integration checkpoint
-python tests/integration_checkpoint_day7.py
 ```
 
 ### Troubleshooting
 
-See [CLAUDE_DESKTOP_SETUP.md](./CLAUDE_DESKTOP_SETUP.md) for comprehensive troubleshooting guide.
-
 **Common issues:**
 
-1. **ImportError: No module named 'mcp_servers'**
-   ```bash
-   export PYTHONPATH="${PYTHONPATH}:$(pwd)/mcp-servers"
-   ```
+1. **Claude Desktop not discovering MCP servers**
+   - Verify config file location (see [Configuration Files](#configuration-files) above)
+   - Ensure JSON syntax is valid in `claude_desktop_config.json`
+   - Restart Claude Desktop completely (quit and reopen)
+   - Check Claude Desktop logs:
+     - Windows: `%APPDATA%\Claude\logs\`
+     - macOS: `~/Library/Logs/Claude/`
+     - Linux: `~/.config/Claude/logs/`
 
-2. **Claude Desktop not discovering servers**
-   - Check config file location
-   - Verify JSON syntax is valid
-   - Check server logs in Claude Desktop settings
+2. **"Python not found" or "Node.js not found"**
+   - Ensure Python 3.11+ and Node.js 18+ are installed
+   - On Windows, check "Add Python to PATH" during installation
+   - Verify installation: `python --version` and `node --version`
 
-3. **Tests failing**
-   - Ensure all dependencies installed
-   - Check Python version (3.11+ required)
-   - Verify data directories exist
+3. **Tool errors after making code changes**
+   - Re-run deployment script to update `~/.car-log-deployment/`
+   - Restart Claude Desktop to reload servers
+
+For detailed troubleshooting, see [deployment/README.md](./deployment/README.md)
 
 ### Slovak Tax Compliance
 
@@ -521,21 +477,36 @@ All implementations follow Slovak VAT Act 2025 requirements:
 - **Report generation**: Processes month of data in < 1 second
 - **MCP server startup**: < 1 second per server
 
-### Production Deployment
+### Data Backup
 
-For production use:
+All runtime data is stored in `~/.car-log-deployment/data/` including:
+- Vehicles
+- Checkpoints
+- Trips
+- Templates
+- Reports
 
-1. **Set environment variables:**
-   ```bash
-   export DATA_PATH="/path/to/production/data"
-   export ANTHROPIC_API_KEY="your-api-key"
-   ```
+**Important:** Backup this directory regularly to prevent data loss.
 
-2. **Configure monitoring** (logs, errors)
-3. **Set up backups** for data directory
-4. **Consider SQLite migration** for 10,000+ trips (P2 feature)
+---
 
-See [CLAUDE_DESKTOP_SETUP.md](./CLAUDE_DESKTOP_SETUP.md) for deployment details.
+## Docker Deployment (Future)
+
+**Status:** Docker deployment is planned for future releases. Currently, use local deployment (see [Installation](#installation) above).
+
+**Planned features:**
+- Containerized MCP servers for easier deployment
+- Docker Compose orchestration
+- Shared data volumes
+- Environment-driven configuration
+
+**Files prepared:**
+- `docker/docker-compose.yml`
+- `docker/Dockerfile.python`
+- `docker/Dockerfile.nodejs`
+- `docker/docker-entrypoint.sh`
+
+For now, these files are reference implementations only. Stick with local deployment for working setup.
 
 ---
 

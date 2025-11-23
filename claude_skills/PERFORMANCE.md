@@ -8,7 +8,7 @@
 
 ## Overview
 
-This document defines performance expectations and benchmarks for Car Log Claude Desktop skills. All measurements are based on the complete MCP backend (7 servers, 28 tools) running either locally or via Docker.
+This document defines performance expectations and benchmarks for Car Log Claude Desktop skills. All measurements are based on the complete MCP backend (7 servers, 24 tools) running either locally or via Docker.
 
 **Performance Goals:**
 - **User Experience:** All operations feel responsive (< 5 seconds)

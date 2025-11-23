@@ -13,6 +13,7 @@ import logging
 import os
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
+from mcp.types import Tool
 
 from .tools import (
     match_templates,
@@ -38,16 +39,16 @@ app = Server("trip-reconstructor")
 async def list_tools():
     """List all available tools."""
     return [
-        {
-            "name": "match_templates",
-            "description": "Match templates to gap between checkpoints using hybrid GPS + address scoring",
-            "inputSchema": match_templates.INPUT_SCHEMA,
-        },
-        {
-            "name": "calculate_template_completeness",
-            "description": "Calculate template completeness and provide improvement suggestions",
-            "inputSchema": calculate_template_completeness.INPUT_SCHEMA,
-        },
+        Tool(
+            name="match_templates",
+            description="Match templates to gap between checkpoints using hybrid GPS + address scoring",
+            inputSchema=match_templates.INPUT_SCHEMA,
+        ),
+        Tool(
+            name="calculate_template_completeness",
+            description="Calculate template completeness and provide improvement suggestions",
+            inputSchema=calculate_template_completeness.INPUT_SCHEMA,
+        ),
     ]
 
 

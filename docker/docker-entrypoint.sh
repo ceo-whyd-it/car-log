@@ -13,8 +13,9 @@ start_server() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting ${server_name}..."
     python -m "mcp_servers.${server_module}" &
 
-    # Store PID
-    eval "${server_name}_PID=$!"
+    # Store PID (replace hyphens with underscores for valid variable name)
+    local pid_var_name=$(echo "${server_name}" | tr '-' '_')
+    eval "${pid_var_name}_PID=$!"
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] ✓ ${server_name} started (PID: $!)"
 }
 

@@ -13,7 +13,7 @@ Before you start testing, verify all prerequisites are met:
 
 ### System Setup
 - [ ] **Claude Desktop** installed and running
-- [ ] **Docker Desktop** installed (or local Python 3.11+ / Node.js 18+)
+- [ ] **Local deployment (install.bat or deploy-macos.sh)** installed (or local Python 3.11+ / Node.js 18+)
 - [ ] **Git** installed (for cloning repository)
 - [ ] **Disk space:** At least 1 GB free
 
@@ -23,7 +23,7 @@ Before you start testing, verify all prerequisites are met:
 - [ ] Branch checked out: `git status` (should show main or demo branch)
 
 ### MCP Servers Setup
-- [ ] All 7 servers running: `docker-compose ps` (all "Up")
+- [ ] All 7 servers running: `Restart Claude Desktop and check for 24 MCP tools` (all "Up")
   - `car-log-core`
   - `ekasa-api`
   - `geo-routing`
@@ -32,8 +32,8 @@ Before you start testing, verify all prerequisites are met:
   - `dashboard-ocr`
   - `report-generator`
 
-- [ ] If not running: `cd docker && docker-compose up -d`
-- [ ] Check logs for errors: `docker-compose logs` (no ERROR messages)
+- [ ] If not running: `cd docker && install.bat (Windows) or ./deployment/scripts/deploy-macos.sh`
+- [ ] Check logs for errors: `Check Claude Desktop logs in %APPDATA%Claudeogs (Windows) or ~/Library/Logs/Claude/ (macOS)` (no ERROR messages)
 
 ### Claude Desktop Configuration
 - [ ] Config file exists:
@@ -44,7 +44,7 @@ Before you start testing, verify all prerequisites are met:
 - [ ] Claude Desktop restarted after config changes
 
 ### Data Directory Setup
-- [ ] Data directory exists: `~/Documents/MileageLog/data/`
+- [ ] Data directory exists: `~/.car-log-deployment/data/`
 - [ ] Subdirectories created:
   - [ ] `vehicles/`
   - [ ] `checkpoints/2025-11/`
@@ -52,7 +52,7 @@ Before you start testing, verify all prerequisites are met:
   - [ ] `templates/`
   - [ ] `reports/2025-11/`
 
-- [ ] Permissions correct: `chmod -R 755 ~/Documents/MileageLog/data/`
+- [ ] Permissions correct: `chmod -R 755 ~/.car-log-deployment/data/`
 
 ### Skills Loaded
 - [ ] Open Claude Desktop → Settings → Skills
@@ -98,7 +98,7 @@ Before you start testing, verify all prerequisites are met:
 
 ### Step 1.2: Verify Vehicle File Created
 - [ ] Open terminal/Finder
-- [ ] Navigate to: `~/Documents/MileageLog/data/vehicles/`
+- [ ] Navigate to: `~/.car-log-deployment/data/vehicles/`
 - [ ] **Expected:** JSON file exists with vehicle data
 - [ ] Open file and verify:
   - [ ] `vin`: "WBAXX01234ABC5678"
@@ -182,7 +182,7 @@ Before you start testing, verify all prerequisites are met:
   - "No gap detected yet (first checkpoint)"
 
 ### Step 2.5: Verify Checkpoint File Created
-- [ ] Navigate to: `~/Documents/MileageLog/data/checkpoints/2025-11/`
+- [ ] Navigate to: `~/.car-log-deployment/data/checkpoints/2025-11/`
 - [ ] **Expected:** JSON file exists
 - [ ] Open file and verify:
   - [ ] `checkpoint_type`: "refuel"
@@ -271,7 +271,7 @@ Before you start testing, verify all prerequisites are met:
   - [ ] User can accept or edit data
 
 ### Step 3.6: Verify Trips Created
-- [ ] Navigate to: `~/Documents/MileageLog/data/trips/2025-11/`
+- [ ] Navigate to: `~/.car-log-deployment/data/trips/2025-11/`
 - [ ] **Expected:** 2 (or more) JSON files
 - [ ] Open one file and verify:
   - [ ] `driver_name`: (your name)
@@ -336,7 +336,7 @@ Before you start testing, verify all prerequisites are met:
   - "Template completeness: XX%"
 
 ### Step 4.6: Verify Template File Created
-- [ ] Navigate to: `~/Documents/MileageLog/data/templates/`
+- [ ] Navigate to: `~/.car-log-deployment/data/templates/`
 - [ ] **Expected:** JSON file exists
 - [ ] Open file and verify:
   - [ ] `name`: "Weekly Warehouse Run" (or similar)
@@ -397,7 +397,7 @@ Before you start testing, verify all prerequisites are met:
 - [ ] Verify Personal trips excluded (if any exist)
 
 ### Step 5.3: Verify Report File Created
-- [ ] Navigate to: `~/Documents/MileageLog/data/reports/2025-11/`
+- [ ] Navigate to: `~/.car-log-deployment/data/reports/2025-11/`
 - [ ] **Expected:** `november-2025.csv` exists
 - [ ] Open file in Excel/LibreOffice/text editor
 - [ ] **Expected columns:**
