@@ -1,3 +1,9 @@
+---
+name: "Vehicle Setup"
+description: "Guide users through Slovak VAT Act 2025 compliant vehicle registration with VIN validation"
+version: "1.0.0"
+---
+
 # Vehicle Setup Skill
 
 ## Purpose

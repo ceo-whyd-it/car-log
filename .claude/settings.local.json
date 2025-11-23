@@ -40,7 +40,15 @@
       "Bash(\"C:/Users/dalib/AppData/Local/Microsoft/WindowsApps/PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0/python.exe\" --version)",
       "Bash(\"C:/Users/dalib/AppData/Local/Microsoft/WindowsApps/PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0/python.exe\" -c \"import mcp_servers.car_log_core; print(''Import successful'')\")",
       "Bash(py --version:*)",
-      "Bash(where py)"
+      "Bash(where py)",
+      "WebFetch(domain:support.claude.com)",
+      "Bash(fi)",
+      "Bash(done)",
+      "Bash(py:*)",
+      "Bash(git mv:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(tree:*)"
     ],
     "deny": [],
     "ask": []

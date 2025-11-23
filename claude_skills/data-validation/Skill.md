@@ -1,3 +1,9 @@
+---
+name: "Data Validation"
+description: "Validate trip data quality using 4 algorithms: distance sum, fuel consumption, efficiency range, deviation"
+version: "1.0.0"
+---
+
 # Skill 6: Data Validation
 
 ## Purpose

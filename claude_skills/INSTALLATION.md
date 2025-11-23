@@ -59,10 +59,13 @@ This automatically:
 **Understanding the Structure:**
 
 Each skill folder contains:
-- **SKILL.md** - Concise prompt for Claude (~200-600 words) ← **Load this into Claude Desktop**
-- **GUIDE.md** - Comprehensive guide for humans (reference documentation)
-- **REFERENCE.md** - MCP tool specifications (technical reference)
+- **SKILL.md** - Concise prompt for Claude (~200-600 words) ← **Load this into Claude Desktop** (ALL CAPS per official Anthropic spec)
+- **references/** - Supporting documentation subfolder
+  - **guide.md** - Comprehensive guide for humans (reference documentation)
+  - **mcp-tools.md** - MCP tool specifications (technical reference)
 - **examples/** - Sample data for testing
+
+**Structure matches official Anthropic skills repository:** https://github.com/anthropics/skills
 
 **Manual Installation Steps:**
 
