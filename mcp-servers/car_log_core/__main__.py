@@ -19,17 +19,23 @@ from .tools import (
     get_vehicle,
     list_vehicles,
     update_vehicle,
+    delete_vehicle,
     create_checkpoint,
     get_checkpoint,
     list_checkpoints,
+    update_checkpoint,
+    delete_checkpoint,
     detect_gap,
     create_template,
+    get_template,
     list_templates,
+    update_template,
     delete_template,
     create_trip,
     create_trips_batch,
     list_trips,
     get_trip,
+    update_trip,
     delete_trip,
 )
 
@@ -66,6 +72,11 @@ async def list_tools():
             description="Update vehicle details",
             inputSchema=update_vehicle.INPUT_SCHEMA,
         ),
+        Tool(
+            name="delete_vehicle",
+            description="Delete vehicle (warns if checkpoints/trips exist)",
+            inputSchema=delete_vehicle.INPUT_SCHEMA,
+        ),
         # Checkpoint tools
         Tool(
             name="create_checkpoint",
@@ -82,6 +93,16 @@ async def list_tools():
             description="List checkpoints with filters (vehicle_id, date range)",
             inputSchema=list_checkpoints.INPUT_SCHEMA,
         ),
+        Tool(
+            name="update_checkpoint",
+            description="Update checkpoint to fix mistakes (odometer, GPS, driver name)",
+            inputSchema=update_checkpoint.INPUT_SCHEMA,
+        ),
+        Tool(
+            name="delete_checkpoint",
+            description="Delete checkpoint (warns if trips reference it)",
+            inputSchema=delete_checkpoint.INPUT_SCHEMA,
+        ),
         # Gap detection
         Tool(
             name="detect_gap",
@@ -95,9 +116,19 @@ async def list_tools():
             inputSchema=create_template.INPUT_SCHEMA,
         ),
         Tool(
+            name="get_template",
+            description="Get single template by ID",
+            inputSchema=get_template.INPUT_SCHEMA,
+        ),
+        Tool(
             name="list_templates",
             description="List all trip templates",
             inputSchema=list_templates.INPUT_SCHEMA,
+        ),
+        Tool(
+            name="update_template",
+            description="Update template (GPS coords, address, name, business description)",
+            inputSchema=update_template.INPUT_SCHEMA,
         ),
         Tool(
             name="delete_template",
@@ -126,6 +157,11 @@ async def list_tools():
             inputSchema=get_trip.INPUT_SCHEMA,
         ),
         Tool(
+            name="update_trip",
+            description="Update trip to fix data (business description, driver name, etc.)",
+            inputSchema=update_trip.INPUT_SCHEMA,
+        ),
+        Tool(
             name="delete_trip",
             description="Delete trip by ID",
             inputSchema=delete_trip.INPUT_SCHEMA,
@@ -145,18 +181,28 @@ async def call_tool(name: str, arguments: dict):
             return await list_vehicles.execute(arguments)
         elif name == "update_vehicle":
             return await update_vehicle.execute(arguments)
+        elif name == "delete_vehicle":
+            return await delete_vehicle.execute(arguments)
         elif name == "create_checkpoint":
             return await create_checkpoint.execute(arguments)
         elif name == "get_checkpoint":
             return await get_checkpoint.execute(arguments)
         elif name == "list_checkpoints":
             return await list_checkpoints.execute(arguments)
+        elif name == "update_checkpoint":
+            return await update_checkpoint.execute(arguments)
+        elif name == "delete_checkpoint":
+            return await delete_checkpoint.execute(arguments)
         elif name == "detect_gap":
             return await detect_gap.execute(arguments)
         elif name == "create_template":
             return await create_template.execute(arguments)
+        elif name == "get_template":
+            return await get_template.execute(arguments)
         elif name == "list_templates":
             return await list_templates.execute(arguments)
+        elif name == "update_template":
+            return await update_template.execute(arguments)
         elif name == "delete_template":
             return await delete_template.execute(arguments)
         elif name == "create_trip":
@@ -167,6 +213,8 @@ async def call_tool(name: str, arguments: dict):
             return await list_trips.execute(arguments)
         elif name == "get_trip":
             return await get_trip.execute(arguments)
+        elif name == "update_trip":
+            return await update_trip.execute(arguments)
         elif name == "delete_trip":
             return await delete_trip.execute(arguments)
         else:
