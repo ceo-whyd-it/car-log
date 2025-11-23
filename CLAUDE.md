@@ -2,13 +2,17 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## ⚠️ CRITICAL STATUS UPDATE
+## ✅ STATUS UPDATE - CRUD COMPLETE
 
-**BLOCKING ISSUE:** Trip CRUD tools are documented in specifications but **NOT IMPLEMENTED**.
-- This breaks the end-to-end workflow at the critical "save trips" step
-- Template matching works, but proposals cannot be saved as trips
-- Report generation works, but has no trip data to report
-- **Action Required:** See TASKS.md section A6 for implementation tasks (estimated 4-6 hours)
+**IMPLEMENTATION COMPLETE:** All missing CRUD operations now implemented (2025-11-23).
+- ✅ Checkpoint update/delete operations functional
+- ✅ Trip CRUD fully implemented (create, batch, get, list, update, delete)
+- ✅ Template get/update operations added
+- ✅ Vehicle delete operation implemented
+- ✅ End-to-end workflow unblocked: Receipt → Checkpoint → Gap → Match → Save Trips → Report
+- **Result:** 21 MCP tools in car-log-core (95% CRUD coverage)
+
+**See:** `spec/CRUD_IMPLEMENTATION_COMPLETE.md` for full implementation details
 
 ## Project Overview
 
@@ -16,7 +20,7 @@ Car Log is a **Slovak tax-compliant company vehicle mileage logger** built for t
 
 **Target Market:** Slovak/European small businesses facing VAT Act 2025 compliance requirements.
 
-**Project Status:** ⚠️ 6/7 servers complete for P0, trip CRUD blocking demo (Hackathon deadline: Nov 30, 2025)
+**Project Status:** ✅ All 7 P0 servers complete, CRUD operations functional, ready for integration testing (Hackathon deadline: Nov 30, 2025)
 
 ## Architecture
 
@@ -169,28 +173,33 @@ Distance from template    Score
 3. Calculate routes (optional): `geo-routing.calculate_route(start, end)` ✅
 4. Run matching: `trip-reconstructor.match_templates({gap_data, templates})` ✅
 5. Present proposals to user (confidence >= 70%) ✅
-6. **Create trips: `car-log-core.create_trips_batch(approved_trips)` ❌ NOT IMPLEMENTED**
+6. **Create trips: `car-log-core.create_trips_batch(approved_trips)` ✅ IMPLEMENTED**
 
-### ⚠️ CRITICAL WORKFLOW GAP
+### ✅ END-TO-END WORKFLOW COMPLETE
 
-**BLOCKING ISSUE:** Step 6 above (`create_trips_batch`) and related trip CRUD tools are **NOT IMPLEMENTED**.
+**All trip CRUD tools now implemented (2025-11-23).**
 
-**Impact on Workflow:**
+**Complete Workflow:**
 ```
 ✅ Receipt → Checkpoint → Gap Detection → Template Matching
-❌ [MISSING STEP] → Trip Storage
-⚠️  Report Generation (works but has no trip data)
+✅ User Approval → Trip Storage (create_trips_batch)
+✅ List Trips → Report Generation
 ```
 
-**Missing Tools:**
-- ❌ `car-log-core.create_trip` - Cannot save individual trips
-- ❌ `car-log-core.create_trips_batch` - Cannot save reconstruction proposals
-- ❌ `car-log-core.list_trips` - Cannot retrieve trips for reports
-- ❌ `car-log-core.get_trip` - Cannot fetch trip details
+**Implemented Tools:**
+- ✅ `car-log-core.create_trip` - Save individual trips manually
+- ✅ `car-log-core.create_trips_batch` - Save reconstruction proposals
+- ✅ `car-log-core.list_trips` - Retrieve trips for reports
+- ✅ `car-log-core.get_trip` - Fetch trip details
+- ✅ `car-log-core.update_trip` - Fix trip data errors
+- ✅ `car-log-core.delete_trip` - Remove incorrect trips
 
-**Action Required:** Implement trip CRUD tools (see TASKS.md section A6) before end-to-end demo can work.
-
-**Workaround:** Template matching produces proposals, but they must be manually recorded or stored externally.
+**Additional CRUD Operations:**
+- ✅ `car-log-core.update_checkpoint` - Fix checkpoint mistakes
+- ✅ `car-log-core.delete_checkpoint` - Remove duplicates
+- ✅ `car-log-core.get_template` - Retrieve single template
+- ✅ `car-log-core.update_template` - Modify template data
+- ✅ `car-log-core.delete_vehicle` - Remove decommissioned vehicles
 
 ---
 
