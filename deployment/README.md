@@ -178,13 +178,13 @@ After restarting Claude Desktop, verify the servers are loaded:
 3. Type: "What MCP tools do you have available?"
 4. Look for Car Log servers in the response
 
-### Expected Tools (28 total)
+### Expected Tools (24 total)
 
-**car-log-core (10 tools):**
-- `create_vehicle`, `list_vehicles`, `get_vehicle`, `update_vehicle`, `delete_vehicle`
-- `create_checkpoint`, `list_checkpoints`, `analyze_gap`
-- `create_template`, `list_templates`, `delete_template`
-- `delete_trip`
+**car-log-core (14 tools):**
+- **Vehicles:** `create_vehicle`, `list_vehicles`, `get_vehicle`, `update_vehicle`
+- **Checkpoints:** `create_checkpoint`, `get_checkpoint`, `list_checkpoints`, `detect_gap`
+- **Templates:** `create_template`, `list_templates`, `delete_template`
+- **Trips:** `create_trip`, `create_trips_batch`, `list_trips`, `get_trip`, `delete_trip`
 
 **trip-reconstructor (1 tool):**
 - `match_templates`

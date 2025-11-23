@@ -104,7 +104,14 @@ cd car-log
 
 1. **Restart Claude Desktop** to load the new MCP servers
 2. **Verify installation** by asking Claude: "What MCP tools do you have available?"
-3. **Expected tools:** You should see 28+ tools from all 7 servers
+3. **Expected tools:** You should see 24 tools from all 7 servers:
+   - car-log-core: 14 tools
+   - trip-reconstructor: 1 tool
+   - validation: 1 tool
+   - ekasa-api: 2 tools
+   - dashboard-ocr: 2 tools
+   - report-generator: 1 tool
+   - geo-routing: 3 tools
 
 ### Configuration Files
 

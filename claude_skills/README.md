@@ -99,7 +99,7 @@ claude_skills/
 
 **Trigger words:** "add vehicle", "new car", license plate patterns
 
-**MCP tools:** `car-log-core.create_vehicle`, `car-log-core.list_vehicles`
+**MCP tools:** `car-log-core.create_vehicle`, `car-log-core.list_vehicles`, `car-log-core.get_vehicle`, `car-log-core.update_vehicle`
 
 **Example:**
 ```
@@ -121,7 +121,7 @@ Claude: [validates VIN format]
 
 **Trigger words:** User pastes image, "refuel", "checkpoint"
 
-**MCP tools:** `ekasa-api.scan_qr_code`, `ekasa-api.fetch_receipt_data`, `dashboard-ocr.extract_metadata`, `car-log-core.create_checkpoint`, `car-log-core.detect_gap`
+**MCP tools:** `ekasa-api.scan_qr_from_pdf`, `ekasa-api.fetch_receipt`, `dashboard-ocr.extract_metadata`, `dashboard-ocr.check_photo_quality`, `car-log-core.create_checkpoint`, `car-log-core.get_checkpoint`, `car-log-core.list_checkpoints`, `car-log-core.detect_gap`
 
 **Example:**
 ```
@@ -148,7 +148,7 @@ Claude: "✓ GPS: 48.1486°N, 17.1077°E
 
 **Trigger words:** Automatic after gap detection, "reconstruct", "fill trips"
 
-**MCP tools:** `car-log-core.list_templates`, `geo-routing.calculate_route`, `trip-reconstructor.match_templates`, `car-log-core.create_trips_batch`, `validation.*`
+**MCP tools:** `car-log-core.list_templates`, `geo-routing.calculate_route`, `trip-reconstructor.match_templates`, `car-log-core.create_trip`, `car-log-core.create_trips_batch`, `car-log-core.list_trips`, `car-log-core.get_trip`, `car-log-core.delete_trip`, `validation.validate_trip`
 
 **Example:**
 ```
@@ -171,7 +171,7 @@ Accept? ✅ Created + validated!"
 
 **Trigger words:** "create template", "save this route", "weekly trip"
 
-**MCP tools:** `geo-routing.geocode_address`, `geo-routing.calculate_route`, `car-log-core.create_template`
+**MCP tools:** `geo-routing.geocode_address`, `geo-routing.reverse_geocode`, `geo-routing.calculate_route`, `car-log-core.create_template`, `car-log-core.list_templates`, `car-log-core.delete_template`
 
 **Example:**
 ```
@@ -196,7 +196,7 @@ Which? 1"
 
 **Trigger words:** "generate report", "export CSV", "November report"
 
-**MCP tools:** `car-log-core.list_trips`, `report-generator.generate_csv`, `report-generator.generate_pdf`
+**MCP tools:** `car-log-core.list_trips`, `report-generator.generate_report`
 
 **Example:**
 ```
@@ -219,7 +219,9 @@ Claude: "✅ Reports generated!
 
 **Trigger words:** Automatic after data entry, "check data", "validate"
 
-**MCP tools:** `validation.validate_checkpoint_pair`, `validation.validate_trip`, `validation.check_efficiency`, `validation.check_deviation_from_average`
+**MCP tools:** `validation.validate_trip`
+
+**Note:** Validation is performed by the single `validate_trip` tool which runs all 4 algorithms: distance sum (±10%), fuel consumption (±15%), efficiency range check, and deviation from average (±20%)
 
 **Example:**
 ```
@@ -513,11 +515,22 @@ After implementing these skills:
 - ✅ Data validation: Manual → Automatic
 - ✅ **Overall: 10x productivity improvement**
 
-**Current Status (November 20, 2025):**
-- ✅ Backend: 100% complete (7 MCP servers, 28 tools, 20/20 integration tests passing)
-- 📋 Skills: 100% documented (6 skills specified)
+**Current Status (November 23, 2025):**
+- ✅ Backend: 100% complete (7 MCP servers, 20 tools, all functional)
+- ✅ Skills: Updated with latest tool definitions
+- ✅ Deployment: Local deployment working (install.bat on Windows)
 - ⏳ Testing: Ready for manual testing in Claude Desktop
 - ⏳ Demo: Script complete, ready to record
+
+**Tool Count Breakdown:**
+- car-log-core: 14 tools (vehicles, checkpoints, templates, trips)
+- trip-reconstructor: 1 tool
+- validation: 1 tool
+- ekasa-api: 2 tools
+- dashboard-ocr: 2 tools
+- report-generator: 1 tool
+- geo-routing: 3 tools
+- **Total: 24 tools across 7 servers**
 
 ---
 
