@@ -1,8 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "Bash(gh pr comment:*)",
-      "Bash(numbers, and hyphens. Try 'trip-reconstruction'.\"\n\nChanges:\n✅ Changed all skill names from \"Title Case\" to \"kebab-case\"\n   - \"Vehicle Setup\" → \"vehicle-setup\"\n   - \"Checkpoint from Receipt\" → \"checkpoint-from-receipt\"\n   - \"Template Creation\" → \"template-creation\"\n   - \"Trip Reconstruction\" → \"trip-reconstruction\"\n   - \"Data Validation\" → \"data-validation\"\n   - \"Report Generation\" → \"report-generation\"\n\n✅ Updated package_skills.py to validate kebab-case format\n✅ Repackaged all 6 skills (verified)\n\nTesting: trip-reconstruction.zip now uploads successfully ✓\n\n🤖 Generated with Claude Code (https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
+      "Bash(find:*)",
+      "Bash(git push:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(python -m py_compile:*)",
+      "Bash(python package_skills.py:*)",
+      "Bash(git check-ignore:*)"
     ],
     "deny": [],
     "ask": []
