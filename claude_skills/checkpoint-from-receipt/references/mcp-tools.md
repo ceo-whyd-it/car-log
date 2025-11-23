@@ -252,6 +252,130 @@ CNG:         "cng", "zemný plyn"
 
 ---
 
+## car-log-core.update_checkpoint
+
+**Purpose:** Update checkpoint to fix mistakes (odometer, GPS, driver name, fuel amount)
+
+**Request:**
+```json
+{
+  "checkpoint_id": "uuid-5678",
+  "updates": {
+    "odometer_km": 125500,
+    "location_coords": {
+      "lat": 48.1500,
+      "lng": 17.1100
+    },
+    "fuel_liters": 53.0
+  }
+}
+```
+
+**Response (Success):**
+```json
+{
+  "success": true,
+  "checkpoint_id": "uuid-5678",
+  "checkpoint": {
+    "checkpoint_id": "uuid-5678",
+    "vehicle_id": "uuid-1234",
+    "checkpoint_type": "refuel",
+    "datetime": "2025-11-01T14:30:00Z",
+    "odometer_km": 125500,
+    "updated_at": "2025-11-23T15:00:00Z"
+  },
+  "updated_fields": ["odometer_km", "location.coords", "receipt.fuel_liters"],
+  "message": "Checkpoint updated successfully"
+}
+```
+
+**Response (Validation Error - Odometer Decreased):**
+```json
+{
+  "success": false,
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Odometer cannot decrease (previous: 125500 km, new: 125400 km)",
+    "field": "odometer_km"
+  }
+}
+```
+
+**Features:**
+- **Partial updates:** Only specified fields are changed
+- **Odometer validation:** Cannot decrease relative to previous checkpoint
+- **Auto-recalculation:** Updates distance_since_previous_km
+- **Vehicle sync:** Updates vehicle's current odometer if this is most recent checkpoint
+
+**Use Cases:**
+- Fix typo in odometer reading
+- Correct GPS coordinates from bad EXIF data
+- Update fuel amount after receipt correction
+- Change driver name if initially recorded incorrectly
+
+---
+
+## car-log-core.delete_checkpoint
+
+**Purpose:** Delete checkpoint (remove duplicate or erroneous entry)
+
+**Request:**
+```json
+{
+  "checkpoint_id": "uuid-5678",
+  "cascade": false
+}
+```
+
+**Response (Success):**
+```json
+{
+  "success": true,
+  "checkpoint_id": "uuid-5678",
+  "message": "Checkpoint deleted successfully"
+}
+```
+
+**Response (Dependency Error):**
+```json
+{
+  "success": false,
+  "error": {
+    "code": "DEPENDENCY_ERROR",
+    "message": "2 trip(s) reference this checkpoint. Set cascade=true to delete them, or delete trips manually first.",
+    "dependent_trips": ["uuid-trip-1", "uuid-trip-2"]
+  }
+}
+```
+
+**Response (Cascade Delete):**
+```json
+{
+  "success": true,
+  "checkpoint_id": "uuid-5678",
+  "warnings": ["Cascade deleted 2 dependent trip(s)"],
+  "message": "Checkpoint deleted successfully"
+}
+```
+
+**Cascade Behavior:**
+- **cascade=false (default):** Blocks deletion if trips reference this checkpoint
+- **cascade=true:** Deletes checkpoint and all dependent trips
+- **Warnings:** Always shows count of affected trips
+
+**Use Cases:**
+- Remove duplicate checkpoint (created twice by mistake)
+- Delete checkpoint with wrong date (created in wrong month)
+- Clean up test data
+- Remove checkpoint after realizing it was entered for wrong vehicle
+
+**Safety Features:**
+- Dependency checking before deletion
+- Clear warnings about affected data
+- Requires explicit cascade=true for force delete
+
+---
+
 ## car-log-core.detect_gap
 
 **Purpose:** Detect gaps between checkpoints for trip reconstruction
