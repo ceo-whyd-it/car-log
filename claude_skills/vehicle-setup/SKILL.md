@@ -1,5 +1,5 @@
 ---
-name: "Vehicle Setup"
+name: "vehicle-setup"
 description: "Guide users through Slovak VAT Act 2025 compliant vehicle registration with VIN validation"
 ---
 

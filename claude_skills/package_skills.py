@@ -90,12 +90,15 @@ class SkillPackager:
                 if len(desc) > 200:
                     return False, f"Description too long ({len(desc)} chars, max 200)"
 
-            # Validate name length (max 64 characters)
+            # Validate name length (max 64 characters) and format (kebab-case)
             name_match = re.search(r'name:\s*["\'](.+?)["\']', frontmatter)
             if name_match:
                 name = name_match.group(1)
                 if len(name) > 64:
                     return False, f"Name too long ({len(name)} chars, max 64)"
+                # Validate kebab-case format (lowercase, numbers, hyphens only)
+                if not re.match(r'^[a-z0-9-]+$', name):
+                    return False, f"Invalid name format: '{name}'. Must be lowercase letters, numbers, and hyphens only (e.g., 'my-skill-name')"
 
         except Exception as e:
             return False, f"Error reading SKILL.md: {str(e)}"

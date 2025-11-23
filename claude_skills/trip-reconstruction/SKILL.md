@@ -1,5 +1,5 @@
 ---
-name: "Trip Reconstruction"
+name: "trip-reconstruction"
 description: "Fill gaps between checkpoints using hybrid GPS (70%) + address (30%) template matching with high confidence"
 ---
 

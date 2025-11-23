@@ -1,5 +1,5 @@
 ---
-name: "Template Creation"
+name: "template-creation"
 description: "Create recurring trip templates with mandatory GPS coordinates for 90%+ accuracy automatic matching"
 ---
 
