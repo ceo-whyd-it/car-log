@@ -1,15 +1,17 @@
-# Car Log MCP Servers - Deployment Guide
+# Car Log MCP Servers - Local Deployment Guide
 
-This directory contains deployment scripts to install Car Log MCP servers for use with Claude Desktop.
+This guide covers **local deployment** of Car Log MCP servers for use with Claude Desktop.
+
+**Important:** This is the **recommended and currently supported** deployment method. Docker deployment is planned for future releases.
 
 ## Overview
 
 The deployment scripts will:
-1. ✅ Create a deployment directory outside the git repository (`~/.car-log-deployment`)
-2. ✅ Copy all MCP server code
-3. ✅ Install Python and Node.js dependencies
+1. ✅ Create a deployment directory outside the git repository (`~/.car-log-deployment/`)
+2. ✅ Copy all 7 MCP server implementations
+3. ✅ Install Python and Node.js dependencies automatically
 4. ✅ Generate a Claude Desktop configuration file
-5. ✅ Provide step-by-step instructions to integrate with Claude Desktop
+5. ✅ Create empty data directories for runtime storage
 
 ## Prerequisites
 
@@ -81,23 +83,29 @@ The deployment scripts will:
 ## What Gets Deployed
 
 ### Deployment Directory Structure
+
+**Windows:** `C:\Users\YourName\.car-log-deployment\`
+**macOS/Linux:** `~/.car-log-deployment/`
+
 ```
-~/.car-log-deployment/
-├── mcp-servers/              # MCP server source code
-│   ├── car_log_core/
-│   ├── trip_reconstructor/
-│   ├── validation/
-│   ├── ekasa_api/
-│   ├── dashboard_ocr/
-│   ├── report_generator/
-│   └── geo-routing/          # Node.js server
-├── data/                     # Runtime data (created empty)
+.car-log-deployment/
+├── mcp_servers/              # MCP server source code (underscore not hyphen)
+│   ├── car_log_core/         # CRUD operations
+│   ├── trip_reconstructor/   # Template matching
+│   ├── validation/           # 4 validation algorithms
+│   ├── ekasa_api/            # Slovak receipt processing
+│   ├── dashboard_ocr/        # EXIF extraction
+│   ├── report_generator/     # CSV/PDF reports
+│   └── geo-routing/          # Geocoding (Node.js)
+├── data/                     # Runtime data (JSON files)
 │   ├── vehicles/
 │   ├── checkpoints/
+│   │   └── YYYY-MM/          # Monthly folders
 │   ├── trips/
+│   │   └── YYYY-MM/          # Monthly folders
 │   ├── templates/
 │   └── reports/
-├── requirements.txt          # Python dependencies
+├── run-*.bat                 # Windows batch wrappers (6 files)
 └── claude_desktop_config.json # Generated config
 ```
 
@@ -165,18 +173,35 @@ deployment\scripts\merge-config-windows.bat
 
 After restarting Claude Desktop, verify the servers are loaded:
 
-1. Open a new conversation in Claude Desktop
-2. Type: "What MCP tools do you have available?"
-3. Look for Car Log servers in the response
+1. **Restart Claude Desktop** (important - quit completely and reopen)
+2. Open a new conversation in Claude Desktop
+3. Type: "What MCP tools do you have available?"
+4. Look for Car Log servers in the response
 
-Expected tools:
+### Expected Tools (28 total)
+
+**car-log-core (10 tools):**
 - `create_vehicle`, `list_vehicles`, `get_vehicle`, `update_vehicle`, `delete_vehicle`
 - `create_checkpoint`, `list_checkpoints`, `analyze_gap`
-- `create_template`, `list_templates`, `match_templates`
+- `create_template`, `list_templates`, `delete_template`
+- `delete_trip`
+
+**trip-reconstructor (1 tool):**
+- `match_templates`
+
+**validation (1 tool):**
 - `validate_trip`
-- `fetch_receipt`, `scan_qr_from_pdf`
+
+**ekasa-api (2 tools):**
+- `fetch_receipt`, `scan_qr_from_pdf` (optional if libzbar installed)
+
+**dashboard-ocr (2 tools):**
 - `extract_metadata`, `check_photo_quality`
+
+**report-generator (1 tool):**
 - `generate_report`
+
+**geo-routing (3 tools):**
 - `geocode_address`, `calculate_route`, `reverse_geocode`
 
 ## Configuration
