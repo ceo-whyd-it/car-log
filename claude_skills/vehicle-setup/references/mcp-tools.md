@@ -155,6 +155,72 @@
 
 ---
 
+## car-log-core.delete_vehicle
+
+**Purpose:** Delete vehicle (remove sold/decommissioned vehicle)
+
+**Request:**
+```json
+{
+  "vehicle_id": "uuid-1234",
+  "cascade": false
+}
+```
+
+**Response (Success):**
+```json
+{
+  "success": true,
+  "vehicle_id": "uuid-1234",
+  "message": "Vehicle deleted successfully"
+}
+```
+
+**Response (Dependency Error):**
+```json
+{
+  "success": false,
+  "error": {
+    "code": "DEPENDENCY_ERROR",
+    "message": "Vehicle has 15 checkpoint(s) and 8 trip(s). Set cascade=true to delete them, or delete data manually first.",
+    "dependent_checkpoints": 15,
+    "dependent_trips": 8
+  }
+}
+```
+
+**Response (Cascade Delete):**
+```json
+{
+  "success": true,
+  "vehicle_id": "uuid-1234",
+  "warnings": [
+    "Cascade deleted 15 checkpoint(s)",
+    "Cascade deleted 8 trip(s)"
+  ],
+  "message": "Vehicle deleted successfully"
+}
+```
+
+**Cascade Behavior:**
+- **cascade=false (default):** Blocks deletion if vehicle has any checkpoints or trips
+- **cascade=true:** Deletes vehicle and all associated checkpoints and trips
+- **Warnings:** Always shows count of affected data
+
+**Use Cases:**
+- Remove sold vehicle from system
+- Delete decommissioned company vehicle
+- Clean up test vehicles
+- Remove vehicle added by mistake
+
+**Safety Features:**
+- Comprehensive dependency checking (checkpoints AND trips)
+- Clear warnings about data loss
+- Requires explicit cascade=true for force delete
+- Returns exact count of dependent records
+
+---
+
 ## Slovak Compliance Notes
 
 ### VIN Validation

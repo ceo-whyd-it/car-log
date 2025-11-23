@@ -1,3 +1,8 @@
+---
+name: "report-generation"
+description: "Generate Slovak VAT Act 2025 compliant reports for business trip tax deductions with automatic validation"
+---
+
 # Skill 5: Report Generation
 
 ## Purpose

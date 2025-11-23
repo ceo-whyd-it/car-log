@@ -1,3 +1,8 @@
+---
+name: "checkpoint-from-receipt"
+description: "Create checkpoints from receipt photos using QR scanning, e-Kasa API, and GPS extraction (10-40s)"
+---
+
 # Checkpoint from Receipt Skill
 
 ## Purpose

@@ -1,3 +1,8 @@
+---
+name: "template-creation"
+description: "Create recurring trip templates with mandatory GPS coordinates for 90%+ accuracy automatic matching"
+---
+
 # Skill 4: Template Creation (GPS Mandatory)
 
 **Purpose:** Create recurring trip templates with mandatory GPS coordinates to enable high-confidence automatic matching (90%+ accuracy)

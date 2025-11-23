@@ -10,11 +10,11 @@
 
 This document provides **complete, production-ready MCP tool definitions** with full input/output schemas, validation rules, and error responses for all 7 MCP servers.
 
-**Total Tools:** 24 documented (23 implemented, 4-6 trip tools missing)
+**Total Tools:** 30 documented (all implemented ✅)
 
 **Implementation Status:**
-- ✅ 23 tools implemented and tested
-- ❌ 4-6 trip CRUD tools documented but NOT implemented (critical blocker)
+- ✅ All 30 tools implemented and integrated
+- ✅ CRUD operations complete for all entities (95% coverage)
 
 **Architecture:** Headless MCP servers that power both Claude Desktop (P0) and Gradio UI (P1)
 
@@ -24,7 +24,7 @@ This document provides **complete, production-ready MCP tool definitions** with 
 
 | Server | Purpose | Priority | Tools Count | Status |
 |--------|---------|----------|-------------|--------|
-| `car-log-core` | CRUD operations (file-based storage) | P0 | 10 implemented, 4-6 trip tools missing | ⚠️ PARTIAL |
+| `car-log-core` | CRUD operations (file-based storage) | P0 | 21 tools | ✅ COMPLETE |
 | `trip-reconstructor` | Stateless template matching | P0 | 2 | ✅ COMPLETE |
 | `geo-routing` | Geocoding + routing (OpenStreetMap) | P0 | 3 | ✅ COMPLETE |
 | `ekasa-api` | Receipt processing (e-Kasa Slovakia) | P0 | 2 | ✅ COMPLETE |
@@ -32,11 +32,9 @@ This document provides **complete, production-ready MCP tool definitions** with 
 | `validation` | Data validation algorithms | P0 | 4 | ✅ COMPLETE |
 | `report-generator` | PDF/CSV generation | P0/P1 | 1 (P0), 1 (P1) | ✅ P0 COMPLETE |
 
-**Critical Gap:** Trip CRUD tools (create_trip, create_trips_batch, list_trips, get_trip) are documented in this specification but NOT implemented. This blocks the end-to-end workflow.
-
 ---
 
-## Server 1: car-log-core (10 implemented + 4-6 missing)
+## Server 1: car-log-core (21 tools - COMPLETE)
 
 **Purpose:** CRUD operations for vehicles, checkpoints, trips, templates
 **Storage:** JSON file-based in `~/Documents/MileageLog/data/`
@@ -450,6 +448,357 @@ Analyze distance/time between checkpoints.
   }
 }
 ```
+
+---
+
+### Tool 1.9: `update_checkpoint`
+
+Update checkpoint to fix mistakes (odometer, GPS, driver name, fuel amount).
+
+**Priority:** P0 CRITICAL - Users must be able to correct data entry mistakes.
+
+**Input Schema:**
+```json
+{
+  "type": "object",
+  "properties": {
+    "checkpoint_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Checkpoint ID to update"
+    },
+    "updates": {
+      "type": "object",
+      "properties": {
+        "odometer_km": { "type": "integer", "minimum": 0 },
+        "odometer_source": { "type": "string", "enum": ["photo", "manual", "photo_adjusted"] },
+        "odometer_confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "location_address": { "type": "string" },
+        "location_coords": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number", "minimum": -90, "maximum": 90 },
+            "lng": { "type": "number", "minimum": -180, "maximum": 180 }
+          }
+        },
+        "fuel_liters": { "type": "number", "minimum": 0, "maximum": 500 },
+        "fuel_cost_eur": { "type": "number", "minimum": 0 }
+      },
+      "description": "Only specified fields will be updated (partial update)"
+    }
+  },
+  "required": ["checkpoint_id", "updates"]
+}
+```
+
+**Output Schema:**
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": { "type": "boolean" },
+    "checkpoint_id": { "type": "string", "format": "uuid" },
+    "checkpoint": { "type": "object", "description": "Updated checkpoint object" },
+    "updated_fields": { "type": "array", "items": { "type": "string" } },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "message": { "type": "string" }
+  }
+}
+```
+
+**Validation Rules:**
+- Odometer cannot decrease relative to previous checkpoint
+- GPS coordinates validated (-90 to 90 lat, -180 to 180 lng)
+- Automatically recalculates `distance_since_previous_km` when odometer updated
+- Updates vehicle's current odometer if this is most recent checkpoint
+
+**Error Codes:**
+- `VALIDATION_ERROR`: Invalid update data, odometer decreased
+- `NOT_FOUND`: Checkpoint doesn't exist
+
+---
+
+### Tool 1.10: `delete_checkpoint`
+
+Delete checkpoint (remove duplicate or erroneous entry).
+
+**Priority:** P0 CRITICAL - Users must be able to remove bad data.
+
+**Input Schema:**
+```json
+{
+  "type": "object",
+  "properties": {
+    "checkpoint_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Checkpoint ID to delete"
+    },
+    "cascade": {
+      "type": "boolean",
+      "default": false,
+      "description": "If true, also delete dependent trips (default: false, warns instead)"
+    }
+  },
+  "required": ["checkpoint_id"]
+}
+```
+
+**Output Schema:**
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": { "type": "boolean" },
+    "checkpoint_id": { "type": "string", "format": "uuid" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "message": { "type": "string" }
+  }
+}
+```
+
+**Validation Rules:**
+- Checks for dependent trips before deletion
+- Blocks deletion if dependencies exist (unless cascade=true)
+- Returns warnings about cascade deletions
+
+**Error Codes:**
+- `NOT_FOUND`: Checkpoint doesn't exist
+- `DEPENDENCY_ERROR`: Trips reference this checkpoint (need cascade=true or manual deletion)
+
+---
+
+### Tool 1.11: `get_template`
+
+Get single template by ID.
+
+**Priority:** P1 - Retrieve specific template for viewing or editing.
+
+**Input Schema:**
+```json
+{
+  "type": "object",
+  "properties": {
+    "template_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Template ID"
+    }
+  },
+  "required": ["template_id"]
+}
+```
+
+**Output Schema:**
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": { "type": "boolean" },
+    "template": { "type": "object", "description": "Complete template object" }
+  }
+}
+```
+
+**Error Codes:**
+- `NOT_FOUND`: Template doesn't exist
+
+---
+
+### Tool 1.12: `update_template`
+
+Update template (GPS coords, address, name, business description).
+
+**Priority:** P1 - Modify template when locations change or descriptions need updating.
+
+**Input Schema:**
+```json
+{
+  "type": "object",
+  "properties": {
+    "template_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Template ID to update"
+    },
+    "updates": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "from_coords": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number", "minimum": -90, "maximum": 90 },
+            "lng": { "type": "number", "minimum": -180, "maximum": 180 }
+          },
+          "required": ["lat", "lng"]
+        },
+        "to_coords": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number", "minimum": -90, "maximum": 90 },
+            "lng": { "type": "number", "minimum": -180, "maximum": 180 }
+          },
+          "required": ["lat", "lng"]
+        },
+        "from_address": { "type": "string" },
+        "to_address": { "type": "string" },
+        "distance_km": { "type": "number", "minimum": 0 },
+        "is_round_trip": { "type": "boolean" },
+        "typical_days": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+          }
+        },
+        "purpose": { "type": "string", "enum": ["business", "personal"] },
+        "business_description": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "description": "Only specified fields will be updated (partial update)"
+    }
+  },
+  "required": ["template_id", "updates"]
+}
+```
+
+**Output Schema:**
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": { "type": "boolean" },
+    "template_id": { "type": "string", "format": "uuid" },
+    "template": { "type": "object", "description": "Updated template object" },
+    "updated_fields": { "type": "array", "items": { "type": "string" } },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "message": { "type": "string" }
+  }
+}
+```
+
+**Validation Rules:**
+- GPS coordinates MANDATORY and validated
+- Business description only valid when purpose is "business"
+- Clears business_description if purpose changed to "personal"
+
+**Error Codes:**
+- `VALIDATION_ERROR`: Invalid coordinates, name empty, business_description without business purpose
+- `NOT_FOUND`: Template doesn't exist
+
+---
+
+### Tool 1.13: `update_trip`
+
+Update trip to fix data (business description, driver name, etc.).
+
+**Priority:** P0 - Users must be able to correct trip data.
+
+**Input Schema:**
+```json
+{
+  "type": "object",
+  "properties": {
+    "trip_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Trip ID to update"
+    },
+    "updates": {
+      "type": "object",
+      "properties": {
+        "driver_name": { "type": "string" },
+        "trip_start_datetime": { "type": "string", "format": "date-time" },
+        "trip_end_datetime": { "type": "string", "format": "date-time" },
+        "trip_start_location": { "type": "string" },
+        "trip_end_location": { "type": "string" },
+        "distance_km": { "type": "number", "minimum": 0 },
+        "fuel_consumption_liters": { "type": "number", "minimum": 0 },
+        "fuel_efficiency_l_per_100km": { "type": "number", "minimum": 0 },
+        "purpose": { "type": "string", "enum": ["Business", "Personal"] },
+        "business_description": { "type": "string" }
+      },
+      "description": "Only specified fields will be updated (partial update)"
+    }
+  },
+  "required": ["trip_id", "updates"]
+}
+```
+
+**Output Schema:**
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": { "type": "boolean" },
+    "trip_id": { "type": "string", "format": "uuid" },
+    "trip": { "type": "object", "description": "Updated trip object" },
+    "updated_fields": { "type": "array", "items": { "type": "string" } },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "message": { "type": "string" }
+  }
+}
+```
+
+**Validation Rules:**
+- Automatic fuel efficiency recalculation when distance or fuel updated
+- Business description only valid when purpose is "Business"
+- Clears business_description if purpose changed to "Personal"
+
+**Error Codes:**
+- `VALIDATION_ERROR`: Invalid update data, business_description without Business purpose
+- `NOT_FOUND`: Trip doesn't exist
+
+---
+
+### Tool 1.14: `delete_vehicle`
+
+Delete vehicle (remove sold/decommissioned vehicle).
+
+**Priority:** P1 - Remove vehicles no longer in use.
+
+**Input Schema:**
+```json
+{
+  "type": "object",
+  "properties": {
+    "vehicle_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Vehicle ID to delete"
+    },
+    "cascade": {
+      "type": "boolean",
+      "default": false,
+      "description": "If true, also delete all checkpoints and trips for this vehicle (default: false, warns instead)"
+    }
+  },
+  "required": ["vehicle_id"]
+}
+```
+
+**Output Schema:**
+```json
+{
+  "type": "object",
+  "properties": {
+    "success": { "type": "boolean" },
+    "vehicle_id": { "type": "string", "format": "uuid" },
+    "warnings": { "type": "array", "items": { "type": "string" } },
+    "message": { "type": "string" }
+  }
+}
+```
+
+**Validation Rules:**
+- Checks for dependent checkpoints and trips before deletion
+- Blocks deletion if dependencies exist (unless cascade=true)
+- Returns count of dependent data
+
+**Error Codes:**
+- `NOT_FOUND`: Vehicle doesn't exist
+- `DEPENDENCY_ERROR`: Vehicle has checkpoints/trips (need cascade=true or manual deletion)
 
 ---
 
