@@ -41,7 +41,11 @@ async def execute(arguments: Dict[str, Any]) -> Dict[str, Any]:
         data_path = get_data_path()
         vehicles_dir = data_path / "vehicles"
 
+        print(f"[DEBUG] list_vehicles: data_path={data_path}, vehicles_dir={vehicles_dir}")
+        print(f"[DEBUG] list_vehicles: vehicles_dir exists={vehicles_dir.exists()}")
+
         vehicle_files = list_json_files(vehicles_dir)
+        print(f"[DEBUG] list_vehicles: found {len(vehicle_files)} vehicle files: {[f.name for f in vehicle_files]}")
         vehicles = []
 
         for vehicle_file in vehicle_files:

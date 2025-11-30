@@ -1,0 +1,54 @@
+# Dockerfile for Gradio Car Log Application
+# Fat container with all Python MCP servers + DSPy + MLflow client
+
+FROM python:3.11-slim
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libzbar0 \
+    poppler-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy requirements and install Python dependencies
+COPY docker/requirements.gradio.txt .
+RUN pip install --no-cache-dir -r requirements.gradio.txt
+
+# Copy MCP servers (shared codebase)
+COPY mcp-servers/car_log_core /app/mcp_servers/car_log_core
+COPY mcp-servers/trip_reconstructor /app/mcp_servers/trip_reconstructor
+COPY mcp-servers/validation /app/mcp_servers/validation
+COPY mcp-servers/ekasa_api /app/mcp_servers/ekasa_api
+COPY mcp-servers/dashboard_ocr /app/mcp_servers/dashboard_ocr
+COPY mcp-servers/report_generator /app/mcp_servers/report_generator
+
+# Copy Gradio application
+COPY carlog_ui /app/carlog_ui
+
+# Copy code library for agent snippets
+COPY code_library /app/code_library
+
+# Create data directories
+RUN mkdir -p /data/vehicles /data/checkpoints /data/trips /data/templates /data/reports
+
+# Set Python path
+ENV PYTHONPATH=/app
+
+# Default environment variables
+ENV DATA_PATH=/data
+ENV GRADIO_HOST=0.0.0.0
+ENV GRADIO_PORT=7860
+ENV MLFLOW_TRACKING_URI=http://mlflow:5000
+ENV GEO_ROUTING_URL=http://geo-routing:8002
+ENV MLFLOW_TRACKING_MODE=summary
+
+# Expose Gradio port
+EXPOSE 7860
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:7860/')" || exit 1
+
+# Run Gradio app
+CMD ["python", "-m", "carlog_ui.app"]

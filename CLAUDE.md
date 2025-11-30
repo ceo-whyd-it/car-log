@@ -63,6 +63,65 @@ This project uses **7 headless MCP servers** as the core backend:
 - **GPS-first**: Coordinates are source of truth (70% weight), addresses are labels (30% weight)
 - **File-based storage**: JSON files with atomic write pattern (no database required for MVP)
 
+## Gradio Web UI (Hybrid Navigation)
+
+The Gradio UI (`carlog_ui/`) uses a **hybrid architecture**:
+- **Navigation views** for DATA DISPLAY (tables, stats, grids)
+- **Chat interface** for ACTIONS (add checkpoint, generate report, reconstruct trips)
+
+### UI Layout
+
+```
++------------------------------------------------------------------+
+|  HEADER: Car Log - Slovak Mileage Tracker    [Vehicle Dropdown]   |
++------------------------------------------------------------------+
+|  SIDEBAR   |   MAIN CONTENT AREA                                  |
+|            |                                                      |
+| [Dashboard]|   VIEW CONTENT (visibility toggled)                  |
+| [Checkpoints]  - Dashboard: stats cards                           |
+| [Trips]    |   - Checkpoints: data grid + filters                 |
+| [Reports]  |   - Trips: data grid + date range                    |
+| [Chat]     |   - Reports: file list + download                    |
+|            |   - Chat: chatbot interface (default)                |
+|            |                                                      |
+|            |   [CHAT INPUT - always visible at bottom]            |
++------------------------------------------------------------------+
+```
+
+### View Components (`carlog_ui/views/`)
+
+| File | Purpose |
+|------|---------|
+| `state.py` | ViewState dataclass for centralized state management |
+| `dashboard.py` | Stats overview (vehicles, checkpoints, trips, efficiency) |
+| `checkpoints.py` | gr.Dataframe with checkpoint list and filters |
+| `trips.py` | gr.Dataframe with trips and date range filter |
+| `reports.py` | Reports list with generation and download |
+
+### Navigation Pattern
+
+```python
+# Nav buttons toggle view visibility + fetch data
+btn_dashboard.click(nav_to_dashboard, inputs=[view_state], outputs=[...sections, ...stats])
+
+# Views fetch data via MCP adapters
+async def nav_to_checkpoints(state_dict):
+    df = await checkpoints_view.fetch_data(vehicle_id=state.selected_vehicle_id)
+    vis = get_visibility_updates("checkpoints")  # (False, True, False, False, False)
+    return state.to_dict(), *[gr.update(visible=v) for v in vis], df
+```
+
+### When to Use Chat vs Views
+
+| Task | Use |
+|------|-----|
+| View checkpoint list | Checkpoints view (data grid) |
+| View trip history | Trips view (data grid) |
+| See overall stats | Dashboard view |
+| Add new checkpoint | Chat: "Add checkpoint" |
+| Generate report | Chat or Reports view button |
+| Reconstruct trips | Chat: "Check for gaps" |
+
 ## Data Storage Architecture
 
 ### File Structure

@@ -49,7 +49,12 @@ Small business owners with company vehicles face:
 5. **Report Generation** - Export CSV/PDF for tax purposes
 
 ### Optional Enhancements (P1)
-- Gradio web UI for visual dashboards
+- **Gradio web UI** - Hybrid navigation with data views + chat actions
+  - Dashboard: Stats overview (vehicles, checkpoints, trips, efficiency)
+  - Checkpoints: Data grid with filters (type, date range)
+  - Trips: Data grid with filters (purpose, date range)
+  - Reports: Generation and download interface
+  - Chat: Always-available input for actions (add checkpoint, reconstruct trips)
 - Claude Vision OCR for automatic odometer reading extraction
 - PDF report generation
 - Multi-vehicle fleet management

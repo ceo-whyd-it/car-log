@@ -1,0 +1,41 @@
+# Gradio Car Log Dependencies
+# For fat container with all Python MCP servers + DSPy + MLflow
+
+# Gradio UI (Gradio 5.x - waiting for Gradio 6 stable release)
+gradio>=5.0.0,<6.0.0
+
+# MCP SDK
+mcp>=1.0.0
+
+# DSPy for intelligent processing
+dspy>=2.5.0
+
+# OpenAI API (DSPy backend)
+openai>=1.0.0
+
+# MLflow for tracking
+mlflow>=3.6.0
+
+# HTTP client for geo-routing
+httpx>=0.27.0
+
+# Image processing
+Pillow>=10.0.0
+piexif>=1.1.3
+
+# QR code scanning
+pyzbar>=0.1.9
+
+# PDF processing
+pdf2image>=1.16.3
+
+# HTTP client (e-Kasa API)
+requests>=2.31.0
+
+# Date handling
+python-dateutil>=2.8.2
+
+# OpenTelemetry
+opentelemetry-distro>=0.50b0
+opentelemetry-exporter-otlp>=1.32.0
+opentelemetry-instrumentation-logging>=0.50b0
