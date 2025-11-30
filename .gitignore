@@ -63,3 +63,18 @@ yarn-error.log*
 */.car-log-deployment/
 deployment/output/
 deployment/*.json
+
+# Playwright
+playwright-report/
+test-results/
+
+# Windows
+nul
+
+# MLflow
+mlruns/
+mlartifacts/
+
+# Workspace/temp files
+*.tmp
+*.temp

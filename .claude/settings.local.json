@@ -12,7 +12,10 @@
       "Bash(cmd /c deploy-windows.bat)",
       "Bash(dir \"%USERPROFILE%\\.car-log-deployment\")",
       "Bash(echo:*)",
-      "Bash(powershell.exe -Command:*)"
+      "Bash(powershell.exe -Command:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr edit:*)",
+      "Bash(gh pr list:*)"
     ],
     "deny": [],
     "ask": []

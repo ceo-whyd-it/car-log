@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
+    "start:http": "node http-server.js",
     "test": "node test.js"
   },
   "keywords": ["mcp", "geocoding", "routing", "openstreetmap"],
@@ -13,7 +14,15 @@
   "license": "ISC",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.22.0",
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/sdk-node": "^0.57.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.57.0",
+    "@opentelemetry/instrumentation-http": "^0.57.0",
+    "@opentelemetry/instrumentation-express": "^0.46.0",
     "axios": "^1.13.2",
-    "node-cache": "^5.1.2"
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "node-cache": "^5.1.2",
+    "winston": "^3.17.0"
   }
 }

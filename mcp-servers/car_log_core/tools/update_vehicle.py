@@ -91,7 +91,7 @@ async def execute(arguments: Dict[str, Any]) -> Dict[str, Any]:
         # Handle license plate change with confirmation
         if "license_plate" in arguments and arguments["license_plate"]:
             new_plate = arguments["license_plate"].strip().upper()
-            old_plate = vehicle.get("license_plate")
+            old_plate = (vehicle.get("license_plate") or "").upper()  # Normalize for comparison
 
             # Check if plate is actually changing
             if new_plate != old_plate:
